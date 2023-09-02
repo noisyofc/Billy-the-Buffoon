@@ -53,6 +53,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     Rigidbody rb;
 
+    public GameObject Umbrella;
 
     public MovementState state;
     public enum MovementState
@@ -105,15 +106,18 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // handle drag
         if (grounded && !activeGraple)
         {
+            Umbrella.gameObject.SetActive(false);
             rb.drag = groundDrag;
             rb.mass = playerMass;
         }
 
         else
         {
+            Umbrella.gameObject.SetActive(false);
             rb.drag = 0;
             if (Input.GetKey(jumpKey))
             {
+                Umbrella.gameObject.SetActive(true);
                 rb.drag = dragAir;
                 rb.mass = playerMassAir;
             }
