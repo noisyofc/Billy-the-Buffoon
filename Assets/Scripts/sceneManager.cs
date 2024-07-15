@@ -19,18 +19,18 @@ public class sceneManager : MonoBehaviour
 
     public void StartGame()
     {
-        SceneManager.LoadScene("Scenes/Level1");
+        SceneManager.LoadScene("Scenes/Level 1 - Borys");
         Time.timeScale = 1;
     }
     public void LoadGame()
     {
-        SceneManager.LoadScene("Scenes/Level3");
+        SceneManager.LoadScene("Scenes/Level 3 - Borys");
         Time.timeScale = 1;
     }
 
     public void NextLevel()
     {
-        SceneManager.LoadScene("Scenes/Level2");
+        SceneManager.LoadScene("Scenes/Level 2 - Borys");
         Time.timeScale = 1;
     }
 
