@@ -43,6 +43,7 @@ public class PlayerCam : MonoBehaviour
 
     public void DoTilt(float zTilt)
     {
-        transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
+        //Change after new prefabs are added - glue especially
+        //transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
     }
 }
