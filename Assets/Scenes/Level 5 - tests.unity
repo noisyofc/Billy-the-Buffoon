@@ -10947,12 +10947,12 @@ PrefabInstance:
     - target: {fileID: 3051714022879210222, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: walkSpeed
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210222, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: crouchSpeed
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210222, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
@@ -10969,6 +10969,16 @@ PrefabInstance:
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 1361911861}
+    - target: {fileID: 3051714022879210223, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: totalThrows
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3051714022879210223, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: throwCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
