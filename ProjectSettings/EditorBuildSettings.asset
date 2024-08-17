@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level 3 - Borys.unity
     guid: 44b3fc4877284c24a9a5c0d6d8a7db4d
+  - enabled: 1
+    path: Assets/Scenes/Level 0 - TEST_LEVEL.unity
+    guid: 6aefb4b44ed9f9744bb6b46f46baa528
   m_configObjects: {}

@@ -17,6 +17,11 @@ public class sceneManager : MonoBehaviour
         
     }
 
+    public void LoadTestLevel()
+    {
+        SceneManager.LoadScene("Scenes/Level 0 - TEST_LEVEL");
+        Time.timeScale = 1;
+    }
     public void StartGame()
     {
         SceneManager.LoadScene("Scenes/Level 1 - Borys");
