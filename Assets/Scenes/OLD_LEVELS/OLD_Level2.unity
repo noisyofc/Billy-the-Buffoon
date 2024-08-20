@@ -8303,8 +8303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb0862e1b5544fc4bb916c43e2eaf995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
-  sprintSpeed: 10
+  walkSpeed: 15
+  sprintSpeed: 15
   slideSpeed: 8
   wallrunSpeed: 8.5
   speedIncreaseMultiplier: 1.5
