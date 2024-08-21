@@ -37483,6 +37483,18 @@ PrefabInstance:
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 1361911861}
+    - target: {fileID: 3051714022879210223, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: objectToThrow
+      value: 
+      objectReference: {fileID: 5892132452817777273, guid: d7663df54ea388a4a903bfcf39ad0eb0,
+        type: 3}
+    - target: {fileID: 3051714022879210223, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: objectsToThrow.Array.data[0]
+      value: 
+      objectReference: {fileID: 5892132452817777273, guid: d7663df54ea388a4a903bfcf39ad0eb0,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
