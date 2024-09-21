@@ -6,7 +6,7 @@ using TMPro;
 
 public class CountStars : MonoBehaviour
 {
-    public TextMeshProUGUI starsText;
+
     public int stars = 0;
     public GameObject[] StarsObj;
 
@@ -26,7 +26,7 @@ public class CountStars : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        starsText.text = stars.ToString();
+
 
         
     }
