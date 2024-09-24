@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 public class Projectile : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Projectile : MonoBehaviour
 
     private Rigidbody rb;
 
+    public GameObject playerObject;
+
 
     private void Start()
     {
@@ -24,6 +27,8 @@ public class Projectile : MonoBehaviour
 
         StartCoroutine(countDown());
 
+        playerObject = GameObject.FindGameObjectWithTag("Player");
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -31,6 +36,10 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.transform.tag == "floor")
         {
             //Destroy(gameObject);
+
+            Collider playerCollider = playerObject.GetComponent<Collider>();
+            Collider projectileCollider = GetComponent<Collider>();
+            Physics.IgnoreCollision(projectileCollider, playerCollider, false);
 
             gameObject.transform.position = new Vector3(transform.position.x, collision.transform.position.y + spawnY + ((collision.transform.localScale.y - 1)/2), transform.position.z);
             gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f));

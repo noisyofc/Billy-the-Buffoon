@@ -25,10 +25,11 @@ public class ThrowingTutorial : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;  // Lock the frame rate to 60 FPS
         readyToThrow = true;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (Input.GetKeyDown(trampKey) && readyToThrow && totalThrows > 0)
         {
@@ -48,46 +49,47 @@ public class ThrowingTutorial : MonoBehaviour
     {
         readyToThrow = false;
 
-        if (choice == 0)
-        {
-            objectToThrow = objectsToThrow[0];
-        }
+        // Select the correct object to throw
+        objectToThrow = objectsToThrow[choice];
 
-        if (choice == 1)
-        {
-            objectToThrow = objectsToThrow[1];
-        }
-
-        if (choice == 2)
-        {
-            objectToThrow = objectsToThrow[2];
-        }
-
-        // instantiate object to throw
+        // Instantiate object to throw
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
 
-        // get rigidbody component
+        // Get Rigidbody component
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
 
-        // calculate direction
-        Vector3 forceDirection = cam.transform.forward;
+        // Ignore collision with the player
+        Collider projectileCollider = projectile.GetComponent<Collider>();
+        Collider playerCollider = GetComponent<Collider>();
+        Physics.IgnoreCollision(projectileCollider, playerCollider);
 
+        // Calculate direction - use Raycast for more accurate aiming
+        Vector3 forceDirection = cam.transform.forward;
         RaycastHit hit;
 
-        if(Physics.Raycast(cam.position, cam.forward, out hit, 500f))
+        if (Physics.Raycast(cam.position, cam.forward, out hit, 500f))
         {
+            // Adjust direction towards hit point
             forceDirection = (hit.point - attackPoint.position).normalized;
         }
+        else
+        {
+            // Fallback to camera's forward direction
+            forceDirection = cam.transform.forward;
+        }
 
-        // add force
-        Vector3 forceToAdd = forceDirection * throwForce + transform.up * throwUpwardForce;
+        // Add force - use Vector3.up for consistent upward direction
+        Vector3 forceToAdd = forceDirection * throwForce + Vector3.up * throwUpwardForce;
 
+        // Apply the calculated force
         projectileRb.AddForce(forceToAdd, ForceMode.Impulse);
 
+        // Reduce total throws and reset throw cooldown
         totalThrows--;
-
-        // implement throwCooldown
         Invoke(nameof(ResetThrow), throwCooldown);
+
+        // Debug visualization
+        Debug.DrawRay(attackPoint.position, forceDirection * 10, Color.red, 2f);
     }
 
     private void ResetThrow()

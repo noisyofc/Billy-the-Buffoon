@@ -22,23 +22,23 @@ public class LevelSelect : MonoBehaviour
 
     public void LoadTestLevel()
     {
-        SceneManager.LoadScene("Scenes/Level 0 - TEST_LEVEL");
+        SceneManager.LoadScene("GAME/Scenes/Level 0 - TEST_LEVEL");
         Time.timeScale = 1;
     }
     public void Level1()
     {
-        SceneManager.LoadScene("Scenes/Level 1 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 1 - Borys");
         Time.timeScale = 1;
     }
     public void Level2()
     {
-        SceneManager.LoadScene("Scenes/Level 2 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 2 - Borys");
         Time.timeScale = 1;
     }
 
     public void Level3()
     {
-        SceneManager.LoadScene("Scenes/Level 3 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 3 - Borys");
         Time.timeScale = 1;
     }
 
