@@ -54,9 +54,12 @@ public class ThrowingTutorial : MonoBehaviour
 
         // Instantiate object to throw
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
+        
 
         // Get Rigidbody component
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();
+        projectileRb.interpolation = RigidbodyInterpolation.Interpolate;
+        projectileRb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         // Ignore collision with the player
         Collider projectileCollider = projectile.GetComponent<Collider>();
