@@ -501,6 +501,13 @@ MonoBehaviour:
   spawnY: 0.8
   spawnYshelf: 1
   glueWall: {fileID: 0}
+  playerObject: {fileID: 0}
+  supportPoints:
+  - {fileID: 1412341114486742038}
+  - {fileID: 3368883339414660977}
+  - {fileID: 1331459552118772296}
+  - {fileID: 2640410345894321761}
+  fallThreshold: 0.5
 --- !u!65 &7433069736405192788
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -520,8 +527,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.81, y: 0.08, z: 1.82}
-  m_Center: {x: 0, y: -0.02, z: -0.00041704366}
+  m_Size: {x: 1.81, y: 0.3, z: 1.82}
+  m_Center: {x: 0, y: -0.14, z: -0.00041704366}
 --- !u!1 &7865657883056031787
 GameObject:
   m_ObjectHideFlags: 0

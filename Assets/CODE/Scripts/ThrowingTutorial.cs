@@ -15,6 +15,8 @@ public class ThrowingTutorial : MonoBehaviour
     public int totalThrows;
     public float throwCooldown;
 
+    private LayerMask platformLayer;
+
     public KeyCode trampKey = KeyCode.Mouse0;
     public KeyCode bananaKey = KeyCode.Mouse2;
     public KeyCode glueKey = KeyCode.Mouse1;
@@ -25,6 +27,9 @@ public class ThrowingTutorial : MonoBehaviour
 
     private void Start()
     {
+
+        platformLayer = LayerMask.GetMask("whatIsGround");
+
         Application.targetFrameRate = 60;  // Lock the frame rate to 60 FPS
         readyToThrow = true;
     }
@@ -51,6 +56,17 @@ public class ThrowingTutorial : MonoBehaviour
 
         // Select the correct object to throw
         objectToThrow = objectsToThrow[choice];
+
+        // Calculate the spawn position and ensure it's above the ground
+        Vector3 spawnPosition = attackPoint.position;
+        RaycastHit groundHit;
+
+        // Perform a raycast downwards from the spawn position to find the ground
+        if (Physics.Raycast(spawnPosition, Vector3.down, out groundHit, Mathf.Infinity, platformLayer))
+        {
+            // Set spawn position slightly above the ground
+            spawnPosition = groundHit.point + Vector3.up * 0.5f;  // Adjust "0.5f" to control how far above the ground to spawn
+        }
 
         // Instantiate object to throw
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
