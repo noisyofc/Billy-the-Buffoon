@@ -2355,12 +2355,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1629746722}
   m_PrefabAsset: {fileID: 0}
---- !u!120 &768217190 stripped
-LineRenderer:
-  m_CorrespondingSourceObject: {fileID: 4467998052841572356, guid: 6c4df039a80357e488dd81909c54aec2,
-    type: 3}
-  m_PrefabInstance: {fileID: 4467998052107966562}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &806325738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8603387664519470025, guid: ea5e702228acb8c48baa102035270d35,
@@ -4098,18 +4092,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4467998052107966562}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1391041772 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2094202941803619063, guid: 976cebd21dc99bb45981864edcfca749,
-    type: 3}
-  m_PrefabInstance: {fileID: 2094202941020962331}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1393535175 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8603387664519470025, guid: ea5e702228acb8c48baa102035270d35,
@@ -5969,12 +5951,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955548088}
   m_CullTransparentMesh: 1
---- !u!4 &1973315865 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4467998051362287995, guid: 6c4df039a80357e488dd81909c54aec2,
-    type: 3}
-  m_PrefabInstance: {fileID: 4467998052107966562}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1994089735
 GameObject:
   m_ObjectHideFlags: 0
@@ -6399,7 +6375,7 @@ PrefabInstance:
         type: 3}
       propertyPath: starsText
       value: 
-      objectReference: {fileID: 1391041772}
+      objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210001, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: StarsObj.Array.data[0]
@@ -6444,7 +6420,7 @@ PrefabInstance:
         type: 3}
       propertyPath: lr
       value: 
-      objectReference: {fileID: 768217190}
+      objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210002, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: cam
@@ -6454,7 +6430,7 @@ PrefabInstance:
         type: 3}
       propertyPath: gunTip
       value: 
-      objectReference: {fileID: 1973315865}
+      objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210002, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: whatIsGrappleable.m_Bits
