@@ -14,6 +14,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float sprintSpeed;
     public float slideSpeed;
     public float wallrunSpeed;
+    public float stuckSpeed;
 
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
@@ -53,6 +54,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     Rigidbody rb;
 
+    public GameObject[] underSlides;
+    public Collider playerCollider;
+    public Collider[] underSLidesCollider;
+
     public GameObject Umbrella;
 
     public MovementState state;
@@ -64,7 +69,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         wallrunning,
         crouching,
         sliding,
-        air
+        air,
+        stuck
     }
 
     public bool freeze;
@@ -77,6 +83,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public TextMeshProUGUI text_speed;
     public TextMeshProUGUI text_mode;
 
+    public bool under = false;
+    private bool stuck = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -86,7 +95,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         startYScale = transform.localScale.y;
 
-
+        playerCollider = GetComponent<Collider>();
+        underSlides = GameObject.FindGameObjectsWithTag("glued");
     }
 
     private void Update()
@@ -122,7 +132,6 @@ public class PlayerMovementAdvanced : MonoBehaviour
                 rb.mass = playerMassAir;
             }
         }
-
     }
 
     public void ResetRestricions()
@@ -166,7 +175,6 @@ public class PlayerMovementAdvanced : MonoBehaviour
     {
         if (collision.transform.tag == "banana")
         {
-
             StartCoroutine(stopSlide());
         }
     }
@@ -179,46 +187,104 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void StateHandler()
     {
-
-        //Mode - Freeze
+        // Mode - Freeze
         if (freeze)
         {
             state = MovementState.freeze;
             moveSpeed = 0;
             rb.velocity = Vector3.zero;
         }
-
         // Mode - Wallrunning
         else if (wallrunning)
         {
             state = MovementState.wallrunning;
             desiredMoveSpeed = wallrunSpeed;
         }
+        else if (stuck)
+        {
+            // Raycast to check if there's something "glued" above the player
+            RaycastHit hit;
+            Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
+            float rayDistance = 5.0f;                // The distance of the raycast
 
+            // Cast a ray upwards from the player's position
+            if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
+            {
+                if (hit.collider.gameObject.CompareTag("glued"))
+                {
+                    Debug.Log("Hit an object with tag 'glued'");
+                    under = true;
+                    stuck = true;
+                }
+                else
+                {
+                    Debug.Log("Hit an object without the 'glued' tag");
+                    under = false;
+                    transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+                    crouching = false;
+                    stuck = false;
 
+                }
+            }
+            else
+            {
+                Debug.Log("No object hit");
+                under = false;
+                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+                crouching = false;
+                stuck = false;
+
+            }
+        }
         // Mode - Crouching
         else if (crouching)
         {
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
+
+            // When crouching, check for "glued" objects to determine if stuck
+            if (under == true && stuck == true)
+            {
+                // Set the player's scale for crouching
+                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+
+                // Set the movement state to stuck
+                state = MovementState.stuck;
+
+                // If there's no input, stop the player from sliding
+                if (horizontalInput == 0 && verticalInput == 0)
+                {
+                    // Set velocity to zero if no input
+                    rb.velocity = Vector3.zero;
+                }
+                else
+                {
+                    // Apply the stuck speed if there is input
+                    moveSpeed = stuckSpeed;
+                    rb.velocity = rb.velocity.normalized * stuckSpeed;
+                }
+            }
+            else
+            {
+                // Normal crouch behavior without being stuck
+                desiredMoveSpeed = crouchSpeed;
+            }
         }
+        
 
-
-
-        // Mode - Walking
+        // Mode - Walking (normal behavior when grounded and not stuck)
         else if (grounded)
         {
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
         }
-
         // Mode - Air
         else
         {
             state = MovementState.air;
         }
 
-        // check if desired move speed has changed drastically
+        // Check if the move speed has drastically changed and smooth the transition if needed
         if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 5f && moveSpeed != 0)
         {
             StopAllCoroutines();
@@ -235,14 +301,60 @@ public class PlayerMovementAdvanced : MonoBehaviour
     }
 
 
+
     IEnumerator stopSlide()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.5f); // Wait for the slide to finish
 
-        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        // Raycast to check if there's something "glued" above the player
+        RaycastHit hit;
+        Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
+        float rayDistance = 5.0f;                // The distance of the raycast
 
-        crouching = false;
+        // Cast a ray upwards from the player's position
+        if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
+        {
+            if (hit.collider.gameObject.CompareTag("glued"))
+            {
+                Debug.Log("Hit an object with tag 'glued'");
+                under = true;
+                stuck = true;
+            }
+            else
+            {
+                Debug.Log("Hit an object without the 'glued' tag");
+                under = false;
+                stuck = false;
+            }
+        }
+        else
+        {
+            Debug.Log("No object hit");
+            under = false;
+            stuck = false;
+        }
+
+        // Update the player's state after the raycast check
+        if (under == true && stuck == true)
+        {
+            // Set the player's scale for crouching
+            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+
+            // Set the movement state to stuck
+            state = MovementState.stuck;
+
+            // Stop the player from sliding
+            rb.velocity = Vector3.zero;
+        }
+        else
+        {
+            // Reset player's scale and allow normal movement again
+            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            crouching = false;
+            stuck = false;  // Set stuck to false so they can move normally again
+        }
     }
+
 
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
@@ -300,31 +412,40 @@ public class PlayerMovementAdvanced : MonoBehaviour
         if (!wallrunning) rb.useGravity = !OnSlope();
     }
 
-    private void SpeedControl()
+private void SpeedControl()
+{
+    if (activeGraple) return;
+
+    // limiting speed on slope
+    if (OnSlope() && !exitingSlope)
     {
+        if (rb.velocity.magnitude > moveSpeed)
+            rb.velocity = rb.velocity.normalized * moveSpeed;
+    }
+    else if (state == MovementState.stuck)
+    {
+        // Clamp velocity to stuckSpeed when in the stuck state
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if (activeGraple) return;
-
-        // limiting speed on slope
-        if (OnSlope() && !exitingSlope)
+        if (flatVel.magnitude > stuckSpeed)
         {
-            if (rb.velocity.magnitude > moveSpeed)
-                rb.velocity = rb.velocity.normalized * moveSpeed;
-        }
-
-        // limiting speed on ground or in air
-        else
-        {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            // limit velocity if needed
-            if (flatVel.magnitude > moveSpeed)
-            {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
+            Vector3 limitedVel = flatVel.normalized * stuckSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }
+    // limiting speed on ground or in air
+    else
+    {
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        // limit velocity if needed
+        if (flatVel.magnitude > moveSpeed)
+        {
+            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+        }
+    }
+}
 
     private void Jump()
     {
@@ -388,6 +509,27 @@ public class PlayerMovementAdvanced : MonoBehaviour
         Invoke(nameof(SetVelocity), 0.1f);
 
         Invoke(nameof(ResetRestricions), 3f);
+    }
+
+    private void IgnoreCollisionsWithGluedObjects()
+    {
+        // Loop through each glued object
+        foreach (GameObject underSlide in underSlides)
+        {
+            // Get the Collider component of the current glued object
+            Collider underSLidesCollider = underSlide.GetComponent<Collider>();
+
+            // Check if the glued object has a Collider
+            if (underSLidesCollider != null)
+            {
+                // Ignore the collision between the player and the current glued object
+                Physics.IgnoreCollision(playerCollider, underSLidesCollider, true);
+            }
+            else
+            {
+                Debug.LogWarning("Object with tag 'glued' does not have a Collider component: ");
+            }
+        }
     }
 
 }

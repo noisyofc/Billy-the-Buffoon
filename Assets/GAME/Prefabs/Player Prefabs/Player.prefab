@@ -199,6 +199,7 @@ MonoBehaviour:
   sprintSpeed: 15
   slideSpeed: 8
   wallrunSpeed: 8.5
+  stuckSpeed: 0.5
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
   groundDrag: 4
@@ -219,6 +220,9 @@ MonoBehaviour:
   dragAir: 10
   playerMassAir: 0.5
   orientation: {fileID: 3051714022119363202}
+  underSlides: []
+  playerCollider: {fileID: 0}
+  underSLidesCollider: []
   Umbrella: {fileID: 8446624546637713696}
   state: 0
   freeze: 0
@@ -227,6 +231,7 @@ MonoBehaviour:
   wallrunning: 0
   text_speed: {fileID: 0}
   text_mode: {fileID: 0}
+  under: 0
 --- !u!114 &3051714022879210223
 MonoBehaviour:
   m_ObjectHideFlags: 0
