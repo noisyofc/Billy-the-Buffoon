@@ -95,7 +95,7 @@ public class Projectile : MonoBehaviour
             Collider projectileCollider = GetComponent<Collider>();
             Physics.IgnoreCollision(projectileCollider, playerCollider, false);
 
-            gameObject.transform.position = new Vector3(transform.position.x, collision.transform.position.y + spawnY + ((collision.transform.localScale.y - 1) / 2), transform.position.z);
+            gameObject.transform.position = new Vector3(transform.position.x, collision.transform.position.y + spawnY, transform.position.z);
             gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f));
             rb.constraints = RigidbodyConstraints.FreezePosition;
             rb.constraints = RigidbodyConstraints.FreezeRotation;

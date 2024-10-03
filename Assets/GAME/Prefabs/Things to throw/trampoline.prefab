@@ -498,8 +498,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b3cafb84716fa4782744f55befdb80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnY: 0.8
-  spawnYshelf: 1
+  spawnY: 0.3
+  spawnYshelf: 0
   glueWall: {fileID: 0}
   playerObject: {fileID: 0}
   supportPoints:
