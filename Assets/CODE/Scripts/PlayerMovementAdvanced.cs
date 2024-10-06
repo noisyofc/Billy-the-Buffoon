@@ -113,14 +113,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
         SpeedControl();
         StateHandler();
 
-        // handle drag
         if (grounded && !activeGraple)
         {
             Umbrella.gameObject.SetActive(false);
-            rb.drag = groundDrag;
-            rb.mass = playerMass;
+            rb.drag = groundDrag;           // Reset drag when grounded
+            rb.mass = playerMass;           // Reset mass when grounded
         }
-
         else
         {
             Umbrella.gameObject.SetActive(false);
@@ -128,8 +126,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
             if (Input.GetKey(jumpKey))
             {
                 Umbrella.gameObject.SetActive(true);
-                rb.drag = dragAir;
-                rb.mass = playerMassAir;
+                rb.drag = dragAir;           // Set drag for umbrella use
+                rb.mass = playerMassAir;     // Set mass for umbrella use
             }
         }
     }
@@ -154,6 +152,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
             GetComponent<Grappling>().StopGrapple();
         }
 
+        // Reset mass and drag when touching the ground or trampoline
+        if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("tramp"))
+        {
+            rb.drag = groundDrag;       // Reset drag to ground drag
+            rb.mass = playerMass;        // Reset mass to normal player mass
+        }
+
         if (collision.transform.tag == "tramp")
         {
             Jump();
@@ -166,8 +171,6 @@ public class PlayerMovementAdvanced : MonoBehaviour
             rb.AddForce(Vector3.forward * 5f, ForceMode.Impulse);
 
             crouching = true;
-
-
         }
     }
 
@@ -449,11 +452,16 @@ private void SpeedControl()
 
     private void Jump()
     {
+        // Reset Rigidbody properties before applying jump force
+        rb.drag = groundDrag;
+        rb.mass = playerMass;
+
         exitingSlope = true;
 
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
+        // Apply the jump force
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
