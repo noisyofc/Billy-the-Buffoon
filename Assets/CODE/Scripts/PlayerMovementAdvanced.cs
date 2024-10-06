@@ -96,7 +96,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         startYScale = transform.localScale.y;
 
         playerCollider = GetComponent<Collider>();
-        underSlides = GameObject.FindGameObjectsWithTag("glued");
+        underSlides = GameObject.FindGameObjectsWithTag("underStuck");
     }
 
     private void Update()
@@ -205,7 +205,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
         else if (stuck)
         {
-            // Raycast to check if there's something "glued" above the player
+            // Raycast to check if there's something "underStuck" above the player
             RaycastHit hit;
             Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
             float rayDistance = 5.0f;                // The distance of the raycast
@@ -213,15 +213,15 @@ public class PlayerMovementAdvanced : MonoBehaviour
             // Cast a ray upwards from the player's position
             if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
             {
-                if (hit.collider.gameObject.CompareTag("glued"))
+                if (hit.collider.gameObject.CompareTag("underStuck"))
                 {
-                    Debug.Log("Hit an object with tag 'glued'");
+                    Debug.Log("Hit an object with tag 'underStuck'");
                     under = true;
                     stuck = true;
                 }
                 else
                 {
-                    Debug.Log("Hit an object without the 'glued' tag");
+                    Debug.Log("Hit an object without the 'underStuck' tag");
                     under = false;
                     transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
                     crouching = false;
@@ -245,7 +245,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
 
-            // When crouching, check for "glued" objects to determine if stuck
+            // When crouching, check for "underStuck" objects to determine if stuck
             if (under == true && stuck == true)
             {
                 // Set the player's scale for crouching
@@ -309,7 +309,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f); // Wait for the slide to finish
 
-        // Raycast to check if there's something "glued" above the player
+        // Raycast to check if there's something "underStuck" above the player
         RaycastHit hit;
         Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
         float rayDistance = 5.0f;                // The distance of the raycast
@@ -317,15 +317,15 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // Cast a ray upwards from the player's position
         if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
         {
-            if (hit.collider.gameObject.CompareTag("glued"))
+            if (hit.collider.gameObject.CompareTag("underStuck"))
             {
-                Debug.Log("Hit an object with tag 'glued'");
+                Debug.Log("Hit an object with tag 'underStuck'");
                 under = true;
                 stuck = true;
             }
             else
             {
-                Debug.Log("Hit an object without the 'glued' tag");
+                Debug.Log("Hit an object without the 'underStuck' tag");
                 under = false;
                 stuck = false;
             }

@@ -20,8 +20,10 @@ public class Projectile : MonoBehaviour
     public GameObject playerObject;
 
     public Transform[] supportPoints;  // Define support points (corners or key points)
-    private LayerMask platformLayer;    // Define what the platform layer is
+    private LayerMask platformLayer;   // Define what the platform layer is
     public float fallThreshold = 0.5f; // Define threshold for how much of the trampoline needs to be unsupported - 50% of POINTS have to raycast!!!
+
+    public float rayLength = 1.0f;     // Maximum distance for the raycast 
 
     private bool isFalling = false;
 
@@ -31,7 +33,7 @@ public class Projectile : MonoBehaviour
     {
         platformLayer = LayerMask.GetMask("whatIsGround");
 
-        // get rigidbody component
+        // Get rigidbody component
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, 0, 0);
 
@@ -175,11 +177,11 @@ public class Projectile : MonoBehaviour
     {
         int supportedPoints = 0;
 
-        // Cast raycasts from each support point to check if they are on the platform
+        // Cast raycasts from each support point to check if they are on the platform within the given ray length
         foreach (Transform point in supportPoints)
         {
-            // Raycast down to check if the point is supported by a platform
-            if (Physics.Raycast(point.position, Vector3.down, out RaycastHit hit, Mathf.Infinity, platformLayer))
+            // Raycast down to check if the point is supported by a platform within the specified ray length
+            if (Physics.Raycast(point.position, Vector3.down, out RaycastHit hit, rayLength, platformLayer))
             {
                 supportedPoints++;
             }

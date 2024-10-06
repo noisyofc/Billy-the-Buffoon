@@ -19,23 +19,23 @@ public class sceneManager : MonoBehaviour
 
     public void LoadTestLevel()
     {
-        SceneManager.LoadScene("Scenes/Level 0 - TEST_LEVEL");
+        SceneManager.LoadScene("GAME/Scenes/Level 0 - TEST_LEVEL");
         Time.timeScale = 1;
     }
     public void StartGame()
     {
-        SceneManager.LoadScene("Scenes/Level 1 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 1 - Borys");
         Time.timeScale = 1;
     }
     public void LoadGame()
     {
-        SceneManager.LoadScene("Scenes/Level 3 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 3 - Borys");
         Time.timeScale = 1;
     }
 
     public void NextLevel()
     {
-        SceneManager.LoadScene("Scenes/Level 2 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level 2 - Borys");
         Time.timeScale = 1;
     }
 
@@ -46,6 +46,6 @@ public class sceneManager : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("Scenes/Main Menu");
+        SceneManager.LoadScene("GAME/Scenes/Main Menu");
     }
 }
