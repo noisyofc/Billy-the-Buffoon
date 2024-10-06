@@ -2,31 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class changeTagOfWall : MonoBehaviour
+public class ChangeTagOfWall : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Tag Settings")]
+    [Tooltip("The tag that should be assigned when the wall is glued.")]
+    public string gluedTag = "glued";
+    [Tooltip("The tag that should be restored after the countdown.")]
+    public string defaultTag = "Wall";
+
+    [Header("Countdown Settings")]
+    [Tooltip("Time to wait before resetting the wall tag.")]
+    public float resetTime = 1f;  // Time before resetting tag
+
+    private void Start()
     {
-        gameObject.transform.tag = "Wall";
+        // Set the initial tag of the game object to "Wall"
+        gameObject.tag = defaultTag;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (gameObject.transform.tag == "glued")
+        // Check if the wall's tag has changed to "glued"
+        if (gameObject.tag == gluedTag)
         {
-            StartCoroutine(countDown());
+            // Start the countdown coroutine to revert the tag back to "Wall"
+            StartCoroutine(ResetTagAfterDelay());
         }
     }
 
-
-    IEnumerator countDown()
+    /// <summary>
+    /// Resets the wall's tag back to its default value after a delay.
+    /// </summary>
+    private IEnumerator ResetTagAfterDelay()
     {
-        yield return new WaitForSeconds(2f);
+        // Wait for the specified reset time
+        yield return new WaitForSeconds(resetTime);
 
-        gameObject.transform.tag = "Wall";
-        gameObject.transform.GetChild(0).gameObject.SetActive(false);
-        gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        // Reset the tag back to "Wall"
+        gameObject.tag = defaultTag;
+
+        // Disable the first two child objects (if present)
+        if (gameObject.transform.childCount >= 2)
+        {
+            gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            gameObject.transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
-
 }

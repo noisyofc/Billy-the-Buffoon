@@ -1,26 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class disappearingGlue : MonoBehaviour
+public class DisappearingGlue : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Disappearance Settings")]
+    [Tooltip("Time (in seconds) before the glue object disappears.")]
+    public float disappearanceTime = 2f;  // Time to wait before the object is destroyed
+
+    private void Start()
     {
-        StartCoroutine(countDown());
+        // Start the countdown for disappearing
+        StartCoroutine(CountdownToDisappear());
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Coroutine that waits for the specified disappearance time before destroying the object.
+    /// </summary>
+    IEnumerator CountdownToDisappear()
     {
-        
-    }
+        // Wait for the specified time before destroying the object
+        yield return new WaitForSeconds(disappearanceTime);
 
-    IEnumerator countDown()
-    {
-        yield return new WaitForSeconds(2f);
-
+        // Destroy the game object after the time has passed
         Destroy(gameObject);
     }
-
 }

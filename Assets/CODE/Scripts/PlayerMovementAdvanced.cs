@@ -2,63 +2,72 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerMovementAdvanced : MonoBehaviour
 {
-    private float moveSpeed;
-    private float desiredMoveSpeed;
-    private float lastDesiredMoveSpeed;
+    [Header("Movement Settings")]
     public float walkSpeed;
     public float sprintSpeed;
     public float slideSpeed;
     public float wallrunSpeed;
+    public float crouchSpeed;
     public float stuckSpeed;
 
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
 
-    public float groundDrag;
+    private float moveSpeed;
+    private float desiredMoveSpeed;
+    private float lastDesiredMoveSpeed;
 
+    [Header("Jump Settings")]
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump;
+    public bool readyToJump;
 
-    public float crouchSpeed;
+    [Header("Physics Settings")]
+    public float groundDrag;
+    public float dragAir;
+    public float playerMass = 1f;
+    public float playerMassAir = 0.5f;
+
+    [Header("Player Properties")]
     public float crouchYScale;
     private float startYScale;
+    public float playerHeight;
+    public LayerMask whatIsGround;
 
+    [Header("Key Bindings")]
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
 
-    public float playerHeight;
-    public LayerMask whatIsGround;
-    bool grounded, air;
+    [Header("UI Elements")]
+    public TextMeshProUGUI text_speed;
+    public TextMeshProUGUI text_mode;
 
-    public float maxSlopeAngle;
-    private RaycastHit slopeHit;
-    private bool exitingSlope;
-
-    public float playerMass = 1f;
-    public float dragAir = 10f;
-    public float playerMassAir = 0.5f;
-
+    [Header("References")]
     public Transform orientation;
-    float horizontalInput;
-    float verticalInput;
-
-    Vector3 moveDirection;
-
-    Rigidbody rb;
-
+    public GameObject Umbrella;
     public GameObject[] underSlides;
     public Collider playerCollider;
-    public Collider[] underSLidesCollider;
+    public Collider[] underSlidesCollider;
+    public bool under = false;  // Tracks if the player is under a specific object
+    private RaycastHit slopeHit;
+    public float maxSlopeAngle;
+    private bool exitingSlope;
 
-    public GameObject Umbrella;
+    // State and Movement Variables
+    public bool grounded, air, stuck, crouching, wallrunning, sliding, freeze;
+    private bool enableMovementOnNextTouch;
+    private Vector3 moveDirection;
+    private bool activeGraple;
+    private Rigidbody rb;
+
+    private float horizontalInput;
+    private float verticalInput;
 
     public MovementState state;
     public enum MovementState
@@ -73,51 +82,42 @@ public class PlayerMovementAdvanced : MonoBehaviour
         stuck
     }
 
-    public bool freeze;
-    public bool sliding;
-    public bool crouching;
-    public bool wallrunning;
-
-    private bool enableMovementOnNextTouch;
-
-    public TextMeshProUGUI text_speed;
-    public TextMeshProUGUI text_mode;
-
-    public bool under = false;
-    private bool stuck = false;
-
     private void Start()
     {
+        // Initialize Rigidbody and prevent rotation
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        // Initial player scale and settings
         readyToJump = true;
-
         startYScale = transform.localScale.y;
-
         playerCollider = GetComponent<Collider>();
+
+        // Find and store objects tagged as underSlides
         underSlides = GameObject.FindGameObjectsWithTag("underStuck");
     }
 
     private void Update()
     {
+        // Quit application on pressing escape
         if (Input.GetKey("escape"))
         {
             Application.Quit();
         }
 
-        // ground check
+        // Ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();
         StateHandler();
 
+        // Handle physics adjustments depending on whether the player is grounded or airborne
         if (grounded && !activeGraple)
         {
             Umbrella.gameObject.SetActive(false);
-            rb.drag = groundDrag;           // Reset drag when grounded
-            rb.mass = playerMass;           // Reset mass when grounded
+            rb.drag = groundDrag;
+            rb.mass = playerMass;
         }
         else
         {
@@ -126,15 +126,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
             if (Input.GetKey(jumpKey))
             {
                 Umbrella.gameObject.SetActive(true);
-                rb.drag = dragAir;           // Set drag for umbrella use
-                rb.mass = playerMassAir;     // Set mass for umbrella use
+                rb.drag = dragAir;
+                rb.mass = playerMassAir;
             }
         }
-    }
-
-    public void ResetRestricions()
-    {
-        activeGraple = false;
     }
 
     private void FixedUpdate()
@@ -142,158 +137,86 @@ public class PlayerMovementAdvanced : MonoBehaviour
         MovePlayer();
     }
 
+    private void MyInput()
+    {
+        // Get player input for movement
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (enableMovementOnNextTouch)
-        {
-            enableMovementOnNextTouch = false;
-            ResetRestricions();
-
-            GetComponent<Grappling>().StopGrapple();
-        }
-
-        // Reset mass and drag when touching the ground or trampoline
+        // Reset mass and drag when touching the floor or trampoline
         if (collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("tramp"))
         {
-            rb.drag = groundDrag;       // Reset drag to ground drag
-            rb.mass = playerMass;        // Reset mass to normal player mass
+            rb.drag = groundDrag;
+            rb.mass = playerMass;
         }
 
+        // Jump when hitting a trampoline
         if (collision.transform.tag == "tramp")
         {
             Jump();
         }
 
+        // Handle banana collision for crouching and sliding behavior
         if (collision.transform.tag == "banana")
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
             rb.AddForce(Vector3.forward * 5f, ForceMode.Impulse);
-
             crouching = true;
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
+        // Stop sliding when exiting a banana collision
         if (collision.transform.tag == "banana")
         {
             StartCoroutine(stopSlide());
         }
     }
 
-    private void MyInput()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-    }
-
     private void StateHandler()
     {
-        // Mode - Freeze
         if (freeze)
         {
             state = MovementState.freeze;
             moveSpeed = 0;
             rb.velocity = Vector3.zero;
         }
-        // Mode - Wallrunning
         else if (wallrunning)
         {
             state = MovementState.wallrunning;
             desiredMoveSpeed = wallrunSpeed;
+            rb.useGravity = false;  // Disable gravity during wall running
         }
         else if (stuck)
         {
-            // Raycast to check if there's something "underStuck" above the player
-            RaycastHit hit;
-            Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
-            float rayDistance = 5.0f;                // The distance of the raycast
-
-            // Cast a ray upwards from the player's position
-            if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
-            {
-                if (hit.collider.gameObject.CompareTag("underStuck"))
-                {
-                    Debug.Log("Hit an object with tag 'underStuck'");
-                    under = true;
-                    stuck = true;
-                }
-                else
-                {
-                    Debug.Log("Hit an object without the 'underStuck' tag");
-                    under = false;
-                    transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-                    crouching = false;
-                    stuck = false;
-
-                }
-            }
-            else
-            {
-                Debug.Log("No object hit");
-                under = false;
-                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-                crouching = false;
-                stuck = false;
-
-            }
+            HandleStuckState();
         }
-        // Mode - Crouching
         else if (crouching)
         {
-            state = MovementState.crouching;
-            desiredMoveSpeed = crouchSpeed;
-
-            // When crouching, check for "underStuck" objects to determine if stuck
-            if (under == true && stuck == true)
-            {
-                // Set the player's scale for crouching
-                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-
-                // Set the movement state to stuck
-                state = MovementState.stuck;
-
-                // If there's no input, stop the player from sliding
-                if (horizontalInput == 0 && verticalInput == 0)
-                {
-                    // Set velocity to zero if no input
-                    rb.velocity = Vector3.zero;
-                }
-                else
-                {
-                    // Apply the stuck speed if there is input
-                    moveSpeed = stuckSpeed;
-                    rb.velocity = rb.velocity.normalized * stuckSpeed;
-                }
-            }
-            else
-            {
-                // Normal crouch behavior without being stuck
-                desiredMoveSpeed = crouchSpeed;
-            }
+            HandleCrouchState();
         }
-        
-
-        // Mode - Walking (normal behavior when grounded and not stuck)
         else if (grounded)
         {
-            state = MovementState.walking;
+            state = MovementState.walking;  // Transition to walking if grounded
             desiredMoveSpeed = walkSpeed;
+            rb.useGravity = true;  // Re-enable gravity if grounded
         }
-        // Mode - Air
         else
         {
-            state = MovementState.air;
+            state = MovementState.air;  // Transition to air state if not grounded
+            rb.useGravity = true;  // Re-enable gravity in the air
         }
 
-        // Check if the move speed has drastically changed and smooth the transition if needed
+        // Smoothly adjust speed if there's a big speed change
         if (Mathf.Abs(desiredMoveSpeed - lastDesiredMoveSpeed) > 5f && moveSpeed != 0)
         {
             StopAllCoroutines();
             StartCoroutine(SmoothlyLerpMoveSpeed());
-
-            print("Lerp Started!");
         }
         else
         {
@@ -303,65 +226,145 @@ public class PlayerMovementAdvanced : MonoBehaviour
         lastDesiredMoveSpeed = desiredMoveSpeed;
     }
 
-
-
-    IEnumerator stopSlide()
+    private void HandleStuckState()
     {
-        yield return new WaitForSeconds(0.5f); // Wait for the slide to finish
-
-        // Raycast to check if there's something "underStuck" above the player
         RaycastHit hit;
-        Vector3 rayOrigin = transform.position;  // Origin of the ray (e.g., from the player's position)
-        float rayDistance = 5.0f;                // The distance of the raycast
+        Vector3 rayOrigin = transform.position;
+        float rayDistance = 5.0f;
 
-        // Cast a ray upwards from the player's position
+        // Cast a ray upwards to check if something is blocking above
         if (Physics.Raycast(rayOrigin, Vector3.up, out hit, rayDistance))
         {
             if (hit.collider.gameObject.CompareTag("underStuck"))
             {
-                Debug.Log("Hit an object with tag 'underStuck'");
                 under = true;
                 stuck = true;
+
+                // Set the player's scale for crouching
+                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+
+                // Stop movement if stuck under something
+                state = MovementState.stuck;
+                rb.velocity = Vector3.zero;
             }
             else
             {
-                Debug.Log("Hit an object without the 'underStuck' tag");
-                under = false;
-                stuck = false;
+                ResetStuckState();
             }
         }
         else
         {
-            Debug.Log("No object hit");
-            under = false;
-            stuck = false;
+            ResetStuckState();
         }
+    }
 
-        // Update the player's state after the raycast check
-        if (under == true && stuck == true)
+    private void HandleCrouchState()
+    {
+        state = MovementState.crouching;
+        desiredMoveSpeed = crouchSpeed;
+
+        if (under && stuck)
         {
-            // Set the player's scale for crouching
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-
-            // Set the movement state to stuck
+            // If the player is stuck under an object, stop movement
             state = MovementState.stuck;
-
-            // Stop the player from sliding
             rb.velocity = Vector3.zero;
         }
         else
         {
-            // Reset player's scale and allow normal movement again
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
-            crouching = false;
-            stuck = false;  // Set stuck to false so they can move normally again
+            // Normal crouch behavior
+            desiredMoveSpeed = crouchSpeed;
         }
     }
 
+    private void ResetStuckState()
+    {
+        // Reset the player's state from being stuck
+        under = false;
+        stuck = false;
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        crouching = false;
+    }
+
+    private void MovePlayer()
+    {
+        if (activeGraple) return;
+
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        // Handle wall running movement
+        if (wallrunning)
+        {
+            // Apply forward force along the wall to keep the player running
+            rb.AddForce(moveDirection.normalized * moveSpeed * 20f, ForceMode.Force);
+
+            // Keep the player at a fixed height while wall running by counteracting gravity
+            rb.useGravity = false;
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        }
+        else
+        {
+            // Handle movement on a slope
+            if (OnSlope() && !exitingSlope)
+            {
+                rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
+
+                if (rb.velocity.y > 0)
+                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+            else if (grounded)
+            {
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            }
+            else if (!grounded)
+            {
+                rb.useGravity = true;  // Ensure gravity is enabled while in the air
+                rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            }
+        }
+    }
+
+    private void SpeedControl()
+    {
+        if (state == MovementState.stuck)
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            if (flatVel.magnitude > stuckSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * stuckSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
+        else if (state == MovementState.stuck)
+        {
+            rb.velocity = Vector3.zero;  // Stop movement when stuck
+        }
+        else
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            if (flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
+    }
+
+    public Vector3 GetSlopeMoveDirection(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+    private void Jump()
+    {
+        rb.drag = groundDrag;
+        rb.mass = playerMass;
+
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
 
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
-        // smoothly lerp movementSpeed to desired value
         float time = 0;
         float difference = Mathf.Abs(desiredMoveSpeed - moveSpeed);
         float startValue = moveSpeed;
@@ -369,110 +372,23 @@ public class PlayerMovementAdvanced : MonoBehaviour
         while (time < difference)
         {
             moveSpeed = Mathf.Lerp(startValue, desiredMoveSpeed, time / difference);
-
-            if (OnSlope())
-            {
-                float slopeAngle = Vector3.Angle(Vector3.up, slopeHit.normal);
-                float slopeAngleIncrease = 1 + (slopeAngle / 90f);
-
-                time += Time.deltaTime * speedIncreaseMultiplier * slopeIncreaseMultiplier * slopeAngleIncrease;
-            }
-            else
-                time += Time.deltaTime * speedIncreaseMultiplier;
-
             yield return null;
         }
 
         moveSpeed = desiredMoveSpeed;
     }
 
-    private void MovePlayer()
+    public void ResetRestricions()
     {
-
-        if (activeGraple) return;
-
-        // calculate movement direction
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-        // on slope
-        if (OnSlope() && !exitingSlope)
-        {
-            rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
-
-            if (rb.velocity.y > 0)
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-        }
-
-        // on ground
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        // in air
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        // turn gravity off while on slope
-        if (!wallrunning) rb.useGravity = !OnSlope();
+        activeGraple = false;
     }
 
-private void SpeedControl()
-{
-    if (activeGraple) return;
-
-    // limiting speed on slope
-    if (OnSlope() && !exitingSlope)
+    IEnumerator stopSlide()
     {
-        if (rb.velocity.magnitude > moveSpeed)
-            rb.velocity = rb.velocity.normalized * moveSpeed;
+        yield return new WaitForSeconds(0.5f);
+        HandleStuckState();
     }
-    else if (state == MovementState.stuck)
-    {
-        // Clamp velocity to stuckSpeed when in the stuck state
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        if (flatVel.magnitude > stuckSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * stuckSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-        }
-    }
-    // limiting speed on ground or in air
-    else
-    {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // limit velocity if needed
-        if (flatVel.magnitude > moveSpeed)
-        {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-        }
-    }
-}
-
-    private void Jump()
-    {
-        // Reset Rigidbody properties before applying jump force
-        rb.drag = groundDrag;
-        rb.mass = playerMass;
-
-        exitingSlope = true;
-
-        // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        // Apply the jump force
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-
-    private Vector3 velocityToSet;
-    private void SetVelocity()
-    {
-        enableMovementOnNextTouch = true;
-        rb.velocity = velocityToSet;
-    }
-
-    public bool OnSlope()
+        public bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
         {
@@ -482,62 +398,4 @@ private void SpeedControl()
 
         return false;
     }
-
-    public Vector3 GetSlopeMoveDirection(Vector3 direction)
-    {
-        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
-    }
-
-
-    public static float Round(float value, int digits)
-    {
-        float mult = Mathf.Pow(10.0f, (float)digits);
-        return Mathf.Round(value * mult) / mult;
-    }
-
-    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
-    {
-        float gravity = Physics.gravity.y;
-        float displacementY = endPoint.y - startPoint.y;
-        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
-
-        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
-        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
-            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
-
-        return velocityXZ + velocityY;
-    }
-
-    bool activeGraple;
-
-    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
-    {
-        activeGraple = true;
-        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        Invoke(nameof(SetVelocity), 0.1f);
-
-        Invoke(nameof(ResetRestricions), 3f);
-    }
-
-    private void IgnoreCollisionsWithGluedObjects()
-    {
-        // Loop through each glued object
-        foreach (GameObject underSlide in underSlides)
-        {
-            // Get the Collider component of the current glued object
-            Collider underSLidesCollider = underSlide.GetComponent<Collider>();
-
-            // Check if the glued object has a Collider
-            if (underSLidesCollider != null)
-            {
-                // Ignore the collision between the player and the current glued object
-                Physics.IgnoreCollision(playerCollider, underSLidesCollider, true);
-            }
-            else
-            {
-                Debug.LogWarning("Object with tag 'glued' does not have a Collider component: ");
-            }
-        }
-    }
-
 }

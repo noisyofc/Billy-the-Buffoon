@@ -1,28 +1,40 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerDeath : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("Respawn Settings")]
+    [Tooltip("The player's respawn position.")]
+    public Vector3 respawnPosition = new Vector3(-8.5f, 16f, -5.5f);  // Default respawn position
+    [Tooltip("The player's respawn rotation.")]
+    public Vector3 respawnRotation = new Vector3(0f, 0f, 0f);         // Default respawn rotation
+
+    private void Start()
     {
-        gameObject.transform.position = new Vector3(-8.5f, 16f, -5.5f);
-        gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+        // Set the player's initial position and rotation at the start of the game
+        RespawnPlayer();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Handles the player's collision detection. If the player collides with the ocean, respawn them.
+    /// </summary>
+    /// <param name="collision">Collision data.</param>
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.transform.tag == "ocean")
+        // Check if the player collided with the ocean
+        if (collision.gameObject.CompareTag("ocean"))
         {
-            gameObject.transform.position = new Vector3(-8.5f, 16f, -5.5f);
-            gameObject.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+            RespawnPlayer();  // Respawn the player if they fall into the ocean
         }
+    }
+
+    /// <summary>
+    /// Respawns the player at the specified position and rotation.
+    /// </summary>
+    private void RespawnPlayer()
+    {
+        // Set the player's position and rotation to the respawn values
+        transform.position = respawnPosition;
+        transform.rotation = Quaternion.Euler(respawnRotation);
     }
 }
