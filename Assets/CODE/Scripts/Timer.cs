@@ -6,7 +6,7 @@ public class Timer : MonoBehaviour
 {
     [Header("Timer Settings")]
     [Tooltip("The total time elapsed since the timer started.")]
-    public float timeElapsed = 0f;  // Stores the total time elapsed
+    public static float timeElapsed = 0f;  // Stores the total time elapsed
 
     [Header("UI Components")]
     [Tooltip("Text component that will display the timer.")]

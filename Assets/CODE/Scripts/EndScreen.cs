@@ -53,8 +53,8 @@ public class EndScreen : MonoBehaviour
             endScreen.gameObject.SetActive(true);
 
             // Get stars collected and time from other game components
-            stars = CountStars.instance.stars;
-            time = Timer.instance.timeElapsed;
+            stars = CountStars.stars;
+            time = Timer.timeElapsed;
         }
     }
 }

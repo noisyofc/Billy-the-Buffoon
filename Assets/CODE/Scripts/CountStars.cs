@@ -8,7 +8,7 @@ public class CountStars : MonoBehaviour
 {
     [Header("Star Count")]
     [Tooltip("The current number of collected stars.")]
-    public int stars = 0;  // Tracks the number of collected stars
+    public static int stars = 0;  // Tracks the number of collected stars
 
     [Header("Star UI Elements")]
     [Tooltip("The UI objects representing collected stars.")]

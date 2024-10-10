@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDeath : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class PlayerDeath : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             Time.timeScale = 0;
+            CountStars.stars = 0;
+            Timer.timeElapsed = 0f;
             mainUI.SetActive(false);
         }
         
