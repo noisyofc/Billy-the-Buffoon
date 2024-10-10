@@ -9,6 +9,11 @@ public class PlayerDeath : MonoBehaviour
     [Tooltip("The player's respawn rotation.")]
     public Vector3 respawnRotation = new Vector3(0f, 0f, 0f);         // Default respawn rotation
 
+    public Rigidbody playerRigidbody;
+    public GameObject deathScreen;
+    public static bool playerDead = false;
+    public GameObject mainUI;
+
     private void Start()
     {
         // Set the player's initial position and rotation at the start of the game
@@ -25,7 +30,15 @@ public class PlayerDeath : MonoBehaviour
         if (collision.gameObject.CompareTag("ocean"))
         {
             RespawnPlayer();  // Respawn the player if they fall into the ocean
+            PlayerMovementAdvanced.Paused = true;
+            deathScreen.SetActive(true);
+            playerDead = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = 0;
+            mainUI.SetActive(false);
         }
+        
     }
 
     /// <summary>
@@ -36,5 +49,7 @@ public class PlayerDeath : MonoBehaviour
         // Set the player's position and rotation to the respawn values
         transform.position = respawnPosition;
         transform.rotation = Quaternion.Euler(respawnRotation);
+        playerRigidbody.velocity = Vector3.zero;
+        playerRigidbody.angularVelocity = Vector3.zero;
     }
 }

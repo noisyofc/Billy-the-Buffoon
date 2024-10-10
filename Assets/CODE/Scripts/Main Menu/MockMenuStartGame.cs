@@ -38,6 +38,7 @@ public class MockMenuStartGame : MonoBehaviour
         {
             SceneManager.LoadScene("GAME/Scenes/Level 1 - Borys");
             Time.timeScale = 1;
+            PlayerMovementAdvanced.Paused = false;
         }
     }
 

@@ -78,6 +78,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: klej
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3b327c13ab04e854995beb5ced2f2181,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -165,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3b327c13ab04e854995beb5ced2f2181,
         type: 3}
       propertyPath: m_Name
-      value: klej
+      value: glue
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3b327c13ab04e854995beb5ced2f2181,
         type: 3}
@@ -181,6 +186,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3180074824662713255}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b327c13ab04e854995beb5ced2f2181,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8024869657701509532}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b327c13ab04e854995beb5ced2f2181,
         type: 3}
@@ -244,6 +253,13 @@ MonoBehaviour:
   spawnYshelf: 1
   glueWall: {fileID: 5477257762456056078, guid: ac37585aabec65a43884743c93091ece,
     type: 3}
+  supportPoints: []
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  fallThreshold: 0.5
+  rayLength: 1
+  playerObject: {fileID: 0}
 --- !u!135 &6820677423875512492
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -270,4 +286,78 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b327c13ab04e854995beb5ced2f2181,
     type: 3}
   m_PrefabInstance: {fileID: 6900197110758199571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7553848373450018423
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6361569545212540664}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3a27b80a96b58624990356f877c5d508,
+        type: 3}
+      propertyPath: m_Name
+      value: klej (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3a27b80a96b58624990356f877c5d508, type: 3}
+--- !u!4 &8024869657701509532 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3a27b80a96b58624990356f877c5d508,
+    type: 3}
+  m_PrefabInstance: {fileID: 7553848373450018423}
   m_PrefabAsset: {fileID: 0}

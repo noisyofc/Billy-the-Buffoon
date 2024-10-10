@@ -22,6 +22,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneManager.LoadScene(testLevelScene);
         Time.timeScale = 1;  // Ensure time is running normally
+        PlayerMovementAdvanced.Paused = false;
     }
 
     // Start the game by loading Level 1
@@ -29,6 +30,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneManager.LoadScene(startGameScene);
         Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
     }
 
     // Load the next level (Level 2)
@@ -36,6 +38,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneManager.LoadScene(nextLevelScene);
         Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
     }
 
     // Load a saved game (Level 3)
@@ -43,6 +46,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneManager.LoadScene(loadGameScene);
         Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
     }
 
     // Exit the game application
@@ -55,5 +59,7 @@ public class SceneManagerController : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(mainMenuScene);
+        Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
     }
 }

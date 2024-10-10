@@ -69,6 +69,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
+    public GameObject optionsCanvas;
+    public GameObject mainUI;
+    public static bool Paused;
+
     public MovementState state;
     public enum MovementState
     {
@@ -102,7 +106,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // Quit application on pressing escape
         if (Input.GetKey("escape"))
         {
-            Application.Quit();
+            Paused = true;
+            Time.timeScale = 0;
+            optionsCanvas.SetActive(true);
+            mainUI.SetActive(false);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
         // Ground check

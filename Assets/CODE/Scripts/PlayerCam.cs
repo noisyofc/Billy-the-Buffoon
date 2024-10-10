@@ -5,6 +5,7 @@ using DG.Tweening;
 public class PlayerCam : MonoBehaviour
 {
     [Header("Sensitivity Settings")]
+    private float mouseSensitivity;
     [Tooltip("Mouse sensitivity along the X-axis.")]
     public float sensX = 100f;  // Sensitivity for mouse X-axis
     [Tooltip("Mouse sensitivity along the Y-axis.")]
@@ -23,15 +24,18 @@ public class PlayerCam : MonoBehaviour
     private void Start()
     {
         // Lock the cursor and hide it for first-person control
+        mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     private void Update()
     {
+        mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
         // Get mouse input for both X and Y axes
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX * mouseSensitivity;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY * mouseSensitivity;
 
         // Adjust the yaw (Y rotation) based on mouse X movement
         yRotation += mouseX;
