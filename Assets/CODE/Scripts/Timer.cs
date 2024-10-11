@@ -27,6 +27,11 @@ public class Timer : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        timeElapsed = 0f;
+    }
+
     private void Update()
     {
         // Update the time elapsed based on the time since the last frame
@@ -35,8 +40,9 @@ public class Timer : MonoBehaviour
         // Convert the time elapsed into minutes and seconds format
         int minutes = Mathf.FloorToInt(timeElapsed / 60f);
         int seconds = Mathf.FloorToInt(timeElapsed % 60f);
+        int milliseconds = Mathf.FloorToInt((timeElapsed * 100) % 100);
 
         // Update the UI text with the formatted time
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        timerText.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
 }

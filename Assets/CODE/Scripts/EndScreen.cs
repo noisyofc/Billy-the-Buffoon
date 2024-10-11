@@ -29,7 +29,8 @@ public class EndScreen : MonoBehaviour
         // Format the time to MM:SS and update the time display
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
-        timeEnd.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        int milliseconds = Mathf.FloorToInt((time * 100) % 100);
+        timeEnd.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
 
     /// <summary>
