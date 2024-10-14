@@ -147,6 +147,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 82494281517017762, guid: 409010852d1134147862865a8889b834,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114563767409429530, guid: 409010852d1134147862865a8889b834,
+        type: 3}
+      propertyPath: collectSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1d31fb5075bc9384abb9503d0fd3c323, type: 3}
     - target: {fileID: 114563767409429530, guid: 409010852d1134147862865a8889b834,
         type: 3}
       propertyPath: rotationSpeed
