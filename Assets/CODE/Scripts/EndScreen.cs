@@ -24,13 +24,13 @@ public class EndScreen : MonoBehaviour
     private void Update()
     {
         // Update the stars display
-        starsEnd.text = stars.ToString();
+        starsEnd.text = string.Format("Balloons Collected: {0}",stars.ToString());
 
         // Format the time to MM:SS and update the time display
         int minutes = Mathf.FloorToInt(time / 60f);
         int seconds = Mathf.FloorToInt(time % 60f);
         int milliseconds = Mathf.FloorToInt((time * 100) % 100);
-        timeEnd.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+        timeEnd.text = string.Format("End Time: {0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
     }
 
     /// <summary>

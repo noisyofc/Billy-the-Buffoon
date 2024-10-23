@@ -1002,6 +1002,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ffbc3415f9f331945bdbbe828f9ec29d, type: 3}
+--- !u!114 &100562235 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3302061337997492644, guid: 01386240b42af534d8657ff6521a621b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1398400515}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &101893179
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10324,6 +10336,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 956090062}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1302772789 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8401536059697835506, guid: 01386240b42af534d8657ff6521a621b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1398400515}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1323125697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11420,12 +11444,22 @@ PrefabInstance:
     - target: {fileID: 1902532792176436210, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_text
-      value: Play Again
+      value: Next Level
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062013160873610387, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062013160873610387, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SceneManagerController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3702582018118690322, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartGame
+      value: LoadGame
       objectReference: {fileID: 0}
     - target: {fileID: 3702582018118690322, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
@@ -11867,18 +11901,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 868b5a0a3ae73df42ad9612354f4bccd, type: 3}
---- !u!114 &1473481496 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 108441149552463536, guid: 01386240b42af534d8657ff6521a621b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1398400515}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1474042530
 GameObject:
   m_ObjectHideFlags: 0
@@ -11987,18 +12009,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1474042530}
   m_Mesh: {fileID: -362046790695249943, guid: 2fac9ae253879294b99cca24cd683aaa, type: 3}
---- !u!114 &1475587168 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8455128437180297827, guid: 01386240b42af534d8657ff6521a621b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1398400515}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1481955385
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13996,8 +14006,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1abb7e43f93be2145a26bb59e6c07c66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starsEnd: {fileID: 1475587168}
-  timeEnd: {fileID: 1473481496}
+  starsEnd: {fileID: 100562235}
+  timeEnd: {fileID: 1302772789}
   endScreen: {fileID: 720659066}
   canvas: {fileID: 1236171893}
   stars: 0
@@ -16331,17 +16341,17 @@ PrefabInstance:
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7
+      value: -3.1523132
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16
+      value: 50.57
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: 285.43268
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
