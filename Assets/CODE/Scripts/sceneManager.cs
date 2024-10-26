@@ -7,13 +7,13 @@ public class SceneManagerController : MonoBehaviour
 {
     [Header("Scenes to Load")]
     [Tooltip("Path for the test level scene.")]
-    public string testLevelScene = "GAME/Scenes/Level 0 - TEST_LEVEL";
+    public string testLevelScene = "GAME/Scenes/Level_0_0";
     [Tooltip("Path for the main game scene (Level 1).")]
-    public string startGameScene = "GAME/Scenes/Level 1 - Borys";
+    public string startGameScene = "GAME/Scenes/Level_1_1";
     [Tooltip("Path for the game load scene (Level 3).")]
-    public string loadGameScene = "GAME/Scenes/Level 3 - Borys";
+    public string loadGameScene = "GAME/Scenes/Level_1_2";
     [Tooltip("Path for the next level scene (Level 2).")]
-    public string nextLevelScene = "GAME/Scenes/Level 2 - Borys";
+    public string nextLevelScene = "GAME/Scenes/Level_1_3";
     [Tooltip("Path for the main menu scene.")]
     public string mainMenuScene = "GAME/Scenes/Menu";
 

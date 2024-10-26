@@ -65,4 +65,16 @@ public class OptionsMenu : MonoBehaviour
         PlayerMovementAdvanced.Paused = false;
         LoadSensitivity();
     }
+
+    public void restartLevel()
+    {
+        Time.timeScale = 1;
+        optionsCanvas.SetActive(false);
+        mainUI.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        PlayerMovementAdvanced.Paused = false;
+        LoadSensitivity();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

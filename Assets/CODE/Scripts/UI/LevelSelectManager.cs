@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelSelectManager : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class LevelSelectManager : MonoBehaviour
         if (selectedLevelButton != null)
         {
             int levelToLoad = selectedLevelButton.levelNumber;
+            string levelName = string.Format("Level_1_{0}", levelToLoad);
+            SceneManager.LoadScene(levelName);
             Debug.Log("Starting Level: " + levelToLoad);
             // Implement your level-loading logic here, e.g., using SceneManager.LoadScene(levelToLoad);
         }

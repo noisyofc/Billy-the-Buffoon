@@ -36,7 +36,7 @@ public class MockMenuStartGame : MonoBehaviour
     {
         if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
         {
-            SceneManager.LoadScene("GAME/Scenes/Level 1 - Borys");
+            SceneManager.LoadScene("GAME/Scenes/Level_1_1");
             Time.timeScale = 1;
             PlayerMovementAdvanced.Paused = false;
         }

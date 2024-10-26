@@ -732,10 +732,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 510178fb6efd86a488f6acbbe44481a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testLevelScene: GAME/Scenes/Level 0 - TEST_LEVEL
-  startGameScene: GAME/Scenes/Level 1 - Borys
-  loadGameScene: GAME/Scenes/Level 3 - Borys
-  nextLevelScene: GAME/Scenes/Level 2 - Borys
+  testLevelScene: GAME/Scenes/Level_0_0
+  startGameScene: GAME/Scenes/Level_1_1
+  loadGameScene: GAME/Scenes/Level_1_2
+  nextLevelScene: GAME/Scenes/Level_1_3
   mainMenuScene: GAME/Scenes/Menu
 --- !u!1 &7562367645373641783
 GameObject:
@@ -857,9 +857,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8367245947274121523}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: sceneManager, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

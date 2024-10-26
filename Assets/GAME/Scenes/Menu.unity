@@ -1856,7 +1856,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Biome Name
+  m_text: Forest
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0426bfe6fb661ed44b992fa6739df3d9, type: 2}
   m_sharedMaterial: {fileID: 7218691770882735598, guid: 0426bfe6fb661ed44b992fa6739df3d9,
@@ -2284,13 +2284,14 @@ GameObject:
   - component: {fileID: 270529871}
   - component: {fileID: 270529870}
   - component: {fileID: 270529874}
+  - component: {fileID: 270529875}
   m_Layer: 0
   m_Name: Choose Level Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &270529870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2388,6 +2389,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playButton: {fileID: 1469501163}
+--- !u!114 &270529875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 270529869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98028589786f554daab9e0f62394575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &326898844 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2a7043eefa3ef784cb856a0c878bf4b3,
@@ -3882,7 +3895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelNumber: 2
-  isUnlocked: 1
+  isUnlocked: 0
   defaultSprite: {fileID: 21300000, guid: 385b892b900fc934eafadf1d90410718, type: 3}
   selectedSprite: {fileID: 21300000, guid: 385b892b900fc934eafadf1d90410718, type: 3}
   disabledSprite: {fileID: 21300000, guid: e91865c91edc23043b5d32253de4e6a2, type: 3}
@@ -6817,7 +6830,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 870609774}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 270529875}
+        m_TargetAssemblyTypeName: BackButton, Assembly-CSharp
+        m_MethodName: goBack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &870609774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7542,7 +7567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86fee2a178b1ee14cbeb606cb20b1e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panelSelectLevel: {fileID: 1201044160}
+  panelSelectLevel: {fileID: 270529869}
   panelOptions: {fileID: 8550659922012376949}
   material:
   - {fileID: 2100000, guid: fbd5e9f5db7c3fe4c85347e9452b2ad4, type: 2}
@@ -10977,7 +11002,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947011406}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f74bfa1dd6d8e74f9c83ea89673ad3e, type: 3}
   m_Name: 
@@ -11004,7 +11029,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.2398548, y: 0.6851314, z: 0.5126047}
   m_Center: {x: 0.007123435, y: -0.000000029802322, z: -0.0014213476}
