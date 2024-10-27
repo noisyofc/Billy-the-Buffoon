@@ -1466,8 +1466,8 @@ PrefabInstance:
       objectReference: {fileID: 1080331823}
     - target: {fileID: 429486827106868092, guid: 02f0ac0aa53fd4449884a43a5afd930e,
         type: 3}
-      propertyPath: currentLevel
-      value: 3
+      propertyPath: currentBiome
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 429486827106868092, guid: 02f0ac0aa53fd4449884a43a5afd930e,
         type: 3}
@@ -1928,17 +1928,17 @@ PrefabInstance:
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.6216497
+      value: -4.642831
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 52.16296
+      value: 50.37
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 283.90097
+      value: 285.35934
       objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210216, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}

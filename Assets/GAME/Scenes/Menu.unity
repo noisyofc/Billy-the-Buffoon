@@ -2427,7 +2427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &270529870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2529,6 +2529,11 @@ MonoBehaviour:
   bestTimeText: {fileID: 543608497}
   bestBalloonsText: {fileID: 58092033}
   gradeText: {fileID: 1596499870}
+  levelButtons:
+  - {fileID: 744850626}
+  - {fileID: 503291567}
+  - {fileID: 665224179}
+  - {fileID: 664137383}
 --- !u!114 &270529875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3796,7 +3801,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: -435}
+  m_AnchoredPosition: {x: 0.000030517578, y: -722}
   m_SizeDelta: {x: 300, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &450149084
@@ -3869,7 +3874,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 21300000, guid: 6e86b80c927b43e4fb710a918bc71b0b, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: a3e84b4a4ac107240b3f4d86aef1e0b6, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -5674,7 +5679,7 @@ MonoBehaviour:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 21300000, guid: 6d084b63d9b043c44a9ebf91109b41f6, type: 3}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 21300000, guid: 146af1d119e61bf46bfa6499cfad768c, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -13603,8 +13608,13 @@ SceneRoots:
   - {fileID: 401521170}
   - {fileID: 270529873}
   - {fileID: 1158569983}
-  - {fileID: 391769203}
   - {fileID: 381812111}
+  - {fileID: 1475627540}
+  - {fileID: 515196820}
+  - {fileID: 351587283}
+  - {fileID: 558688168}
+  - {fileID: 189561356}
+  - {fileID: 391769203}
   - {fileID: 701773084}
   - {fileID: 384013576}
   - {fileID: 603200322}
@@ -13628,14 +13638,10 @@ SceneRoots:
   - {fileID: 397254509}
   - {fileID: 966689941}
   - {fileID: 1515363268}
-  - {fileID: 515196820}
-  - {fileID: 351587283}
-  - {fileID: 558688168}
   - {fileID: 1323170053}
   - {fileID: 2137619725}
   - {fileID: 174228152}
   - {fileID: 1018675024}
-  - {fileID: 1475627540}
   - {fileID: 110996918}
   - {fileID: 1194297430}
   - {fileID: 845804502}
@@ -13643,7 +13649,6 @@ SceneRoots:
   - {fileID: 1296139867}
   - {fileID: 1870874131}
   - {fileID: 78025018}
-  - {fileID: 189561356}
   - {fileID: 545974461}
   - {fileID: 1801582044}
   - {fileID: 377256732}

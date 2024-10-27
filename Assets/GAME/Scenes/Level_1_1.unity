@@ -3705,7 +3705,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 600477624}
     m_Modifications:
     - target: {fileID: 722312126126372932, guid: 9b1fbf24805b77e42b36d548b84cf230,
         type: 3}
@@ -3767,6 +3767,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b1fbf24805b77e42b36d548b84cf230, type: 3}
+--- !u!4 &237496223 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 722312126126372932, guid: 9b1fbf24805b77e42b36d548b84cf230,
+    type: 3}
+  m_PrefabInstance: {fileID: 237496222}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &240207501
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5872,7 +5878,7 @@ GameObject:
   m_Component:
   - component: {fileID: 477594776}
   m_Layer: 0
-  m_Name: Stars
+  m_Name: Balloons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7261,6 +7267,7 @@ Transform:
   - {fileID: 1432526511}
   - {fileID: 348819784}
   - {fileID: 475606698}
+  - {fileID: 237496223}
   m_Father: {fileID: 1898587337}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &601870764
@@ -13215,37 +13222,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1572779608}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1116465577
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1116465578}
-  m_Layer: 0
-  m_Name: ForestObjects
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1116465578
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1116465577}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1117417283
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16128,7 +16104,7 @@ PrefabInstance:
     - target: {fileID: 3702582018118690322, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: LoadGame
+      value: StartNextLevel
       objectReference: {fileID: 0}
     - target: {fileID: 3702582018118690322, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
@@ -17166,7 +17142,7 @@ GameObject:
   - component: {fileID: 1474042533}
   - component: {fileID: 1474042532}
   m_Layer: 0
-  m_Name: Cube.031
+  m_Name: end model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20755,7 +20731,7 @@ GameObject:
   - component: {fileID: 1885033915}
   - component: {fileID: 1885033914}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: end level trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20792,6 +20768,10 @@ MonoBehaviour:
   timeEnd: {fileID: 1302772789}
   endScreen: {fileID: 720659066}
   canvas: {fileID: 1236171893}
+  currentBiome: 1
+  currentLevel: 1
+  totalBalloons: 9
+  gradeAchieved: A+
   stars: 0
   time: 0
 --- !u!65 &1885033915
@@ -24313,16 +24293,14 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 5462591464691421119}
   - {fileID: 456193063}
   - {fileID: 402647635}
+  - {fileID: 1398400515}
+  - {fileID: 5462591464691421119}
+  - {fileID: 7264196945580426522}
+  - {fileID: 2094202941020962331}
   - {fileID: 3051714022367177107}
   - {fileID: 4467998052107966562}
-  - {fileID: 2094202941020962331}
-  - {fileID: 496665136}
-  - {fileID: 7264196945580426522}
-  - {fileID: 477594776}
-  - {fileID: 1398400515}
   - {fileID: 7355589265258579345}
-  - {fileID: 1116465578}
-  - {fileID: 237496222}
+  - {fileID: 477594776}
+  - {fileID: 496665136}

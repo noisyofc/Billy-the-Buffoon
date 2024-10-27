@@ -65,6 +65,9 @@ public class SceneManagerController : MonoBehaviour
 
     public void StartNextLevel()
     {
+        Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
+
         // Get the current active scene's build index
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 

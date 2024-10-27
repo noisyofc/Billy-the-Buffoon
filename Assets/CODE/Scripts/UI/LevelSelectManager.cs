@@ -19,14 +19,16 @@ public class LevelSelectManager : MonoBehaviour
 
     private BiomeSelector biomeSelector; // Reference to the BiomeSelector
     private int selectedBiomeIndex;
+    public List<LevelButton> levelButtons;
 
     // Dictionary to map level scene names to custom display names
     private Dictionary<string, string> levelDisplayNames = new Dictionary<string, string>
     {
         { "Level_1_1", "Aerial Acrobatics" },
         { "Level_1_2", "Mountain Climber" },
-        { "Level_2_1", "Desert Dash" },
-        { "Level_2_2", "Sandy Sprint" },
+        { "Level_1_3", "Desert Dash" },
+        { "Level_1_4", "Sandy Sprint" },
+        { "Level_2_1", "Boulder Breaker" },
         // Add more level mappings as needed
     };
 
@@ -38,6 +40,8 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
+        //levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
+
         biomeSelector = FindObjectOfType<BiomeSelector>();
         selectedBiomeIndex = biomeSelector.currentBiomeIndex;
 
@@ -62,12 +66,12 @@ public class LevelSelectManager : MonoBehaviour
     }
 
     // Method to deselect the currently selected level button
-    public void DeselectCurrentLevel()
+    private void DeselectCurrentLevel()
     {
         if (selectedLevelButton != null)
         {
             // Deselect the level button and disable its background
-            selectedLevelButton.SetSelected(false);
+            selectedLevelButton.SetSelected(false); // Deactivates the background within SetSelected
             selectedLevelButton = null;
         }
 
@@ -80,6 +84,7 @@ public class LevelSelectManager : MonoBehaviour
         bestBalloonsText.text = "Collected: N/A";
         gradeText.text = "Grade: N/A";
     }
+
 
     // Method to select a level and update UI
     public void SelectLevel(LevelButton levelButton)
@@ -117,31 +122,33 @@ public class LevelSelectManager : MonoBehaviour
     {
         GameData gameData = SaveSystem.LoadGame();
 
-        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
-        {
-            if (levelButton.biomeNumber == selectedBiomeIndex)
-            {
-                LevelData levelData = gameData.levels.Find(level =>
-                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
-                    level.levelNumber == levelButton.levelNumber.ToString());
+foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+{
+    // Only process buttons for the currently selected biome
+    if (levelButton.biomeNumber == selectedBiomeIndex)
+    {
+        LevelData levelData = gameData.levels.Find(level => 
+            level.biomeNumber == levelButton.biomeNumber.ToString() &&
+            level.levelNumber == levelButton.levelNumber.ToString());
 
-                if (levelData != null)
-                {
-                    levelButton.isUnlocked = levelData.isUnlocked == "true";
-                    levelButton.UpdateButtonState();
-                }
-                else
-                {
-                    levelButton.isUnlocked = false;
-                    levelButton.UpdateButtonState();
-                }
-            }
-            else
-            {
-                levelButton.isUnlocked = false;
-                levelButton.UpdateButtonState();
-            }
+        if (levelData != null)
+        {
+            levelButton.isUnlocked = levelData.isUnlocked == "true";
+            levelButton.UpdateButtonState();
         }
+        else
+        {
+            levelButton.isUnlocked = false;
+            levelButton.UpdateButtonState();
+        }
+    }
+    else
+    {
+        // Lock buttons not in the selected biome
+        levelButton.isUnlocked = false;
+        levelButton.UpdateButtonState();
+    }
+}
     }
 
     // Method to update the level info UI based on selected level
@@ -235,5 +242,36 @@ public class LevelSelectManager : MonoBehaviour
         Debug.Log("All levels have been locked.");
     }
 
+    public void UpdateLevelButtonsForBiome(int biomeIndex)
+    {
+        DeselectCurrentLevel(); // Clear current selection and background
+
+        selectedBiomeIndex = biomeIndex;
+
+        // Update each button to reflect the new biome and level numbers
+        for (int i = 0; i < levelButtons.Count; i++)
+        {
+            LevelButton levelButton = levelButtons[i];
+            levelButton.biomeNumber = biomeIndex; // Set the biome number
+            levelButton.levelNumber = i + 1;      // Set level number based on index (1, 2, 3, 4)
+
+            // Check if this level is unlocked based on saved data
+            GameData gameData = SaveSystem.LoadGame();
+            LevelData levelData = gameData.levels.Find(level =>
+                level.biomeNumber == levelButton.biomeNumber.ToString() &&
+                level.levelNumber == levelButton.levelNumber.ToString());
+
+            if (levelData != null)
+            {
+                levelButton.isUnlocked = levelData.isUnlocked == "true";
+            }
+            else
+            {
+                levelButton.isUnlocked = false;
+            }
+
+            levelButton.UpdateButtonState(); // Update button appearance
+        }
+    }
 
 }
