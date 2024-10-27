@@ -62,4 +62,26 @@ public class SceneManagerController : MonoBehaviour
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
     }
+
+    public void StartNextLevel()
+    {
+        // Get the current active scene's build index
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        // Calculate the next scene index
+        int nextSceneIndex = currentSceneIndex + 1;
+
+        // Check if the next scene index is within the build settings range
+        if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
+        {
+            // Load the next scene
+            SceneManager.LoadScene(nextSceneIndex);
+            Debug.Log("Loading next level: " + nextSceneIndex);
+        }
+        else
+        {
+            // Optional: handle end of levels (e.g., loop to start, show end screen)
+            Debug.Log("No more levels. End of game.");
+        }
+    }
 }

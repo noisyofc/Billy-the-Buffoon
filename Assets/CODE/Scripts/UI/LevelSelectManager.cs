@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using TMPro;
 
 public class LevelSelectManager : MonoBehaviour
 {
@@ -8,6 +10,25 @@ public class LevelSelectManager : MonoBehaviour
     private LevelButton selectedLevelButton;
 
     public Button playButton;
+
+    // Reference to UI Text elements
+    public TextMeshProUGUI levelNameText;
+    public TextMeshProUGUI bestTimeText;
+    public TextMeshProUGUI bestBalloonsText;
+    public TextMeshProUGUI gradeText;
+
+    private BiomeSelector biomeSelector; // Reference to the BiomeSelector
+    private int selectedBiomeIndex;
+
+    // Dictionary to map level scene names to custom display names
+    private Dictionary<string, string> levelDisplayNames = new Dictionary<string, string>
+    {
+        { "Level_1_1", "Aerial Acrobatics" },
+        { "Level_1_2", "Mountain Climber" },
+        { "Level_2_1", "Desert Dash" },
+        { "Level_2_2", "Sandy Sprint" },
+        // Add more level mappings as needed
+    };
 
     private void Awake()
     {
@@ -17,35 +38,202 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
+        biomeSelector = FindObjectOfType<BiomeSelector>();
+        selectedBiomeIndex = biomeSelector.currentBiomeIndex;
+
         playButton.interactable = false;
         playButton.onClick.AddListener(StartSelectedLevel);
+
+        LoadLevelUnlockStatus(); // Load initial level unlock status
+        DeselectCurrentLevel(); // Ensure no level is selected on canvas open
     }
 
-    public void SelectLevel(LevelButton levelButton)
+    private void Update()
     {
-        // Deselect the previously selected level
+        // Check if the biome has changed
+        if (selectedBiomeIndex != biomeSelector.currentBiomeIndex)
+        {
+            // Deselect the currently selected level when biome changes
+            DeselectCurrentLevel();
+
+            selectedBiomeIndex = biomeSelector.currentBiomeIndex;
+            LoadLevelUnlockStatus();
+        }
+    }
+
+    // Method to deselect the currently selected level button
+    public void DeselectCurrentLevel()
+    {
         if (selectedLevelButton != null)
         {
+            // Deselect the level button and disable its background
             selectedLevelButton.SetSelected(false);
+            selectedLevelButton = null;
         }
+
+        // Disable the play button since no level is selected
+        playButton.interactable = false;
+
+        // Clear level info UI
+        levelNameText.text = "Select a Level";
+        bestTimeText.text = "Best Time: N/A";
+        bestBalloonsText.text = "Collected: N/A";
+        gradeText.text = "Grade: N/A";
+    }
+
+    // Method to select a level and update UI
+    public void SelectLevel(LevelButton levelButton)
+    {
+        DeselectCurrentLevel();
 
         // Select the new level
         selectedLevelButton = levelButton;
         selectedLevelButton.SetSelected(true);
 
-        // Enable the play button
-        playButton.interactable = true;
+        playButton.interactable = levelButton.isUnlocked;
+
+        // Display the selected level information on the UI
+        UpdateLevelInfoUI();
     }
 
     private void StartSelectedLevel()
     {
-        if (selectedLevelButton != null)
+        if (selectedLevelButton != null && selectedLevelButton.isUnlocked)
         {
+            int biomeToLoad = selectedLevelButton.biomeNumber;
             int levelToLoad = selectedLevelButton.levelNumber;
-            string levelName = string.Format("Level_1_{0}", levelToLoad);
+            string levelName = string.Format("Level_{0}_{1}", biomeToLoad, levelToLoad);
             SceneManager.LoadScene(levelName);
-            Debug.Log("Starting Level: " + levelToLoad);
-            // Implement your level-loading logic here, e.g., using SceneManager.LoadScene(levelToLoad);
+
+            Debug.Log("Starting Level: " + levelName);
+        }
+        else
+        {
+            Debug.LogWarning("Cannot start a locked level!");
         }
     }
+
+    private void LoadLevelUnlockStatus()
+    {
+        GameData gameData = SaveSystem.LoadGame();
+
+        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        {
+            if (levelButton.biomeNumber == selectedBiomeIndex)
+            {
+                LevelData levelData = gameData.levels.Find(level =>
+                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
+                    level.levelNumber == levelButton.levelNumber.ToString());
+
+                if (levelData != null)
+                {
+                    levelButton.isUnlocked = levelData.isUnlocked == "true";
+                    levelButton.UpdateButtonState();
+                }
+                else
+                {
+                    levelButton.isUnlocked = false;
+                    levelButton.UpdateButtonState();
+                }
+            }
+            else
+            {
+                levelButton.isUnlocked = false;
+                levelButton.UpdateButtonState();
+            }
+        }
+    }
+
+    // Method to update the level info UI based on selected level
+    private void UpdateLevelInfoUI()
+    {
+        if (selectedLevelButton == null) return;
+
+        // Construct the level key based on biome and level numbers
+        string levelKey = $"Level_{selectedLevelButton.biomeNumber}_{selectedLevelButton.levelNumber}";
+
+        // Set the level name using the display names dictionary
+        if (levelDisplayNames.TryGetValue(levelKey, out string displayName))
+        {
+            levelNameText.text = displayName;
+        }
+        else
+        {
+            levelNameText.text = "Unknown Level"; // Default text if no display name is found
+        }
+
+        // Load game data to retrieve best time, balloons, and grade
+        GameData gameData = SaveSystem.LoadGame();
+        LevelData levelData = gameData.levels.Find(level =>
+            level.biomeNumber == selectedLevelButton.biomeNumber.ToString() &&
+            level.levelNumber == selectedLevelButton.levelNumber.ToString());
+
+        if (levelData != null)
+        {
+            bestTimeText.text = $"Best Time: {levelData.bestTime}";
+            bestBalloonsText.text = $"Collected: {levelData.bestBalloons}";
+            gradeText.text = $"Grade: {levelData.grade}";
+        }
+        else
+        {
+            bestTimeText.text = "Best Time: N/A";
+            bestBalloonsText.text = "Collected: N/A";
+            gradeText.text = "Grade: N/A";
+        }
+    }
+
+    public void SaveLevelProgress(int biomeNumber, int levelNumber, string timeElapsed, string balloonsCollected, string grade)
+    {
+        GameData gameData = SaveSystem.LoadGame();
+
+        LevelData levelData = gameData.levels.Find(level =>
+            level.biomeNumber == biomeNumber.ToString() &&
+            level.levelNumber == levelNumber.ToString());
+
+        if (levelData == null)
+        {
+            levelData = new LevelData
+            {
+                biomeNumber = biomeNumber.ToString(),
+                levelNumber = levelNumber.ToString(),
+                isUnlocked = "true",
+                bestTime = timeElapsed,
+                bestBalloons = balloonsCollected,
+                grade = grade
+            };
+            gameData.levels.Add(levelData);
+        }
+        else
+        {
+            levelData.isUnlocked = "true";
+            levelData.bestTime = timeElapsed;
+            levelData.bestBalloons = balloonsCollected;
+            levelData.grade = grade;
+        }
+
+        SaveSystem.SaveGame(gameData);
+    }
+
+    public void goBack()
+    {
+        DeselectCurrentLevel();
+        gameObject.SetActive(false);
+    }
+
+    public void LockAllLevels()
+    {
+        // Deselect any selected level
+        DeselectCurrentLevel();
+
+        // Lock all levels
+        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        {
+            levelButton.isUnlocked = false;
+            levelButton.UpdateButtonState();
+        }
+
+        Debug.Log("All levels have been locked.");
+    }
+
+
 }
