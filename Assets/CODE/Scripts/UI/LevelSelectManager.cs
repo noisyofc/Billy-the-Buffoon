@@ -21,6 +21,14 @@ public class LevelSelectManager : MonoBehaviour
     private int selectedBiomeIndex;
     public List<LevelButton> levelButtons;
 
+    public GameObject OptionsButton;
+    public GameObject LevelButton;
+    public GameObject QuitButton;
+    public GameObject StartButton;
+
+    //public MockMenuOptions mockMenuOptions;
+    //public MockMenuSelectLevel mockMenuSelectLevel;
+
     // Dictionary to map level scene names to custom display names
     private Dictionary<string, string> levelDisplayNames = new Dictionary<string, string>
     {
@@ -50,6 +58,9 @@ public class LevelSelectManager : MonoBehaviour
 
         LoadLevelUnlockStatus(); // Load initial level unlock status
         DeselectCurrentLevel(); // Ensure no level is selected on canvas open
+
+        //mockMenuSelectLevel = GetComponent<MockMenuSelectLevel>();
+        //mockMenuOptions = GetComponent<MockMenuOptions>();
     }
 
     private void Update()
@@ -225,6 +236,16 @@ foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
     {
         DeselectCurrentLevel();
         gameObject.SetActive(false);
+        LevelButton.GetComponent<MockMenuSelectLevel>().enabled = true;
+        LevelButton.GetComponent<Collider>().enabled = true;
+        QuitButton.GetComponent<MockMenuExit>().enabled = true;
+        QuitButton.GetComponent<Collider>().enabled = true;
+        StartButton.GetComponent<MockMenuStartGame>().enabled = true;
+        StartButton.GetComponent<Collider>().enabled = true;
+        OptionsButton.GetComponent<MockMenuOptions>().enabled = true;
+        OptionsButton.GetComponent<Collider>().enabled = true;
+        MockMenuSelectLevel.isMouseOver = false;
+        MockMenuOptions.isMouseOver = false;
     }
 
     public void LockAllLevels()

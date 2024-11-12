@@ -8,14 +8,22 @@ public class MockMenuOptions : MonoBehaviour
     Renderer rend;
     public Material[] material;
     public GameObject panelSelectLevel, panelOptions;
+    private float timer = 0f;
+    private bool isOnState = true;
+    public static bool isMouseOver = false;
+
+    public GameObject OptionsButton;
+    public GameObject LevelButton;
+    public GameObject QuitButton;
+    public GameObject StartButton;
+    
+    // Flickering interval in seconds (adjust to control flicker speed)
+    public float flickerInterval = 0.5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        //rend = GetComponent<Renderer>();
-        //rend.enabled = true;
-        //rend.sharedMaterial = material[0];
-
+        // Initialize flickering by setting all lights to "off" (material[0]) initially
         int numOfChildren = transform.childCount;
         for (int i = 0; i < numOfChildren; i++)
         {
@@ -29,15 +37,36 @@ public class MockMenuOptions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (panelOptions.gameObject.activeSelf == true)
+        // Only perform flickering if the mouse is not over the object
+        if (!isMouseOver)
         {
-            int numOfChildren = transform.childCount;
-            for (int i = 0; i < numOfChildren; i++)
+            // Increment the timer by the time elapsed since the last frame
+            timer += Time.deltaTime;
+
+            // Check if the flicker interval has passed
+            if (timer >= flickerInterval)
             {
-                GameObject child = transform.GetChild(i).gameObject;
-                rend = child.GetComponent<Renderer>();
-                rend.enabled = true;
-                rend.sharedMaterial = material[0];
+                // Toggle the state and reset the timer
+                isOnState = !isOnState;
+                timer = 0f;
+
+                int numOfChildren = transform.childCount;
+
+                for (int i = 0; i < numOfChildren; i++)
+                {
+                    GameObject child = transform.GetChild(i).gameObject;
+                    Renderer rend = child.GetComponent<Renderer>();
+
+                    // Set the material based on the alternating pattern and state
+                    if ((i % 2 == 0 && isOnState) || (i % 2 != 0 && !isOnState))
+                    {
+                        rend.sharedMaterial = material[1];  // Turn on
+                    }
+                    else
+                    {
+                        rend.sharedMaterial = material[0];  // Turn off
+                    }
+                }
             }
         }
     }
@@ -46,9 +75,15 @@ public class MockMenuOptions : MonoBehaviour
     {
         if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
         {
-            //SceneManager.LoadScene("Scenes/Level 0 - TEST_LEVEL");
-            //Time.timeScale = 1;
             panelOptions.gameObject.SetActive(true);
+            LevelButton.GetComponent<MockMenuSelectLevel>().enabled = false;
+            LevelButton.GetComponent<Collider>().enabled = false;
+            QuitButton.GetComponent<MockMenuExit>().enabled = false;
+            QuitButton.GetComponent<Collider>().enabled = false;
+            StartButton.GetComponent<MockMenuStartGame>().enabled = false;
+            StartButton.GetComponent<Collider>().enabled = false;
+            OptionsButton.GetComponent<MockMenuOptions>().enabled = false;
+            OptionsButton.GetComponent<Collider>().enabled = false;
         }
     }
 
@@ -56,8 +91,10 @@ public class MockMenuOptions : MonoBehaviour
     {
         if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
         {
-            //rend.sharedMaterial = material[1];
+            // Set isMouseOver to true to stop flickering
+            isMouseOver = true;
 
+            // Turn all lights on
             int numOfChildren = transform.childCount;
             for (int i = 0; i < numOfChildren; i++)
             {
@@ -73,18 +110,8 @@ public class MockMenuOptions : MonoBehaviour
     {
         if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
         {
-            //rend.sharedMaterial = material[0];
-
-            int numOfChildren = transform.childCount;
-            for (int i = 0; i < numOfChildren; i++)
-            {
-                GameObject child = transform.GetChild(i).gameObject;
-                rend = child.GetComponent<Renderer>();
-                rend.enabled = true;
-                rend.sharedMaterial = material[0];
-            }
+            // Set isMouseOver to false to resume flickering
+            isMouseOver = false;
         }
-
     }
-
 }
