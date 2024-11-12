@@ -69,6 +69,8 @@ public class LevelSelectManager : MonoBehaviour
 
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
+
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -130,6 +132,12 @@ public class LevelSelectManager : MonoBehaviour
             SceneManager.LoadScene(levelName);
 
             Debug.Log("Starting Level: " + levelName);
+
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            PlayerMovementAdvanced.Paused = false;
+            //LoadSensitivity();
         }
         else
         {
@@ -141,33 +149,33 @@ public class LevelSelectManager : MonoBehaviour
     {
         GameData gameData = SaveSystem.LoadGame();
 
-foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
-{
-    // Only process buttons for the currently selected biome
-    if (levelButton.biomeNumber == selectedBiomeIndex)
-    {
-        LevelData levelData = gameData.levels.Find(level => 
-            level.biomeNumber == levelButton.biomeNumber.ToString() &&
-            level.levelNumber == levelButton.levelNumber.ToString());
+        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        {
+            // Only process buttons for the currently selected biome
+            if (levelButton.biomeNumber == selectedBiomeIndex)
+            {
+                LevelData levelData = gameData.levels.Find(level => 
+                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
+                    level.levelNumber == levelButton.levelNumber.ToString());
 
-        if (levelData != null)
-        {
-            levelButton.isUnlocked = levelData.isUnlocked == "true";
-            levelButton.UpdateButtonState();
+                if (levelData != null)
+                {
+                    levelButton.isUnlocked = levelData.isUnlocked == "true";
+                    levelButton.UpdateButtonState();
+                }
+                else
+                {
+                    levelButton.isUnlocked = false;
+                    levelButton.UpdateButtonState();
+                }
+            }
+            else
+            {
+                // Lock buttons not in the selected biome
+                levelButton.isUnlocked = false;
+                levelButton.UpdateButtonState();
+            }
         }
-        else
-        {
-            levelButton.isUnlocked = false;
-            levelButton.UpdateButtonState();
-        }
-    }
-    else
-    {
-        // Lock buttons not in the selected biome
-        levelButton.isUnlocked = false;
-        levelButton.UpdateButtonState();
-    }
-}
     }
 
     // Method to update the level info UI based on selected level

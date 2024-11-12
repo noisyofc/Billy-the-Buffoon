@@ -11,6 +11,8 @@ public class EndScreen : MonoBehaviour
     public TextMeshProUGUI starsEnd;  // UI element for showing stars at the end screen
     [Tooltip("Text element displaying the total time.")]
     public TextMeshProUGUI timeEnd;   // UI element for showing time at the end screen
+    [Tooltip("Text element displaying the grade.")]
+    public TextMeshProUGUI grade;   // UI element for showing time at the end screen
     [Tooltip("Image representing the end screen background.")]
     public Image endScreen;           // Image component for the end screen background
     [Tooltip("The main canvas that will be disabled when the end screen shows.")]
@@ -21,13 +23,30 @@ public class EndScreen : MonoBehaviour
 
     public int totalBalloons = 9;
 
-    public string gradeAchieved = "A+";
+    [Tooltip("Grading")]
+    private string gradeAchieved;
+
+    [Tooltip("Grade treshholds")]
+    public int bestTimeSeconds = 45;
+    public int bestBalloons = 9;
 
     [Header("Game Data")]
     [Tooltip("Number of stars collected by the player.")]
     public int stars = 0;  // Number of stars collected
     [Tooltip("Total time taken by the player.")]
     public float time = 0f;  // Total time spent
+
+    public string gradeCheck;
+
+    public enum Grade
+    {
+        D = 1,
+        C = 2,
+        B = 3,
+        A = 4,
+        S = 5,
+        SPlus = 6  // Highest rank
+    }
 
     private void Update()
     {
@@ -72,9 +91,70 @@ public class EndScreen : MonoBehaviour
 
             string balloonsCollected = string.Format("{0}/{1}", stars.ToString(), totalBalloons);
 
-            gradeAchieved = "T-";
+            //Grading system
+            if (seconds <= bestTimeSeconds && stars >= bestBalloons)
+            {
+                gradeAchieved = "S+";
+            }
+            else if (seconds <= (bestTimeSeconds+5) && stars >= bestBalloons)
+            {
+                gradeAchieved = "S";
+            }
+            else if (seconds <= bestTimeSeconds && stars >= (bestBalloons-1))
+            {
+                gradeAchieved = "S";
+            }
+            else if (seconds <= (bestTimeSeconds+10) && stars >= bestBalloons)
+            {
+                gradeAchieved = "A";
+            }
+            else if (seconds <= bestTimeSeconds && stars >= (bestBalloons-3))
+            {
+                gradeAchieved = "A";
+            }
+            else if (seconds <= (bestTimeSeconds+15) && stars >= bestBalloons)
+            {
+                gradeAchieved = "B";
+            }
+            else if (seconds <= bestTimeSeconds && stars >= (bestBalloons-5))
+            {
+                gradeAchieved = "B";
+            }
+            else if (seconds <= (bestTimeSeconds+20) && stars >= bestBalloons)
+            {
+                gradeAchieved = "C";
+            }
+            else if (seconds <= bestTimeSeconds && stars >= (bestBalloons-7))
+            {
+                gradeAchieved = "C";
+            }
+            else
+            {
+                gradeAchieved = "D"; // Default to D if criteria for higher grades are not met
+            }
 
-            LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
+            grade.text = gradeAchieved;
+            
+            GameData gameData = SaveSystem.LoadGame();
+            LevelData levelData = gameData.levels.Find(level =>
+                level.biomeNumber == currentBiome.ToString() && 
+                level.levelNumber == currentLevel.ToString());
+            if (levelData != null)
+            {
+                gradeCheck = levelData.grade;
+                if (GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
+                {
+                    LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
+                }
+                else
+                {
+                    Debug.Log("Previous grade is better or equal.");
+                }
+            }
+            else
+            {
+                LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
+            }
 
         }
     }
@@ -98,6 +178,33 @@ public class EndScreen : MonoBehaviour
         {
             // Optional: handle end of levels (e.g., loop to start, show end screen)
             Debug.Log("No more levels. End of game.");
+        }
+    }
+
+    public class GradeComparison
+    {
+        // Helper method to convert string to enum
+        public static Grade GetGradeValue(string gradeString)
+        {
+            return gradeString switch
+            {
+                "S+" => Grade.SPlus,
+                "S" => Grade.S,
+                "A" => Grade.A,
+                "B" => Grade.B,
+                "C" => Grade.C,
+                "D" => Grade.D,
+                _ => Grade.D // Default to D if input is invalid
+            };
+        }
+
+        // Method to check if the achieved grade is better than the saved grade
+        public static bool IsAchievedGradeBetter(string gradeAchieved, string gradeCheck)
+        {
+            Grade achieved = GetGradeValue(gradeAchieved);
+            Grade saved = GetGradeValue(gradeCheck);
+
+            return achieved > saved; // Higher enum value means a better grade
         }
     }
 }

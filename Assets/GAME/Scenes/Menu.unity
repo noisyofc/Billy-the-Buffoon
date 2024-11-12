@@ -2804,7 +2804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &270529870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2928,10 +2928,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d98028589786f554daab9e0f62394575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OptionsButton: {fileID: 0}
-  LevelButton: {fileID: 0}
-  QuitButton: {fileID: 0}
-  StartButton: {fileID: 0}
+  OptionsButton: {fileID: 919132149240376531}
+  LevelButton: {fileID: 919132148119395167}
+  QuitButton: {fileID: 82935914}
+  StartButton: {fileID: 919132149299179176}
   mainCamera: {fileID: 401521169}
 --- !u!114 &270529876
 MonoBehaviour:
