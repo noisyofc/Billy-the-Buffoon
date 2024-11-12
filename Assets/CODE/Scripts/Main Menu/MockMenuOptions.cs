@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 
 public class MockMenuOptions : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class MockMenuOptions : MonoBehaviour
     public GameObject LevelButton;
     public GameObject QuitButton;
     public GameObject StartButton;
+
+    private PostProcessVolume postProcessVolume;
+    private DepthOfField depthOfField;
+    public Camera mainCamera;
     
     // Flickering interval in seconds (adjust to control flicker speed)
     public float flickerInterval = 0.5f;
@@ -32,6 +37,10 @@ public class MockMenuOptions : MonoBehaviour
             rend.enabled = true;
             rend.sharedMaterial = material[0];
         }
+
+        // Find the post-process volume attached to the Main Camera
+        postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+        postProcessVolume.profile.TryGetSettings(out depthOfField);
     }
 
     // Update is called once per frame
@@ -84,6 +93,8 @@ public class MockMenuOptions : MonoBehaviour
             StartButton.GetComponent<Collider>().enabled = false;
             OptionsButton.GetComponent<MockMenuOptions>().enabled = false;
             OptionsButton.GetComponent<Collider>().enabled = false;
+
+            EnableBlur();
         }
     }
 
@@ -113,5 +124,16 @@ public class MockMenuOptions : MonoBehaviour
             // Set isMouseOver to false to resume flickering
             isMouseOver = false;
         }
+    }
+
+    public void EnableBlur()
+    {
+        depthOfField.active = true;
+
+    }
+
+    public void DisableBlur()
+    {
+        depthOfField.active = false;
     }
 }

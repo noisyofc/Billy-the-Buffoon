@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.Rendering.PostProcessing;
 
 public class LevelSelectManager : MonoBehaviour
 {
@@ -25,6 +26,10 @@ public class LevelSelectManager : MonoBehaviour
     public GameObject LevelButton;
     public GameObject QuitButton;
     public GameObject StartButton;
+
+    private PostProcessVolume postProcessVolume;
+    private DepthOfField depthOfField;
+    public Camera mainCamera;
 
     //public MockMenuOptions mockMenuOptions;
     //public MockMenuSelectLevel mockMenuSelectLevel;
@@ -61,6 +66,9 @@ public class LevelSelectManager : MonoBehaviour
 
         //mockMenuSelectLevel = GetComponent<MockMenuSelectLevel>();
         //mockMenuOptions = GetComponent<MockMenuOptions>();
+
+        postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+        postProcessVolume.profile.TryGetSettings(out depthOfField);
     }
 
     private void Update()
@@ -246,6 +254,7 @@ foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
         OptionsButton.GetComponent<Collider>().enabled = true;
         MockMenuSelectLevel.isMouseOver = false;
         MockMenuOptions.isMouseOver = false;
+        depthOfField.active = false;
     }
 
     public void LockAllLevels()
