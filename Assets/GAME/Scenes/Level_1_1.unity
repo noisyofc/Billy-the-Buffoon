@@ -34227,6 +34227,11 @@ PrefabInstance:
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 1361911861}
+    - target: {fileID: 3538241351268035513, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34452,6 +34457,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: deathScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 6795071926692421262, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 49.986084
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
