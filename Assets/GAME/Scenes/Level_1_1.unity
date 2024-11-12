@@ -34458,6 +34458,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: deathScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 6697958461379920930, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6795071926692421262, guid: 49c7e86b9113484458a32a3b96007306,
         type: 3}
       propertyPath: m_AnchoredPosition.y
