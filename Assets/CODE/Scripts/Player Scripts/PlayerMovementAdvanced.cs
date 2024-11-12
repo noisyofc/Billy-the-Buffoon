@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerMovementAdvanced : MonoBehaviour
 {
@@ -73,6 +74,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public GameObject mainUI;
     public static bool Paused;
 
+    private PostProcessVolume postProcessVolume;
+    private DepthOfField depthOfField;
+    public Camera mainCamera;
+
     public MovementState state;
     public enum MovementState
     {
@@ -99,6 +104,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         // Find and store objects tagged as underSlides
         underSlides = GameObject.FindGameObjectsWithTag("underStuck");
+
+        postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+        postProcessVolume.profile.TryGetSettings(out depthOfField);
     }
 
     private void Update()
@@ -112,6 +120,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
             mainUI.SetActive(false);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            depthOfField.active = true;
         }
 
         // Ground check
