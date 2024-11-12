@@ -36,7 +36,7 @@ public class PlayerDeath : MonoBehaviour
             playerDead = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
             CountStars.stars = 0;
             Timer.timeElapsed = 0f;
             mainUI.SetActive(false);

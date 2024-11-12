@@ -29885,11 +29885,11 @@ MonoBehaviour:
   currentBiome: 1
   currentLevel: 1
   totalBalloons: 9
-  gradeAchieved: A+
   bestTimeSeconds: 45
   bestBalloons: 9
   stars: 0
   time: 0
+  gradeCheck: 
 --- !u!65 &1885033915
 BoxCollider:
   m_ObjectHideFlags: 0

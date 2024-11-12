@@ -152,7 +152,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Paused == false)
+        {
         MovePlayer();
+        }
     }
 
     private void MyInput()

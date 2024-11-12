@@ -82,6 +82,8 @@ public class OptionsMenu : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(mainMenuScene);
+        Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused = false;
     }
 
     public void restartLevel()
