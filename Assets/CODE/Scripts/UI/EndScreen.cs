@@ -14,7 +14,7 @@ public class EndScreen : MonoBehaviour
     [Tooltip("Text element displaying the grade.")]
     public TextMeshProUGUI grade;   // UI element for showing time at the end screen
     [Tooltip("Image representing the end screen background.")]
-    public Image endScreen;           // Image component for the end screen background
+    public GameObject endScreen;           // Chnvas component for the end screen background
     [Tooltip("The main canvas that will be disabled when the end screen shows.")]
     public GameObject canvas;         // Canvas to hide when end screen is shown
 

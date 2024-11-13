@@ -7389,6 +7389,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82f575ec2967f47439ed87564689aff3, type: 3}
+--- !u!1 &392038755 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7009863066175723349, guid: 01386240b42af534d8657ff6521a621b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1398400515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &394116598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10007,7 +10013,7 @@ PrefabInstance:
         type: 3}
       propertyPath: endScreen
       value: 
-      objectReference: {fileID: 720659066}
+      objectReference: {fileID: 392038755}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
       propertyPath: bestBalloons
@@ -13862,18 +13868,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5388108b1dd1274098d74761410229b, type: 3}
---- !u!114 &720659066 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1142792345581585981, guid: 01386240b42af534d8657ff6521a621b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1398400515}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &731062257
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22433,7 +22427,7 @@ PrefabInstance:
     - target: {fileID: 389385185054297313, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1902532792176436210, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
@@ -22464,6 +22458,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: endScreen (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7009863066175723349, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7674200240240267245, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
@@ -29880,7 +29879,7 @@ MonoBehaviour:
   starsEnd: {fileID: 100562235}
   timeEnd: {fileID: 1302772789}
   grade: {fileID: 0}
-  endScreen: {fileID: 720659066}
+  endScreen: {fileID: 0}
   canvas: {fileID: 1236171893}
   currentBiome: 1
   currentLevel: 1
