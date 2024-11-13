@@ -55,6 +55,16 @@ public class SceneManagerController : MonoBehaviour
         Application.Quit();
     }
 
+    public void PlayAgain()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        gameObject.SetActive(false);
+        Time.timeScale = 1;
+        PlayerMovementAdvanced.Paused=false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     // Load the main menu
     public void MainMenu()
     {

@@ -112,7 +112,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void Update()
     {
         // Quit application on pressing escape
-        if (Input.GetKey("escape"))
+        if (Input.GetKey("escape") || Input.GetKey("p"))
         {
             Paused = true;
             Time.timeScale = 0;
