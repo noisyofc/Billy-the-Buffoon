@@ -15,7 +15,7 @@ public class CountStars : MonoBehaviour
     public TextMeshProUGUI balloonsText;
 
     public static CountStars instance;  // Singleton instance of the CountStars class
-    public int totalBalloons;
+    public int totalBalloons = 9;
     private void Awake()
     {
         // Initialize the singleton instance
@@ -37,7 +37,6 @@ public class CountStars : MonoBehaviour
 
     private void Update()
     {
-        totalBalloons = EndScreen.totalBalloons;
         balloonsText.text = string.Format("{0}/{1}", stars.ToString(), totalBalloons);
     }
 

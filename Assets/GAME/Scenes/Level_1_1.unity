@@ -10008,7 +10008,7 @@ PrefabInstance:
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
       propertyPath: totalBalloons
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
@@ -29865,6 +29865,7 @@ MonoBehaviour:
   canvas: {fileID: 1236171893}
   currentBiome: 1
   currentLevel: 1
+  totalBalloons: 9
   bestTimeSeconds: 45
   bestBalloons: 9
   stars: 0
@@ -33977,6 +33978,11 @@ PrefabInstance:
       propertyPath: balloonsText
       value: 
       objectReference: {fileID: 1821093624}
+    - target: {fileID: 3051714022879210001, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: totalBalloons
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 3051714022879210001, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: StarsObj.Array.data[0]
