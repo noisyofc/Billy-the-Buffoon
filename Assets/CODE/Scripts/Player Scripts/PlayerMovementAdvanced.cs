@@ -113,6 +113,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void Update()
     {
+        if (wallrunning == true)
+        {
+            Umbrella.gameObject.SetActive(false);
+        }
+
         // Quit application on pressing escape
         if (Input.GetKey("escape") || Input.GetKey("p"))
         {
@@ -143,17 +148,18 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             Umbrella.gameObject.SetActive(false);
             rb.drag = 0;
-            if (Input.GetKey(jumpKey))
+            if (Input.GetKey(jumpKey) && wallrunning == false)
             {
-                Umbrella.gameObject.SetActive(true);
                 rb.drag = dragAir;
                 rb.mass = playerMassAir;
+                StartCoroutine(umbrellaWait()); //wait as umbrella shows for a second
             }
         }
     }
 
     private void FixedUpdate()
     {
+
         if (Paused == false)
         {
         MovePlayer();
@@ -212,6 +218,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
         else if (wallrunning)
         {
+            Umbrella.gameObject.SetActive(false);
             state = MovementState.wallrunning;
             desiredMoveSpeed = wallrunSpeed;
             rb.useGravity = false;  // Disable gravity during wall running
@@ -415,6 +422,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
         HandleStuckState();
         slideParticles.Stop();
     }
+
+    IEnumerator umbrellaWait()
+    {
+        yield return 0;
+        Umbrella.gameObject.SetActive(true);
+    }
+
         public bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))

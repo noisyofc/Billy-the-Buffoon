@@ -160,6 +160,11 @@ public class Projectile : MonoBehaviour
         {
             StartCoroutine(CountDown());
         }
+
+        if (collision.gameObject.CompareTag("ocean"))
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>
