@@ -2075,6 +2075,11 @@ PrefabInstance:
       propertyPath: optionsCanvas
       value: 
       objectReference: {fileID: 1510402220}
+    - target: {fileID: 3051714022879210222, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: slideParticles
+      value: 
+      objectReference: {fileID: 4467998052107966566}
     - target: {fileID: 3051714022879210223, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
       propertyPath: cam
@@ -2219,6 +2224,12 @@ MonoBehaviour:
 --- !u!20 &4467998052107966565 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4467998051934560669, guid: 6c4df039a80357e488dd81909c54aec2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4467998052107966562}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &4467998052107966566 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6316312613678230174, guid: 6c4df039a80357e488dd81909c54aec2,
     type: 3}
   m_PrefabInstance: {fileID: 4467998052107966562}
   m_PrefabAsset: {fileID: 0}

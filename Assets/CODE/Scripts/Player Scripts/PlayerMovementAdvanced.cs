@@ -91,6 +91,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
         stuck
     }
 
+    public ParticleSystem slideParticles;
+
     private void Start()
     {
         // Initialize Rigidbody and prevent rotation
@@ -187,6 +189,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
             rb.AddForce(Vector3.forward * 5f, ForceMode.Impulse);
             crouching = true;
+
         }
     }
 
@@ -216,6 +219,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         else if (stuck)
         {
             HandleStuckState();
+            
         }
         else if (crouching)
         {
@@ -406,8 +410,10 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     IEnumerator stopSlide()
     {
+        slideParticles.Play();
         yield return new WaitForSeconds(0.5f);
         HandleStuckState();
+        slideParticles.Stop();
     }
         public bool OnSlope()
     {
