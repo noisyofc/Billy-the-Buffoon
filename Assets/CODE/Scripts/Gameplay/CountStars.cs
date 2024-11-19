@@ -12,10 +12,10 @@ public class CountStars : MonoBehaviour
 
     [Header("Star UI Elements")]
     [Tooltip("The UI objects representing collected stars.")]
-    public GameObject[] starUIObjects;  // Array of UI objects to display collected stars
+    public TextMeshProUGUI balloonsText;
 
     public static CountStars instance;  // Singleton instance of the CountStars class
-
+    public int totalBalloons;
     private void Awake()
     {
         // Initialize the singleton instance
@@ -33,12 +33,12 @@ public class CountStars : MonoBehaviour
     {
         // Initialize star count to 0 at the start
         stars = 0;
+    }
 
-        // Ensure all star UI elements are inactive at the start
-        foreach (GameObject starUI in starUIObjects)
-        {
-            starUI.SetActive(false);
-        }
+    private void Update()
+    {
+        totalBalloons = EndScreen.totalBalloons;
+        balloonsText.text = string.Format("{0}/{1}", stars.ToString(), totalBalloons);
     }
 
     /// <summary>
@@ -52,13 +52,6 @@ public class CountStars : MonoBehaviour
         {
             stars += 1;  // Increase the star count
 
-            // Activate the corresponding UI element for the collected star
-            if (stars - 1 < starUIObjects.Length)
-            {
-                starUIObjects[stars - 1].SetActive(true);
-            }
-
-            // Optionally, you could destroy the star object after collection
             Destroy(other.gameObject);
         }
     }
