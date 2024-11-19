@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class LevelSelect : MonoBehaviour
 {
 
-    public GameObject levelSelectPanel, optionsPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -22,43 +21,11 @@ public class LevelSelect : MonoBehaviour
 
     public void LoadTestLevel()
     {
-        SceneManager.LoadScene("GAME/Scenes/Level 0 - TEST_LEVEL");
-        Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
-    }
-    public void Level1()
-    {
-        SceneManager.LoadScene("GAME/Scenes/Level 1 - Borys");
-        Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
-    }
-    public void Level2()
-    {
-        SceneManager.LoadScene("GAME/Scenes/Level 2 - Borys");
+        SceneManager.LoadScene("GAME/Scenes/Level_0_0");
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
     }
 
-    public void Level3()
-    {
-        SceneManager.LoadScene("GAME/Scenes/Level 3 - Borys");
-        Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
-    }
 
-    public void Level4()
-    {
-        Debug.Log("LOCKED");
-    }
-
-    public void goBack()
-    {
-        levelSelectPanel.SetActive(false);
-    }
-
-    public void goBackOptions()
-    {
-        optionsPanel.SetActive(false);
-    }
 
 }
