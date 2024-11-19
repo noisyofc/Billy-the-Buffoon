@@ -21,7 +21,7 @@ public class EndScreen : MonoBehaviour
     public int currentBiome = 1; // Set this to the actual biome number for the level
     public int currentLevel = 1; // Set this to the actual level number within the biome
 
-    public int totalBalloons = 9;
+    public static int totalBalloons = 9;
 
     [Tooltip("Grading")]
     private string gradeAchieved;
@@ -37,6 +37,7 @@ public class EndScreen : MonoBehaviour
     public float time = 0f;  // Total time spent
 
     public string gradeCheck;
+    public static EndScreen instance;
 
     public enum Grade
     {
