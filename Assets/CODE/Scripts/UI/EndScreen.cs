@@ -172,7 +172,7 @@ public class EndScreen : MonoBehaviour
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
             // Load the next scene
-            SceneManager.LoadScene(nextSceneIndex);
+            SceneTransitionManager.Instance.LoadScene(nextSceneIndex);
             Debug.Log("Loading next level: " + nextSceneIndex);
         }
         else

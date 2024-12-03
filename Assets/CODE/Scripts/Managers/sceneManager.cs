@@ -20,7 +20,7 @@ public class SceneManagerController : MonoBehaviour
     // Load the test level scene
     public void LoadTestLevel()
     {
-        SceneManager.LoadScene(testLevelScene);
+        SceneTransitionManager.Instance.LoadScene(testLevelScene);
         Time.timeScale = 1;  // Ensure time is running normally
         PlayerMovementAdvanced.Paused = false;
     }
@@ -28,7 +28,7 @@ public class SceneManagerController : MonoBehaviour
     // Start the game by loading Level 1
     public void StartGame()
     {
-        SceneManager.LoadScene(startGameScene);
+        SceneTransitionManager.Instance.LoadScene(startGameScene);
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
     }
@@ -36,7 +36,7 @@ public class SceneManagerController : MonoBehaviour
     // Load the next level (Level 2)
     public void NextLevel()
     {
-        SceneManager.LoadScene(nextLevelScene);
+        SceneTransitionManager.Instance.LoadScene(nextLevelScene);
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
     }
@@ -44,7 +44,7 @@ public class SceneManagerController : MonoBehaviour
     // Load a saved game (Level 3)
     public void LoadGame()
     {
-        SceneManager.LoadScene(loadGameScene);
+        SceneTransitionManager.Instance.LoadScene(loadGameScene);
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
     }
@@ -88,7 +88,7 @@ public class SceneManagerController : MonoBehaviour
         if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
         {
             // Load the next scene
-            SceneManager.LoadScene(nextSceneIndex);
+            SceneTransitionManager.Instance.LoadScene(nextSceneIndex);
             Debug.Log("Loading next level: " + nextSceneIndex);
         }
         else

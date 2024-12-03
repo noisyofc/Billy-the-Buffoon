@@ -129,7 +129,7 @@ public class LevelSelectManager : MonoBehaviour
             int biomeToLoad = selectedLevelButton.biomeNumber;
             int levelToLoad = selectedLevelButton.levelNumber;
             string levelName = string.Format("Level_{0}_{1}", biomeToLoad, levelToLoad);
-            SceneManager.LoadScene(levelName);
+            SceneTransitionManager.Instance.LoadScene(levelName);
 
             Debug.Log("Starting Level: " + levelName);
 
