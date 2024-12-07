@@ -805,6 +805,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7475428705582264866}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &120012075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7103677485625230910, guid: 77a724c6a2ef1484483dd60beb35a46e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7475428705582264866}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120012074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98028589786f554daab9e0f62394575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &124143772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7795,6 +7807,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29a020761a0181e4e88693e612e30ca9, type: 3}
+--- !u!20 &1040362883 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 9123462569007539930, guid: 28f1cf66e2d538c46951565345dd7bf3,
+    type: 3}
+  m_PrefabInstance: {fileID: 2508488341500667683}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1060746643
 GameObject:
   m_ObjectHideFlags: 0
@@ -15169,6 +15187,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3293931939382791356, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 1040362883}
     - target: {fileID: 4849892524582725227, guid: 77a724c6a2ef1484483dd60beb35a46e,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -15348,6 +15371,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939028920031973222, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 120012075}
+    - target: {fileID: 8939028920031973222, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: goBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939028920031973222, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BackButton, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9210428655349668576, guid: 77a724c6a2ef1484483dd60beb35a46e,
         type: 3}

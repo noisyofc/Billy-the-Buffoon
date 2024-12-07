@@ -120,6 +120,13 @@ public class LevelSelectManager : MonoBehaviour
 
         // Display the selected level information on the UI
         UpdateLevelInfoUI();
+
+        if (!levelButton.isUnlocked)
+        {
+            Debug.Log("This level is locked!");
+            levelNameText.text += " (Locked)";
+        }
+        
     }
 
     private void StartSelectedLevel()
@@ -151,27 +158,25 @@ public class LevelSelectManager : MonoBehaviour
 
         foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
         {
-            // Only process buttons for the currently selected biome
             if (levelButton.biomeNumber == selectedBiomeIndex)
             {
-                LevelData levelData = gameData.levels.Find(level => 
+                LevelData levelData = gameData.levels.Find(level =>
                     level.biomeNumber == levelButton.biomeNumber.ToString() &&
                     level.levelNumber == levelButton.levelNumber.ToString());
 
                 if (levelData != null)
                 {
                     levelButton.isUnlocked = levelData.isUnlocked == "true";
-                    levelButton.UpdateButtonState();
                 }
                 else
                 {
                     levelButton.isUnlocked = false;
-                    levelButton.UpdateButtonState();
                 }
+
+                levelButton.UpdateButtonState();
             }
             else
             {
-                // Lock buttons not in the selected biome
                 levelButton.isUnlocked = false;
                 levelButton.UpdateButtonState();
             }
@@ -183,20 +188,17 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (selectedLevelButton == null) return;
 
-        // Construct the level key based on biome and level numbers
         string levelKey = $"Level_{selectedLevelButton.biomeNumber}_{selectedLevelButton.levelNumber}";
 
-        // Set the level name using the display names dictionary
         if (levelDisplayNames.TryGetValue(levelKey, out string displayName))
         {
             levelNameText.text = displayName;
         }
         else
         {
-            levelNameText.text = "Unknown Level"; // Default text if no display name is found
+            levelNameText.text = "Unknown Level";
         }
 
-        // Load game data to retrieve best time, balloons, and grade
         GameData gameData = SaveSystem.LoadGame();
         LevelData levelData = gameData.levels.Find(level =>
             level.biomeNumber == selectedLevelButton.biomeNumber.ToString() &&

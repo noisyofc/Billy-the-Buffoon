@@ -284,10 +284,10 @@ RectTransform:
   - {fileID: 1961595305}
   m_Father: {fileID: 1045721321}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 2000, y: 1150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &386370663
 MonoBehaviour:
@@ -358,6 +358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBar: {fileID: 1961595306}
   pressAnyKeyText: {fileID: 1289381375}
+  smoothSpeed: 0.5
 --- !u!4 &526828757
 Transform:
   m_ObjectHideFlags: 0

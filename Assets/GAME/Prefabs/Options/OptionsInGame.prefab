@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3667279726572598703}
   - component: {fileID: 9046325257147267182}
   - component: {fileID: 5099093317795905441}
+  - component: {fileID: 6715094693478784207}
   m_Layer: 5
   m_Name: OptionsInGame
   m_TagString: Untagged
@@ -121,6 +122,20 @@ MonoBehaviour:
   optionsCanvas: {fileID: 1361298079333280250}
   mainUI: {fileID: 0}
   mainCamera: {fileID: 0}
+--- !u!114 &6715094693478784207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361298079333280250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39764829d03e1c0488b0e62a4987db38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainUI: {fileID: 1361298079333280250}
+  optionsPanel: {fileID: 0}
 --- !u!1 &3700773258267203693
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,9 +388,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 6715094693478784207}
+        m_TargetAssemblyTypeName: ShowOptions, Assembly-CSharp
+        m_MethodName: showPanelOptions
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
