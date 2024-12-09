@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShowOptions : MonoBehaviour
 {
@@ -19,13 +20,13 @@ public class ShowOptions : MonoBehaviour
 
     public void showPanelOptions()
     {
-        optionsPanel.SetActive(true);
+        optionsPanel.GetComponent<Canvas>().enabled = true;
         mainUI.SetActive(false);
     }
 
     public void backButton()
     {
-        optionsPanel.SetActive(false);
+        optionsPanel.GetComponent<Canvas>().enabled = false;
         mainUI.SetActive(true);       
     }
 }

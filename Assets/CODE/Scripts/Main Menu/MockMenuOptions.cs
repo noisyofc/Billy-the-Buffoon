@@ -82,9 +82,9 @@ public class MockMenuOptions : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
+        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
         {
-            panelOptions.gameObject.SetActive(true);
+            panelOptions.GetComponent<Canvas>().enabled = true;
             LevelButton.GetComponent<MockMenuSelectLevel>().enabled = false;
             LevelButton.GetComponent<Collider>().enabled = false;
             QuitButton.GetComponent<MockMenuExit>().enabled = false;
@@ -100,7 +100,7 @@ public class MockMenuOptions : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
+        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
         {
             // Set isMouseOver to true to stop flickering
             isMouseOver = true;
@@ -119,7 +119,7 @@ public class MockMenuOptions : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
+        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
         {
             // Set isMouseOver to false to resume flickering
             isMouseOver = false;
