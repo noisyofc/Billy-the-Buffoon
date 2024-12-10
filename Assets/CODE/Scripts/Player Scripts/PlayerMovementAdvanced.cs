@@ -118,8 +118,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
             Umbrella.gameObject.SetActive(false);
         }
 
-        // Quit application on pressing escape
-        if (Input.GetKey("escape") || Input.GetKey("p"))
+        // Pause
+        if (Input.GetButtonDown("Cancel") && !Paused && !EndScreen.endLevel)
         {
             Paused = true;
             Time.timeScale = 0;

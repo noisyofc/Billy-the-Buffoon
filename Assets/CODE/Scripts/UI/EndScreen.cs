@@ -39,6 +39,8 @@ public class EndScreen : MonoBehaviour
     public string gradeCheck;
     public static EndScreen instance;
 
+    public static bool endLevel;
+
     public enum Grade
     {
         D = 1,
@@ -47,6 +49,12 @@ public class EndScreen : MonoBehaviour
         A = 4,
         S = 5,
         SPlus = 6  // Highest rank
+    }
+
+    public void Start()
+    {
+        // wy³¹cza bool, aby gra na starcie mog³a reagowaæ na przycisk pauzy
+        endLevel = false;
     }
 
     private void Update()
@@ -70,6 +78,9 @@ public class EndScreen : MonoBehaviour
         // Check if the object entering the trigger is the player
         if (other.CompareTag("Player"))
         {
+            // w³¹cza bool, aby gra nie reagowa³a na przycisk pauzy
+            endLevel = true;
+
             // Pause the game
             Time.timeScale = 0;
 

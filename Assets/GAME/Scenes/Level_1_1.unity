@@ -14520,6 +14520,16 @@ PrefabInstance:
       propertyPath: audioSources.Array.data[0]
       value: 
       objectReference: {fileID: 1627137428}
+    - target: {fileID: 3664117866374908498, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5140853611461180776, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6233966480369462188, guid: 77a724c6a2ef1484483dd60beb35a46e,
         type: 3}
       propertyPath: m_Pivot.x
