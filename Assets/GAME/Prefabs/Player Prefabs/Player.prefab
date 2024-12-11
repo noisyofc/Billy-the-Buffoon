@@ -240,7 +240,9 @@ MonoBehaviour:
   freeze: 0
   optionsCanvas: {fileID: 0}
   mainUI: {fileID: 0}
+  mainCamera: {fileID: 0}
   state: 0
+  slideParticles: {fileID: 0}
 --- !u!114 &3051714022879210223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a984b26c27ba52848a090c38daba54c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starUIObjects: []
+  balloonsText: {fileID: 0}
+  totalBalloons: 9
 --- !u!136 &7385438046344069821
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -589,6 +592,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: parasol (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f58677cd7dec04046a0a4fb35d606770,
+        type: 3}
+      propertyPath: m_Layer
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f58677cd7dec04046a0a4fb35d606770,
         type: 3}
