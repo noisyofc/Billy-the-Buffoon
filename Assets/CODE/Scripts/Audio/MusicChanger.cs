@@ -12,8 +12,8 @@ public class MusicManager : MonoBehaviour
         // Ensure that there is only one instance of this object (Singleton pattern)
         if (instance == null)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Make this GameObject persistent across scenes
+            //instance = this;
+            //DontDestroyOnLoad(gameObject); // Make this GameObject persistent across scenes
         }
         else if (instance != this)
         {

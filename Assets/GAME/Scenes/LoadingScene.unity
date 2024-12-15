@@ -358,7 +358,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBar: {fileID: 1961595306}
   pressAnyKeyText: {fileID: 1289381375}
-  smoothSpeed: 0.5
+  smoothSpeed: 0.8
 --- !u!4 &526828757
 Transform:
   m_ObjectHideFlags: 0

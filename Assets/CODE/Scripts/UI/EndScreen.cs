@@ -41,6 +41,9 @@ public class EndScreen : MonoBehaviour
 
     public static bool endLevel;
 
+    public GameObject highScore;
+    public TextMeshProUGUI highTime, highBalloons, highGrade;
+
     public enum Grade
     {
         D = 1,
@@ -157,15 +160,32 @@ public class EndScreen : MonoBehaviour
                 if (GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
                 {
                     LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
+                    highScore.SetActive(true);
+                    //highBalloons.text = starsEnd.text;
+                    //highTime.text = timeEnd.text;
+                    //highGrade.text = grade.text;
+
+                    highTime.text = bestTime;
+                    highBalloons.text = balloonsCollected;
+                    highGrade.text = gradeAchieved;
+
                 }
                 else
                 {
                     Debug.Log("Previous grade is better or equal.");
+                    highScore.SetActive(false);
+                    highGrade.text = levelData.grade;
+                    highTime.text = levelData.bestTime;
+                    highBalloons.text = levelData.bestBalloons;
                 }
             }
             else
             {
                 LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
+                highScore.SetActive(true);
+                highTime.text = bestTime;
+                highBalloons.text = balloonsCollected;
+                highGrade.text = gradeAchieved;
             }
 
         }
