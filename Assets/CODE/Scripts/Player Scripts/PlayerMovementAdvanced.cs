@@ -41,7 +41,6 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public LayerMask whatIsGround;
 
     [Header("Key Bindings")]
-    public KeyCode jumpKey = KeyCode.Space;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
 
@@ -119,7 +118,12 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         // Pause
+#if UNITY_WEBGL
         if (Input.GetButtonDown("Cancel") && !Paused && !EndScreen.endLevel)
+#endif
+#if !UNITY_WEBGL
+        if (Input.GetButtonDown("Pause") && !Paused && !EndScreen.endLevel)
+#endif
         {
             Paused = true;
             Time.timeScale = 0;
@@ -148,7 +152,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             Umbrella.gameObject.SetActive(false);
             rb.drag = 0;
-            if (Input.GetKey(jumpKey) && wallrunning == false)
+            if (Input.GetButton("Parasol") && wallrunning == false)
             {
                 rb.drag = dragAir;
                 rb.mass = playerMassAir;
@@ -169,8 +173,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void MyInput()
     {
         // Get player input for movement
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
     }
 
     private void OnCollisionEnter(Collision collision)

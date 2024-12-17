@@ -9,14 +9,19 @@ public class OptionsManager : MonoBehaviour
     public GameObject controlsPanel;
 
     public Slider sensitivitySliderMouse;
+    public Slider sensitivitySliderPad;
     public float defaultSensitivity = 1.0f;
+    public float defaultSensitivityPad = 0.5f;
     private float currentSensitivity;
+    private float currentSensitivityPad;
 
     public void Start()
     {
         LoadSensitivity();
         sensitivitySliderMouse.value = currentSensitivity;
+        sensitivitySliderPad.value = currentSensitivityPad;
         sensitivitySliderMouse.onValueChanged.AddListener(delegate { OnSensitivityChange(); });
+        sensitivitySliderPad.onValueChanged.AddListener(delegate { OnSensitivityChangePad(); });
     }
 
     public void ShowGeneral()
@@ -57,6 +62,12 @@ public class OptionsManager : MonoBehaviour
         SaveSensitivity();
     }
 
+    public void OnSensitivityChangePad()
+    {
+        currentSensitivityPad = sensitivitySliderPad.value;
+        SaveSensitivityPad();
+    }
+
     public void SaveSensitivity()
     {
         PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
@@ -64,9 +75,29 @@ public class OptionsManager : MonoBehaviour
         Debug.Log("Sensitivity Saved: " + currentSensitivity);
     }
 
+    public void SaveSensitivityPad()
+    {
+        PlayerPrefs.SetFloat("PadSensitivity", currentSensitivityPad);
+        PlayerPrefs.Save();
+        Debug.Log("Sensitivity Pad Saved: " + currentSensitivityPad);
+    }
+
     public void LoadSensitivity()
     {
         currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+        currentSensitivityPad = PlayerPrefs.GetFloat("PadSensitivity", defaultSensitivity);
         Debug.Log("Sensitivity Loaded: " + currentSensitivity);
+    }
+
+    public void SetSenseToDefault()
+    {
+        currentSensitivity = defaultSensitivity;
+        currentSensitivityPad = defaultSensitivityPad;
+
+        sensitivitySliderMouse.value = defaultSensitivity;
+        sensitivitySliderPad.value = defaultSensitivityPad;
+
+        SaveSensitivity();
+        SaveSensitivityPad();
     }
 }

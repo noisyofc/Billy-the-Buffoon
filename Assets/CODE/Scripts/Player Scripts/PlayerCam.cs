@@ -6,6 +6,7 @@ public class PlayerCam : MonoBehaviour
 {
     [Header("Sensitivity Settings")]
     private float mouseSensitivity;
+    private float PadSensitivity;
     [Tooltip("Mouse sensitivity along the X-axis.")]
     public float sensX = 100f;  // Sensitivity for mouse X-axis
     [Tooltip("Mouse sensitivity along the Y-axis.")]
@@ -25,6 +26,7 @@ public class PlayerCam : MonoBehaviour
     {
         // Lock the cursor and hide it for first-person control
         mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
+        PadSensitivity = PlayerPrefs.GetFloat("PadSensitivity", 0.5f);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
@@ -33,15 +35,21 @@ public class PlayerCam : MonoBehaviour
     private void Update()
     {
         mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
+        PadSensitivity = PlayerPrefs.GetFloat("PadSensitivity", 0.5f);
         // Get mouse input for both X and Y axes
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX * mouseSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY * mouseSensitivity;
 
+        float PadX = Input.GetAxisRaw("Pad X") * Time.deltaTime * sensX * PadSensitivity;
+        float PadY = Input.GetAxisRaw("Pad Y") * Time.deltaTime * sensY * PadSensitivity;
+
         // Adjust the yaw (Y rotation) based on mouse X movement
         yRotation += mouseX;
+        yRotation += PadX;
 
         // Adjust the pitch (X rotation) based on mouse Y movement and clamp it between -90 and 90 degrees
         xRotation -= mouseY;
+        xRotation -= PadY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         // Apply the rotations to the camera holder and the player's orientation
