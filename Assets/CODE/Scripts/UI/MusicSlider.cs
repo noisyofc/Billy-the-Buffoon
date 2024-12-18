@@ -15,7 +15,7 @@ public class MusicSlider : MonoBehaviour
     {
         if (!PlayerPrefs.HasKey("Music"))
         {
-            slider.value = 1;
+            slider.value = 0.5f;
         }
         else
         {
@@ -35,5 +35,11 @@ public class MusicSlider : MonoBehaviour
     {
         PlayerPrefs.SetFloat("Music", slider.value);
         PlayerPrefs.Save();
+    }
+
+    public void SetDefault()
+    {
+        slider.value = 0.5f;
+        SaveValue();
     }
 }

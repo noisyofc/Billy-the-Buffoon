@@ -10,7 +10,12 @@ public class ButtonEscape : MonoBehaviour
 
     void Update()
     {
+#if UNITY_WEBGL
         if (Input.GetButtonDown("Cancel"))
+#endif
+#if !UNITY_WEBGL
+        if (Input.GetButtonDown("Pause"))
+#endif
         {
             if (button.interactable)
             {

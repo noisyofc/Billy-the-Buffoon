@@ -36,4 +36,10 @@ public class SfxSlider : MonoBehaviour
         PlayerPrefs.SetFloat("SFX", slider.value);
         PlayerPrefs.Save();
     }
+
+    public void SetDefault()
+    {
+        slider.value = 1;
+        SaveValue();
+    }
 }
