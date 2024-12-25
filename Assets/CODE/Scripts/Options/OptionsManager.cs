@@ -15,6 +15,11 @@ public class OptionsManager : MonoBehaviour
     private float currentSensitivity;
     private float currentSensitivityPad;
 
+    public Image general;
+    public Image audio;
+    public Image video;
+    public Image controls;
+
     public void Start()
     {
         LoadSensitivity();
@@ -30,6 +35,11 @@ public class OptionsManager : MonoBehaviour
         videoPanel.SetActive(false);
         audioPanel.SetActive(false);
         controlsPanel.SetActive(false);
+
+        ChangeColor("#8C8C8C", general);
+        ChangeColor("#FFFFFF", audio);
+        ChangeColor("#FFFFFF", video);
+        ChangeColor("#FFFFFF", controls);
     }
 
     public void ShowVideo()
@@ -38,6 +48,11 @@ public class OptionsManager : MonoBehaviour
         videoPanel.SetActive(true);
         audioPanel.SetActive(false);
         controlsPanel.SetActive(false);
+
+        ChangeColor("#FFFFFF", general);
+        ChangeColor("#FFFFFF", audio);
+        ChangeColor("#8C8C8C", video);
+        ChangeColor("#FFFFFF", controls);
     }
 
     public void ShowAudio()
@@ -46,6 +61,11 @@ public class OptionsManager : MonoBehaviour
         videoPanel.SetActive(false);
         audioPanel.SetActive(true);
         controlsPanel.SetActive(false);
+
+        ChangeColor("#FFFFFF", general);
+        ChangeColor("#8C8C8C", audio);
+        ChangeColor("#FFFFFF", video);
+        ChangeColor("#FFFFFF", controls);
     }
     
     public void ShowControls()
@@ -54,6 +74,11 @@ public class OptionsManager : MonoBehaviour
         generalPanel.SetActive(false);
         videoPanel.SetActive(false);
         audioPanel.SetActive(false);
+
+        ChangeColor("#FFFFFF", general);
+        ChangeColor("#FFFFFF", audio);
+        ChangeColor("#FFFFFF", video);
+        ChangeColor("#8C8C8C", controls);
     }
 
     public void OnSensitivityChange()
@@ -99,5 +124,18 @@ public class OptionsManager : MonoBehaviour
 
         SaveSensitivity();
         SaveSensitivityPad();
+    }
+
+    public void ChangeColor(string hexColor, Image buttonImage)
+    {
+        if (ColorUtility.TryParseHtmlString(hexColor, out Color newColor))
+        {
+            buttonImage.color = newColor;
+            Debug.Log($"Kolor zmieniony na: {newColor}");
+        }
+        else
+        {
+            Debug.LogError("Nieprawid³owy kod koloru: " + hexColor);
+        }
     }
 }
