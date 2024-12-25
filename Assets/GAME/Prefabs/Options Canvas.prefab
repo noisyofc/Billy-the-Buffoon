@@ -1736,10 +1736,18 @@ MonoBehaviour:
   sensitivitySliderPad: {fileID: 2604229642314458971}
   defaultSensitivity: 1
   defaultSensitivityPad: 0.5
-  general: {fileID: 8168053260405919794}
-  audio: {fileID: 4529127685905543059}
-  video: {fileID: 6056356545384460713}
-  controls: {fileID: 652729751185945785}
+  generalButton: {fileID: 8168053260405919794}
+  audioButton: {fileID: 4529127685905543059}
+  videoButton: {fileID: 6056356545384460713}
+  controlsButton: {fileID: 652729751185945785}
+  general: {fileID: 21300000, guid: 205991bd4f40ed048a57c1ecf8a527ef, type: 3}
+  audio: {fileID: 21300000, guid: 3e2dc21359b86ca4499c81aee0503108, type: 3}
+  video: {fileID: 21300000, guid: 225ddb29f61298b4aa675c6470d8f3e7, type: 3}
+  controls: {fileID: 21300000, guid: 4a17adc269643df4697504302870c042, type: 3}
+  generalPressed: {fileID: 21300000, guid: 376688c796205894aa03cd7b357b241a, type: 3}
+  audioPressed: {fileID: 21300000, guid: 5c78a05e5e2094a47b7c154f4f0abbff, type: 3}
+  videoPressed: {fileID: 21300000, guid: 7d112bf008162014ba6ffca5c7a3f2aa, type: 3}
+  controlsPressed: {fileID: 21300000, guid: f74f0668c7116fa44b7e53f91c925b7f, type: 3}
 --- !u!114 &6904305036968903630
 MonoBehaviour:
   m_ObjectHideFlags: 0

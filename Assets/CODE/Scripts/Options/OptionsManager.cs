@@ -15,10 +15,20 @@ public class OptionsManager : MonoBehaviour
     private float currentSensitivity;
     private float currentSensitivityPad;
 
-    public Image general;
-    public Image audio;
-    public Image video;
-    public Image controls;
+    public Image generalButton;
+    public Image audioButton;
+    public Image videoButton;
+    public Image controlsButton;
+
+    public Sprite general;
+    public Sprite audio;
+    public Sprite video;
+    public Sprite controls;
+
+    public Sprite generalPressed;
+    public Sprite audioPressed;
+    public Sprite videoPressed;
+    public Sprite controlsPressed;
 
     public void Start()
     {
@@ -36,10 +46,10 @@ public class OptionsManager : MonoBehaviour
         audioPanel.SetActive(false);
         controlsPanel.SetActive(false);
 
-        ChangeColor("#8C8C8C", general);
-        ChangeColor("#FFFFFF", audio);
-        ChangeColor("#FFFFFF", video);
-        ChangeColor("#FFFFFF", controls);
+        generalButton.sprite = generalPressed;
+        audioButton.sprite = audio;
+        videoButton.sprite = video;
+        controlsButton.sprite = controls;
     }
 
     public void ShowVideo()
@@ -49,10 +59,10 @@ public class OptionsManager : MonoBehaviour
         audioPanel.SetActive(false);
         controlsPanel.SetActive(false);
 
-        ChangeColor("#FFFFFF", general);
-        ChangeColor("#FFFFFF", audio);
-        ChangeColor("#8C8C8C", video);
-        ChangeColor("#FFFFFF", controls);
+        generalButton.sprite = general;
+        audioButton.sprite = audio;
+        videoButton.sprite = videoPressed;
+        controlsButton.sprite = controls;
     }
 
     public void ShowAudio()
@@ -62,10 +72,10 @@ public class OptionsManager : MonoBehaviour
         audioPanel.SetActive(true);
         controlsPanel.SetActive(false);
 
-        ChangeColor("#FFFFFF", general);
-        ChangeColor("#8C8C8C", audio);
-        ChangeColor("#FFFFFF", video);
-        ChangeColor("#FFFFFF", controls);
+        generalButton.sprite = general;
+        audioButton.sprite = audioPressed;
+        videoButton.sprite = video;
+        controlsButton.sprite = controls;
     }
     
     public void ShowControls()
@@ -75,10 +85,10 @@ public class OptionsManager : MonoBehaviour
         videoPanel.SetActive(false);
         audioPanel.SetActive(false);
 
-        ChangeColor("#FFFFFF", general);
-        ChangeColor("#FFFFFF", audio);
-        ChangeColor("#FFFFFF", video);
-        ChangeColor("#8C8C8C", controls);
+        generalButton.sprite = general;
+        audioButton.sprite = audio;
+        videoButton.sprite = video;
+        controlsButton.sprite = controlsPressed;
     }
 
     public void OnSensitivityChange()
