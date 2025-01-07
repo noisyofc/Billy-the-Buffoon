@@ -37639,6 +37639,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 548059985}
     m_Modifications:
+    - target: {fileID: 4269894990990233065, guid: 69bb92f65f1a3d94693c3f1842817c47,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7274103735572482524, guid: 69bb92f65f1a3d94693c3f1842817c47,
         type: 3}
       propertyPath: m_LocalScale.y
@@ -37704,7 +37709,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: islandMedium_grass_2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4269894990990233065, guid: 69bb92f65f1a3d94693c3f1842817c47, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -38348,6 +38354,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 548059985}
     m_Modifications:
+    - target: {fileID: 1621498875938726317, guid: cc34a034804a57947afff9f5191c59cf,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8528691580605207050, guid: cc34a034804a57947afff9f5191c59cf,
         type: 3}
       propertyPath: m_Name
@@ -38413,7 +38424,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1621498875938726317, guid: cc34a034804a57947afff9f5191c59cf, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
