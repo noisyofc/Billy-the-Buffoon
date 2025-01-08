@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 1828315600607213980, guid: 8ce5a6dc32350e141abb7d5e34694117,
         type: 3}
       propertyPath: m_Name
-      value: islandBig_grass_3 Variant
+      value: islandBig_grass_3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

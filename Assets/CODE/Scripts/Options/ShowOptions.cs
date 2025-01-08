@@ -27,6 +27,6 @@ public class ShowOptions : MonoBehaviour
     public void backButton()
     {
         optionsPanel.GetComponent<Canvas>().enabled = false;
-        mainUI.SetActive(true);       
+        mainUI.SetActive(true);  
     }
 }

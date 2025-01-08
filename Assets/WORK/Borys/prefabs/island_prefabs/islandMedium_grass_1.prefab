@@ -73,6 +73,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: islandMedium_grass_1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f95b768edee6bd6468136bdb645b6410,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f95b768edee6bd6468136bdb645b6410,
+        type: 3}
+      propertyPath: m_TagString
+      value: floor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

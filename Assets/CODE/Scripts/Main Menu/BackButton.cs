@@ -11,6 +11,8 @@ public class BackButton : MonoBehaviour
     public GameObject QuitButton;
     public GameObject StartButton;
 
+    public GameObject panelOptions;
+
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
     public Camera mainCamera;
@@ -30,7 +32,8 @@ public class BackButton : MonoBehaviour
 
     public void goBack()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        panelOptions.GetComponent<Canvas>().enabled = false;
         LevelButton.GetComponent<MockMenuSelectLevel>().enabled = true;
         LevelButton.GetComponent<Collider>().enabled = true;
         QuitButton.GetComponent<MockMenuExit>().enabled = true;

@@ -2527,6 +2527,7 @@ MonoBehaviour:
   LevelButton: {fileID: 919132148119395167}
   QuitButton: {fileID: 82935914}
   StartButton: {fileID: 919132149299179176}
+  panelOptions: {fileID: 0}
   mainCamera: {fileID: 401521169}
 --- !u!114 &270529876
 MonoBehaviour:
@@ -15446,6 +15447,11 @@ PrefabInstance:
       propertyPath: StartButton
       value: 
       objectReference: {fileID: 919132149299179176}
+    - target: {fileID: 7103677485625230910, guid: 77a724c6a2ef1484483dd60beb35a46e,
+        type: 3}
+      propertyPath: panelOptions
+      value: 
+      objectReference: {fileID: 120012074}
     - target: {fileID: 7103677485625230910, guid: 77a724c6a2ef1484483dd60beb35a46e,
         type: 3}
       propertyPath: OptionsButton

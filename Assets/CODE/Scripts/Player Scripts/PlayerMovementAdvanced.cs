@@ -173,8 +173,8 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private void MyInput()
     {
         // Get player input for movement
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
     }
 
     private void OnCollisionEnter(Collision collision)
