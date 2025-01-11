@@ -30,6 +30,18 @@ public class OptionsManager : MonoBehaviour
     public Sprite videoPressed;
     public Sprite controlsPressed;
 
+    public Image toggle1280x720Button;
+    public Image toggle1920x1080Button;
+    public Image toggle3840x2160Button;
+
+    public Sprite toggle1280x720;
+    public Sprite toggle1920x1080;
+    public Sprite toggle3840x2160;
+
+    public Sprite toggle1280x720Pressed;
+    public Sprite toggle1920x1080Pressed;
+    public Sprite toggle3840x2160Pressed;
+
     public void Start()
     {
         LoadSensitivity();
@@ -37,6 +49,7 @@ public class OptionsManager : MonoBehaviour
         sensitivitySliderPad.value = currentSensitivityPad;
         sensitivitySliderMouse.onValueChanged.AddListener(delegate { OnSensitivityChange(); });
         sensitivitySliderPad.onValueChanged.AddListener(delegate { OnSensitivityChangePad(); });
+        CheckRes();
     }
 
     public void ShowGeneral()
@@ -77,7 +90,7 @@ public class OptionsManager : MonoBehaviour
         videoButton.sprite = video;
         controlsButton.sprite = controls;
     }
-    
+
     public void ShowControls()
     {
         controlsPanel.SetActive(true);
@@ -136,16 +149,62 @@ public class OptionsManager : MonoBehaviour
         SaveSensitivityPad();
     }
 
-    public void ChangeColor(string hexColor, Image buttonImage)
+    public void CheckRes()
     {
-        if (ColorUtility.TryParseHtmlString(hexColor, out Color newColor))
+        if (!PlayerPrefs.HasKey("Res"))
         {
-            buttonImage.color = newColor;
-            Debug.Log($"Kolor zmieniony na: {newColor}");
+            SetResolution1920x1080();
         }
-        else
+
+        if (PlayerPrefs.GetInt("Res") == 1)
         {
-            Debug.LogError("Nieprawid³owy kod koloru: " + hexColor);
+            SetResolution1280x720();
         }
+        else if (PlayerPrefs.GetInt("Res") == 2)
+        {
+            SetResolution1920x1080();
+        }
+        else if (PlayerPrefs.GetInt("Res") == 3)
+        {
+            SetResolution3840x2160();
+        }
+    }
+
+    public void SetResolution1280x720()
+    {
+        Screen.SetResolution(1280, 720, Screen.fullScreen);
+        PlayerPrefs.SetInt("Res", 1);
+        PlayerPrefs.Save();
+        toggle1280x720Button.sprite = toggle1280x720Pressed;
+        toggle1920x1080Button.sprite = toggle1920x1080;
+        toggle3840x2160Button.sprite = toggle3840x2160;
+        Debug.Log("Ustawiono rozdzielczoœæ 1280x720");
+    }
+
+    public void SetResolution1920x1080()
+    {
+        Screen.SetResolution(1920, 1080, Screen.fullScreen);
+        PlayerPrefs.SetInt("Res", 2);
+        PlayerPrefs.Save();
+        toggle1280x720Button.sprite = toggle1280x720;
+        toggle1920x1080Button.sprite = toggle1920x1080Pressed;
+        toggle3840x2160Button.sprite = toggle3840x2160;
+        Debug.Log("Ustawiono rozdzielczoœæ 1920x1080");
+    }
+
+    public void SetResolution3840x2160()
+    {
+        Screen.SetResolution(3840, 2160, Screen.fullScreen);
+        PlayerPrefs.SetInt("Res", 3);
+        PlayerPrefs.Save();
+        toggle1280x720Button.sprite = toggle1280x720;
+        toggle1920x1080Button.sprite = toggle1920x1080;
+        toggle3840x2160Button.sprite = toggle3840x2160Pressed;
+        Debug.Log("Ustawiono rozdzielczoœæ 1920x1080");
+    }
+
+    public void SetResDefault()
+    {
+        SetResolution1920x1080();
     }
 }
