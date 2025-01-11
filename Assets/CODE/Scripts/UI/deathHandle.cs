@@ -17,7 +17,7 @@ public class deathHandle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.R) && PlayerMovementAdvanced.Paused==true && PlayerDeath.playerDead==true)
+        if (Input.GetButtonDown("Restart") && PlayerMovementAdvanced.Paused==true && PlayerDeath.playerDead==true)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

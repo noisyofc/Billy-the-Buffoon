@@ -152,7 +152,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
             Umbrella.gameObject.SetActive(false);
             rb.drag = 0;
-            if (Input.GetButton("Parasol") && wallrunning == false)
+            if ((Input.GetButton("Parasol") || Input.GetAxis("Parasol") != 0) && wallrunning == false)
             {
                 rb.drag = dragAir;
                 rb.mass = playerMassAir;
