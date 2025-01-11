@@ -12,6 +12,8 @@ public class LoadingScreenController : MonoBehaviour
     private bool canPressKey = false; // Prevent key press until the text is fully displayed
     private float targetProgress = 0f;
 
+
+//test
     private void Start()
     {
         pressAnyKeyText.SetActive(false); // Ensure the "Press any key" text is hidden initially
