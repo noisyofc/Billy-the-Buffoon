@@ -200,7 +200,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720;
         toggle1920x1080Button.sprite = toggle1920x1080;
         toggle3840x2160Button.sprite = toggle3840x2160Pressed;
-        Debug.Log("Ustawiono rozdzielczoœæ 1920x1080");
+        Debug.Log("Ustawiono rozdzielczoœæ 3840x2160");
     }
 
     public void SetResDefault()

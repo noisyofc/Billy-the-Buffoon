@@ -63,7 +63,7 @@ public class UIButtons : MonoBehaviour
             }
         }
 
-        string[] axes = { "Horizontalp", "Verticalp", "Tramp", "Parasol" };
+        string[] axes = { "Horizontalp", "Verticalp", "Tramp" };//, "Parasol" };
         foreach (string axis in axes)
         {
             float value = Input.GetAxis(axis);
