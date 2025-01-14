@@ -42,6 +42,9 @@ public class LevelSelectManager : MonoBehaviour
         { "Level_1_3", "Desert Dash" },
         { "Level_1_4", "Sandy Sprint" },
         { "Level_2_1", "Boulder Breaker" },
+        { "Level_2_2", "Desert Disaster" },
+        { "Level_2_3", "Rocky Rockslide" },
+        { "Level_2_4", "Sunny Slide" },
         // Add more level mappings as needed
     };
 

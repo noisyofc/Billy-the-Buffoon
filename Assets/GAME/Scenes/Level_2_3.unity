@@ -1472,7 +1472,7 @@ PrefabInstance:
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
       propertyPath: currentLevel
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
@@ -2070,7 +2070,7 @@ PrefabInstance:
     - target: {fileID: 2808755943693849555, guid: 976cebd21dc99bb45981864edcfca749,
         type: 3}
       propertyPath: m_text
-      value: 2-1
+      value: 2-3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
