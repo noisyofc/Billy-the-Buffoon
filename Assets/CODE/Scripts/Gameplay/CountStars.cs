@@ -51,7 +51,7 @@ public class CountStars : MonoBehaviour
         {
             stars += 1;  // Increase the star count
 
-            Destroy(other.gameObject);
+           // Destroy(other.gameObject);
         }
     }
 }

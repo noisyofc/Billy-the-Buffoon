@@ -6,7 +6,7 @@ public class CollectSound : MonoBehaviour
 {
     public AudioSource collect;
 
-    public void Collect()
+    public void Collected()
     {
         collect.Play();
     }

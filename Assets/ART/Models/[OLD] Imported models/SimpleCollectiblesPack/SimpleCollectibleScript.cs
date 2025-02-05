@@ -18,7 +18,7 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	public int starsCollected = 0;
 
-	public CollectSound collectSound;
+	public AudioSource collect;
 
 	private void Awake()
 	{
@@ -34,9 +34,9 @@ public class SimpleCollectibleScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (collectSound == null)
+		if (collect == null)
         {
-			collectSound = GameObject.Find("Collect").GetComponent<CollectSound>();
+			collect = GameObject.Find("Collect").GetComponent<AudioSource>();
         }
 
 		if (rotate)
@@ -53,9 +53,9 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 	public void Collect()
 	{
-		collectSound.Collect();
+		collect.Play();
 
-		if(collectEffect)
+		if (collectEffect)
 			Instantiate(collectEffect, transform.position, Quaternion.identity);
 
 		//Below is space to add in your code for what happens based on the collectible type
