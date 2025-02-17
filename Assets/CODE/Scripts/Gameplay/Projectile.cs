@@ -37,6 +37,8 @@ public class Projectile : MonoBehaviour
     private Renderer[] meshRenderers;  // Mesh renderers to show/hide object
     private bool isFalling = false;  // Indicates whether the trampoline is falling
 
+    public GameObject[] glueParticles;
+
     private void Start()
     {
         // Get the platform layer mask (whatIsGround layer)
@@ -142,8 +144,17 @@ public class Projectile : MonoBehaviour
 
             // Set the wall as glued
             collision.gameObject.transform.tag = "glued";
+            
             collision.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             collision.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+
+            ContactPoint contact = collision.contacts[0]; // Get the first contact point
+
+            for (int i = 0; i < glueParticles.Length; i++)
+            {
+                Instantiate(glueParticles[i], contact.point, rotation);
+            }
+            
 
             // Destroy the projectile once glued
             Destroy(gameObject);

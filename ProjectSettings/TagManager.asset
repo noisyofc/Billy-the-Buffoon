@@ -16,6 +16,7 @@ TagManager:
   - glue
   - Star
   - underStuck
+  - glueParticle
   layers:
   - Default
   - TransparentFX
