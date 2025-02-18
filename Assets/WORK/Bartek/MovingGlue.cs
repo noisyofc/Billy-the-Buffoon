@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,12 +44,14 @@ public class MovingGlue : MonoBehaviour
         // Set targetPos within the bounds of the collision object
         float offset = 5f; // Small offset to ensure targetPos is within bounds
 
+        gameObject.transform.rotation = collision.transform.rotation;
+        targetPos = Vector3.zero;
         switch (whichDrop)
         {
             case 0:
                 // Move to the bottom-left corner
                 targetPos = new Vector3(
-                    startPos.x,
+                    startPos.x - ((Vector3.Distance(new Vector3(0,0,bounds.min.z), new Vector3(0,0,bounds.max.z)) * MathF.Sin(collision.gameObject.transform.rotation.z))/(2 * MathF.Sin((180 - collision.gameObject.transform.rotation.z)/2))),
                     bounds.min.y + offset,
                     bounds.min.z + offset
                 );
@@ -56,7 +59,7 @@ public class MovingGlue : MonoBehaviour
             case 1:
                 // Move to the bottom-right corner
                 targetPos = new Vector3(
-                    startPos.x,
+                    startPos.x + ((Vector3.Distance(new Vector3(0,0,bounds.min.z), new Vector3(0,0,bounds.max.z)) * MathF.Sin(collision.gameObject.transform.rotation.z))/(2 * MathF.Sin((180 - collision.gameObject.transform.rotation.z)/2))),
                     bounds.min.y + offset,
                     bounds.max.z - offset
                 );
@@ -64,7 +67,7 @@ public class MovingGlue : MonoBehaviour
             case 2:
                 // Move to the top-left corner
                 targetPos = new Vector3(
-                    startPos.x,
+                    startPos.x - ((Vector3.Distance(new Vector3(0,0,bounds.min.z), new Vector3(0,0,bounds.max.z)) * MathF.Sin(collision.gameObject.transform.rotation.z))/(2 * MathF.Sin((180 - collision.gameObject.transform.rotation.z)/2))),
                     bounds.max.y - offset,
                     bounds.min.z + offset
                 );
@@ -72,7 +75,7 @@ public class MovingGlue : MonoBehaviour
             case 3:
                 // Move to the top-right corner
                 targetPos = new Vector3(
-                    startPos.x,
+                    startPos.x + ((Vector3.Distance(new Vector3(0,0,bounds.min.z), new Vector3(0,0,bounds.max.z)) * MathF.Sin(collision.gameObject.transform.rotation.z))/(2 * MathF.Sin((180 - collision.gameObject.transform.rotation.z)/2))),
                     bounds.max.y - offset,
                     bounds.max.z - offset
                 );
