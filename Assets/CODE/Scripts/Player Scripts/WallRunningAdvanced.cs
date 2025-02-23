@@ -127,7 +127,10 @@ public class WallRunningAdvanced : MonoBehaviour
             }
 
             // Wall jump
-            if (Input.GetKeyDown(jumpKey) || Input.GetAxis("Tramp") != 0) WallJump();
+            if (Input.GetButtonDown("A/Space"))
+            {
+                WallJump();
+            }
         }
 
         // State 2: Exiting Wall Run
