@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class kaktus : MonoBehaviour
 {
-    public float pushForce = 5f;
+    public float pushForce = 55f;
     private Rigidbody player;
 
     public void Update()
@@ -19,7 +19,6 @@ public class kaktus : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            player = GetComponent<Rigidbody>();
             if (player != null)
             {
                 Vector3 pushDirection = transform.position + collision.transform.position;
