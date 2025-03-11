@@ -1914,6 +1914,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall_to_wallrun
       objectReference: {fileID: 0}
+    - target: {fileID: 7799075883460615778, guid: 92f38314bcb2e5740bd84d487faeb93b,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2356,6 +2361,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 496665136}
     m_Modifications:
+    - target: {fileID: 3599710323599038804, guid: 0d4a3a4e9a6e46b49bb898714bbb8387,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3599710323599038804, guid: 0d4a3a4e9a6e46b49bb898714bbb8387,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -3465,6 +3475,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3599710323599038804, guid: 0d4a3a4e9a6e46b49bb898714bbb8387,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3599710323599038804, guid: 0d4a3a4e9a6e46b49bb898714bbb8387,
+        type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fdbabd10092433046aa5ec75a38c1a33, type: 2}
@@ -3700,6 +3715,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Wall_to_wallrun (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7799075883460615778, guid: 92f38314bcb2e5740bd84d487faeb93b,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
