@@ -26,6 +26,7 @@ public class deathHandle : MonoBehaviour
             PlayerMovementAdvanced.Paused=false;
             PlayerDeath.playerDead=false;
             mainUI.SetActive(true);
+            MusicManager.instance.SaveMusicTime();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }

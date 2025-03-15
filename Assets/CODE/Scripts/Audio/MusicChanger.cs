@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Required for scene management
 
@@ -7,18 +8,22 @@ public class MusicManager : MonoBehaviour
     public AudioSource backgroundMusic; // Reference to the AudioSource component
     public string menuSceneName = "Menu"; // The name of the menu scene where the music should stop
 
+    public static float musicTime = 0f;
+
     void Awake()
     {
         // Ensure that there is only one instance of this object (Singleton pattern)
         if (instance == null)
         {
-            //instance = this;
+            instance = this;
             //DontDestroyOnLoad(gameObject); // Make this GameObject persistent across scenes
         }
         else if (instance != this)
         {
             Destroy(gameObject); // Destroy duplicates
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
@@ -33,20 +38,34 @@ public class MusicManager : MonoBehaviour
         SceneManager.activeSceneChanged += OnSceneChanged;
     }
 
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        backgroundMusic.time = musicTime;
+        backgroundMusic.Play();
+    }
+
+    public void SaveMusicTime()
+    {
+        musicTime = backgroundMusic.time;
+    }
+
     // This method is called whenever the active scene changes
     private void OnSceneChanged(Scene previousScene, Scene newScene)
     {
         // Check if the new scene is the menu scene
-        if (newScene.name == menuSceneName)
-        {
-            // Stop the background music when transitioning to the menu scene
-            StopMusic();
-        }
-        else
-        {
-            // Start playing music again when returning to a non-menu scene
-            PlayMusic();
-        }
+        //if (newScene.name == menuSceneName)
+        //{
+        //    StopMusic();
+        //}
+        //else
+        //{
+        //    StartCoroutine(PlayMusic());
+        //}
     }
 
     public void SetVolume(float volume)
@@ -62,17 +81,13 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    public void PlayMusic()
+    IEnumerator PlayMusic()
     {
+        yield return new WaitForEndOfFrame();
+
         if (!backgroundMusic.isPlaying)
         {
             backgroundMusic.Play(); // Play the music if it's not already playing
         }
-    }
-
-    // Optional: Clean up the event listener when the object is destroyed
-    void OnDestroy()
-    {
-        SceneManager.activeSceneChanged -= OnSceneChanged;
     }
 }

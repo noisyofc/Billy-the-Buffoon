@@ -78,6 +78,8 @@ public class SceneManagerController : MonoBehaviour
         Time.timeScale = 1;
         PlayerMovementAdvanced.Paused = false;
 
+        MusicManager.musicTime = 0f;
+
         // Get the current active scene's build index
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
 

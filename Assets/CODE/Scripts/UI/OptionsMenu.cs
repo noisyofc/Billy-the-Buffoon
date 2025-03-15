@@ -89,6 +89,7 @@ public class OptionsMenu : MonoBehaviour
     public void restartLevel()
     {
         ResumeGame();
+        MusicManager.instance.SaveMusicTime();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
