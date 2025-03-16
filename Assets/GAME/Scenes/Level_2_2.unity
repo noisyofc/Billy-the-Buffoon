@@ -620,6 +620,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: islandBig_grass_3 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1188791125375854042, guid: 66ddf20dda5b78c4d9988b5927027fe1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ae25f71fff9a6a4f99a813ee29b25e9, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1792,6 +1797,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 496665136}
     m_Modifications:
+    - target: {fileID: 171003925889079369, guid: 5c4ad73f6b58aa045b7ae72cefc9f875,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 884fd51e6987eac478be56527c5a177f, type: 2}
     - target: {fileID: 1302855267646382886, guid: 5c4ad73f6b58aa045b7ae72cefc9f875,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2632,6 +2642,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: islandBig_grass_3 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 1188791125375854042, guid: 66ddf20dda5b78c4d9988b5927027fe1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: fdbabd10092433046aa5ec75a38c1a33, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3423,6 +3438,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: islandBig_grass_3 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 1188791125375854042, guid: 66ddf20dda5b78c4d9988b5927027fe1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 884fd51e6987eac478be56527c5a177f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
