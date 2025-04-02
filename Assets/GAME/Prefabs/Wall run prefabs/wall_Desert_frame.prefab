@@ -349,6 +349,11 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6397432201825612893, guid: 92f38314bcb2e5740bd84d487faeb93b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d71242dc4f5deae4d848381f938cfc98, type: 2}
     - target: {fileID: 6656645278218486733, guid: 92f38314bcb2e5740bd84d487faeb93b,
         type: 3}
       propertyPath: m_FlipX
@@ -395,6 +400,11 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6656645278218486733, guid: 92f38314bcb2e5740bd84d487faeb93b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d71242dc4f5deae4d848381f938cfc98, type: 2}
     - target: {fileID: 7693509926031515538, guid: 92f38314bcb2e5740bd84d487faeb93b,
         type: 3}
       propertyPath: m_IsActive

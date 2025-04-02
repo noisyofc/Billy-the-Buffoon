@@ -3043,6 +3043,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 670048747343928900, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d71242dc4f5deae4d848381f938cfc98, type: 2}
+    - target: {fileID: 1001317426403092948, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d71242dc4f5deae4d848381f938cfc98, type: 2}
     - target: {fileID: 2403623188092471237, guid: b91567704dfd2d84c9a27d2e8a2c4669,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3097,6 +3107,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: wall_Desert_frame
+      objectReference: {fileID: 0}
+    - target: {fileID: 4605366926012776987, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438518324355561744, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5310,6 +5330,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: wall_Desert_frame (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4605366926012776987, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438518324355561744, guid: b91567704dfd2d84c9a27d2e8a2c4669,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
