@@ -20,8 +20,8 @@ public class kaktus : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             if (player != null)
-            {
-                Vector3 pushDirection = transform.position + collision.transform.position;
+            {                
+                Vector3 pushDirection = collision.transform.position - transform.position;
                 pushDirection.y = 0;
                 pushDirection.Normalize();
 
