@@ -86,7 +86,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8f71673d2dd3c8e499f4bcc188cd585b,
         type: 3}
       propertyPath: m_Name
-      value: wall_Desert_frame 1
+      value: wall_BASE_frame 1
       objectReference: {fileID: 0}
     - target: {fileID: 2696006071620861743, guid: 8f71673d2dd3c8e499f4bcc188cd585b,
         type: 3}
