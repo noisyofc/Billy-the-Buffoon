@@ -30,6 +30,7 @@ public class PlayerDeath : MonoBehaviour
         // Check if the player collided with the ocean
         if (collision.gameObject.CompareTag("ocean"))
         {
+            EndScreen.endLevel = true;
             RespawnPlayer();  // Respawn the player if they fall into the ocean
             PlayerMovementAdvanced.Paused = true;
             deathScreen.SetActive(true);

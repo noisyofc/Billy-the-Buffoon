@@ -40,6 +40,7 @@ public class EndScreen : MonoBehaviour
     public static EndScreen instance;
 
     public static bool endLevel;
+    public static EndScreen Instance;
 
     public GameObject highScore;
     public TextMeshProUGUI highTime, highBalloons, highGrade;
@@ -52,6 +53,18 @@ public class EndScreen : MonoBehaviour
         A = 4,
         S = 5,
         SPlus = 6  // Highest rank
+    }
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Start()
