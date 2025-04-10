@@ -18,6 +18,12 @@ TagManager:
   - underStuck
   - glueParticle
   - Kaktus
+  - Tut1
+  - Tut2
+  - Tut3
+  - Tut4
+  - Tut5
+  - Tut6
   layers:
   - Default
   - TransparentFX
