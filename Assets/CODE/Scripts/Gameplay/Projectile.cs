@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
     [Tooltip("Support points of the trampoline to check for platform support")]
     public Transform[] supportPoints;  // Define support points (corners or key points)
     [Tooltip("Layer mask used to identify platform layer")]
-    public LayerMask platformLayer;   // Define what the platform layer is
+    public LayerMask platformLayer;   // Define what the platform layer is  // Define what the platform layer is
     [Tooltip("Threshold for how much of the trampoline needs to be supported - 50% of points should hit platform")]
     public float fallThreshold = 0.5f; // Define threshold for how much of the trampoline needs to be unsupported
     [Tooltip("Maximum distance for the raycast to check if the support points are on a platform")]
@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour
     private void Start()
     {
         // Get the platform layer mask (whatIsGround layer)
-        platformLayer = LayerMask.GetMask("whatIsGround");
+        platformLayer = LayerMask.GetMask("whatIsGround", "whatIsPlayer");
 
         // Get the Rigidbody component and center of mass
         rb = GetComponent<Rigidbody>();
@@ -126,7 +126,7 @@ public class Projectile : MonoBehaviour
                 {
                     isFalling = true;
                     StartCoroutine(CountDownFall());
-                //    EnableFalling();
+                    EnableFalling();
                 }
             }
         }
