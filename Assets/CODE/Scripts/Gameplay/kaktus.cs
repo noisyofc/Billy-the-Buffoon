@@ -8,9 +8,9 @@ public class kaktus : MonoBehaviour
     public float pushForce = 55f;
     private Rigidbody player;
 
-    public Image hitImage;           
-    public AudioSource hitAudio;           
-    public float effectDuration = 0.2f;
+    private Image hitImage;
+    private AudioSource hitAudio;
+    private float effectDuration = 0.2f;
 
     private float timer;
     private bool isActive;
