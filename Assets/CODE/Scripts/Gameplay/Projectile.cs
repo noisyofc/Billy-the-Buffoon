@@ -126,7 +126,7 @@ public class Projectile : MonoBehaviour
                 {
                     isFalling = true;
                     StartCoroutine(CountDownFall());
-                    EnableFalling();
+                //    EnableFalling();
                 }
             }
         }
