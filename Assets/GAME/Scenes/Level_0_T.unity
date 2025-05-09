@@ -11316,7 +11316,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0f4a547fb787e8340abd559f955c60c3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b10c5672bd77d7c4fb39b8746dbe4d51, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -31251,6 +31251,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3339765363972324806, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fb5bd796188588a458da394686380416,
+        type: 3}
     - target: {fileID: 3357139757852193843, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_IsActive
@@ -91770,6 +91776,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 783911852454465172, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2853050123404974281, guid: 49c7e86b9113484458a32a3b96007306,
         type: 3}
       propertyPath: mainUI
@@ -91793,7 +91804,32 @@ PrefabInstance:
     - target: {fileID: 6795071926692421262, guid: 49c7e86b9113484458a32a3b96007306,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 53.00006
+      value: 53
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440125572692109737, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.952797
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440125572692109737, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.3400707
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440125572692109737, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8662158
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440125572692109737, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 18.824
+      objectReference: {fileID: 0}
+    - target: {fileID: 7440125572692109737, guid: 49c7e86b9113484458a32a3b96007306,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 36.625
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
