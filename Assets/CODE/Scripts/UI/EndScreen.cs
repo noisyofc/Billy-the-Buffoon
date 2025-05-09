@@ -201,8 +201,36 @@ public class EndScreen : MonoBehaviour
                 highBalloons.text = balloonsCollected;
                 highGrade.text = gradeAchieved;
             }
+                // Always save the grade, even if it's not better than the previous one
+                LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
 
+                // Update the high score UI based on grade comparison
+                if (levelData != null && GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
+                    {
+                        highScore.SetActive(true);
+                        highTime.text = bestTime;
+                        highBalloons.text = balloonsCollected;
+                        highGrade.text = gradeAchieved;
+                    }
+                    else if (levelData != null)
+                    {
+                        highScore.SetActive(false);
+                        highGrade.text = levelData.grade;
+                        highTime.text = levelData.bestTime;
+                        highBalloons.text = levelData.bestBalloons;
+                    }
+                    else
+                    {
+                        highScore.SetActive(true);
+                        highTime.text = bestTime;
+                        highBalloons.text = balloonsCollected;
+                        highGrade.text = gradeAchieved;
+                    }
         }
+
+
+
+
     }
 
     public void StartNextLevel()

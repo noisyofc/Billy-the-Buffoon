@@ -11625,12 +11625,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2578899488624827622, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7009863066175723349, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_Name
       value: endScreen
       objectReference: {fileID: 0}
     - target: {fileID: 7009863066175723349, guid: 01386240b42af534d8657ff6521a621b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7562367645373641783, guid: 01386240b42af534d8657ff6521a621b,
         type: 3}
       propertyPath: m_IsActive
       value: 0

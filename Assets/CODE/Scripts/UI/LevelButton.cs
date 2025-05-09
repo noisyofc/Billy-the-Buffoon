@@ -56,11 +56,11 @@ public class LevelButton : MonoBehaviour
             return;
         }
 
-        // Set button interactable state and sprite based on isUnlocked
+        Debug.Log($"Updating button state: Biome {biomeNumber}, Level {levelNumber}, isUnlocked: {isUnlocked}");
+
         button.interactable = isUnlocked;
         image.sprite = isUnlocked ? defaultSprite : disabledSprite;
 
-        // Update button click listeners safely
         ResetButtonListeners();
         if (isUnlocked)
         {

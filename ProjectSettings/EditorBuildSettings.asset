@@ -23,16 +23,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/GAME/Scenes/Level_1_4.unity
     guid: e763583bdb890dc469cea25e8a3d6cc5
-  - enabled: 1
+  - enabled: 0
     path: Assets/GAME/Scenes/Level_2_1.unity
     guid: ce4e14b131ceb9e469519ef0988758bd
-  - enabled: 1
+  - enabled: 0
     path: Assets/GAME/Scenes/Level_2_2.unity
     guid: df791b550f01704429edd08efc717264
-  - enabled: 1
+  - enabled: 0
     path: Assets/GAME/Scenes/Level_2_3.unity
     guid: 85a05e4ebe2038a489ec9de755ebaf30
-  - enabled: 1
+  - enabled: 0
     path: Assets/GAME/Scenes/Level_2_4.unity
     guid: 1640dd266c29a834784fe2ecf1219866
   - enabled: 0

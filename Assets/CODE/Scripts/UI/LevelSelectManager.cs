@@ -56,6 +56,21 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
+
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        UnlockAllLevels();
+        LockLevelsPast1_4();
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+        //ONLY FOR 1 VERSION, DELETE LATER
+
+
         //levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
 
         biomeSelector = FindObjectOfType<BiomeSelector>();
@@ -315,6 +330,88 @@ public class LevelSelectManager : MonoBehaviour
 
             levelButton.UpdateButtonState(); // Update button appearance
         }
+    }
+
+
+
+    public void UnlockAllLevels()
+    {
+        // Load the current game data
+        GameData gameData = SaveSystem.LoadGame();
+
+        // Iterate through all level buttons
+        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        {
+            // Unlock the level
+            levelButton.isUnlocked = true;
+            levelButton.UpdateButtonState();
+
+            // Update the game data to reflect the unlocked status
+            LevelData levelData = gameData.levels.Find(level =>
+                level.biomeNumber == levelButton.biomeNumber.ToString() &&
+                level.levelNumber == levelButton.levelNumber.ToString());
+
+            if (levelData == null)
+            {
+                // If the level data doesn't exist, create a new entry
+                levelData = new LevelData
+                {
+                    biomeNumber = levelButton.biomeNumber.ToString(),
+                    levelNumber = levelButton.levelNumber.ToString(),
+                    isUnlocked = "true",
+                    bestTime = "N/A",
+                    bestBalloons = "N/A",
+                    grade = "N/A"
+                };
+                gameData.levels.Add(levelData);
+            }
+            else
+            {
+                // Update the existing level data
+                levelData.isUnlocked = "true";
+            }
+        }
+
+        // Save the updated game data
+        SaveSystem.SaveGame(gameData);
+
+        Debug.Log("All levels have been unlocked.");
+    }
+
+    public void LockLevelsPast1_4()
+    {
+        // Load the current game data
+        GameData gameData = SaveSystem.LoadGame();
+
+        // Iterate through all level buttons
+        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        {
+            // Check if the level is past Level_1_4
+            if (levelButton.biomeNumber > 1 || (levelButton.biomeNumber == 1 && levelButton.levelNumber > 4))
+            {
+                // Lock the level
+                levelButton.isUnlocked = false;
+                levelButton.UpdateButtonState();
+
+                // Update the game data to reflect the locked status
+                LevelData levelData = gameData.levels.Find(level =>
+                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
+                    level.levelNumber == levelButton.levelNumber.ToString());
+
+                if (levelData != null)
+                {
+                    levelData.isUnlocked = "false";
+                }
+                levelButton.isUnlocked = false;
+                levelButton.UpdateButtonState();
+            }
+        }
+
+        // Save the updated game data
+        SaveSystem.SaveGame(gameData);
+        
+
+        Debug.Log("All levels past Level_1_4 have been locked.");
     }
 
 }

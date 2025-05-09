@@ -72,7 +72,7 @@ public class MockMenuStartGame : MonoBehaviour
         if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false)
         {
             // Load the next scene and reset game state
-            SceneTransitionManager.Instance.LoadScene("GAME/Scenes/Level_1_1");
+            SceneTransitionManager.Instance.LoadScene("GAME/Scenes/Level_0_T");
             Time.timeScale = 1;
             PlayerMovementAdvanced.Paused = false;
         }
