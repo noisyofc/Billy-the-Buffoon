@@ -69,7 +69,7 @@ public class EndScreen : MonoBehaviour
 
     public void Start()
     {
-        // wy³¹cza bool, aby gra na starcie mog³a reagowaæ na przycisk pauzy
+        // wyï¿½ï¿½cza bool, aby gra na starcie mogï¿½a reagowaï¿½ na przycisk pauzy
         endLevel = false;
     }
 
@@ -94,11 +94,12 @@ public class EndScreen : MonoBehaviour
         // Check if the object entering the trigger is the player
         if (other.CompareTag("Player"))
         {
-            // w³¹cza bool, aby gra nie reagowa³a na przycisk pauzy
+            // wï¿½ï¿½cza bool, aby gra nie reagowaï¿½a na przycisk pauzy
             endLevel = true;
 
             // Pause the game
-            Time.timeScale = 0;
+            //Time.timeScale = 0;
+            PlayerMovementAdvanced.Paused = true;
 
             // Unlock and make the cursor visible
             Cursor.lockState = CursorLockMode.None;
