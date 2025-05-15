@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class HoldRtoReset : MonoBehaviour
 {
-    public Slider countdownSlider;    // Assign in Inspector
+    private Slider countdownSlider;    // Assign in Inspector
     public float holdTime = 2f;
-    public GameObject deathScreen, endScreen;
+    private GameObject deathScreen, endScreen;
 
     private float holdTimer = 0f;
     private bool isHolding = false;
@@ -16,34 +16,57 @@ public class HoldRtoReset : MonoBehaviour
 
     void Start()
     {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == "SliderRestart" && obj.GetComponent<Slider>() != null)
+            {
+                countdownSlider = obj.GetComponent<Slider>();
+            }
+            else if (obj.name == "deathScreen")
+            {
+                deathScreen = obj;
+            }
+            else if (obj.name == "endScreen")
+            {
+                endScreen = obj;
+            }
+        }
+
         if (countdownSlider != null)
             countdownSlider.gameObject.SetActive(false);
 
         // If R is held down on load, wait for release before allowing holding again
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetButton("Restart"))
             canStartHold = false;
         StartCoroutine(DisableHoldTemporarily());
     }
 
     void Update()
     {
+        if (countdownSlider == null || deathScreen == null || endScreen == null)
+        {
+            Secure();
+        }
+
         if (!canStartHold)
         {
-            if (Input.GetKeyUp(KeyCode.R))
+            if (Input.GetButton("Restart"))
             {
                 canStartHold = true; // Now we can allow holding again
             }
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.R) && deathScreen.activeInHierarchy == false && endScreen.activeInHierarchy == false)
+        if (Input.GetButtonDown("Restart") && deathScreen.activeInHierarchy == false && endScreen.activeInHierarchy == false)
         {
             isHolding = true;
             if (countdownSlider != null)
                 countdownSlider.gameObject.SetActive(true);
         }
 
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetButton("Restart"))
         {
             holdTimer += Time.deltaTime;
 
@@ -56,12 +79,32 @@ public class HoldRtoReset : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.R))
+        if (Input.GetButtonUp("Restart"))
         {
             ResetHold();
         }
     }
 
+    public void Secure()
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == "SliderRestart" && obj.GetComponent<Slider>() != null)
+            {
+                countdownSlider = obj.GetComponent<Slider>();
+            }
+            else if (obj.name == "deathScreen")
+            {
+                deathScreen = obj;
+            }
+            else if (obj.name == "endScreen")
+            {
+                endScreen = obj;
+            }
+        }
+    }
     void ResetHold()
     {
         isHolding = false;
