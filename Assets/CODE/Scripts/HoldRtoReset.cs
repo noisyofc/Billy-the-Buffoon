@@ -24,7 +24,7 @@ public class HoldRtoReset : MonoBehaviour
             {
                 countdownSlider = obj.GetComponent<Slider>();
             }
-            else if (obj.name == "deathScreen")
+            else if (obj.name == "deathScreen" || obj.name == "deathScreen Desert")
             {
                 deathScreen = obj;
             }
@@ -95,7 +95,7 @@ public class HoldRtoReset : MonoBehaviour
             {
                 countdownSlider = obj.GetComponent<Slider>();
             }
-            else if (obj.name == "deathScreen")
+            else if (obj.name == "deathScreen" || obj.name == "deathScreen Desert")
             {
                 deathScreen = obj;
             }
