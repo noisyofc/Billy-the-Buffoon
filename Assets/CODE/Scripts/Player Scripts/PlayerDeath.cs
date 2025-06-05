@@ -15,42 +15,47 @@ public class PlayerDeath : MonoBehaviour
     public static bool playerDead = false;
     public GameObject mainUI;
 
+    [SerializeField] public GameObject[] respawnPoints;
+
     private void Start()
     {
-        // Set the player's initial position and rotation at the start of the game
-        RespawnPlayer();
+        RespawnPlayer(); // Set initial spawn
     }
 
-    /// <summary>
-    /// Handles the player's collision detection. If the player collides with the ocean, respawn them.
-    /// </summary>
-    /// <param name="collision">Collision data.</param>
     private void OnCollisionEnter(Collision collision)
     {
-        // Check if the player collided with the ocean
         if (collision.gameObject.CompareTag("ocean"))
         {
             EndScreen.endLevel = true;
-            RespawnPlayer();  // Respawn the player if they fall into the ocean
+            RespawnPlayer();
             PlayerMovementAdvanced.Paused = true;
             deathScreen.SetActive(true);
             playerDead = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            //Time.timeScale = 0;
             CountStars.stars = 0;
             Timer.timeElapsed = 0f;
             mainUI.SetActive(false);
         }
-        
     }
 
-    /// <summary>
-    /// Respawns the player at the specified position and rotation.
-    /// </summary>
-    private void RespawnPlayer()
+    private void OnTriggerEnter(Collider other)
     {
-        // Set the player's position and rotation to the respawn values
+        foreach (GameObject point in respawnPoints)
+        {
+            if (other.gameObject == point)
+            {
+                // Update the respawn position and rotation
+                respawnPosition = point.transform.position;
+                respawnRotation = point.transform.eulerAngles;
+                Debug.Log("Updated respawn point to: " + point.name);
+                break;
+            }
+        }
+    }
+
+    public void RespawnPlayer()
+    {
         transform.position = respawnPosition;
         transform.rotation = Quaternion.Euler(respawnRotation);
         playerRigidbody.velocity = Vector3.zero;

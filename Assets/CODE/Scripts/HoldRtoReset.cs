@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class HoldRtoReset : MonoBehaviour
+public class HoldRtoReset : PlayerDeath
 {
     private Slider countdownSlider;    // Assign in Inspector
     public float holdTime = 2f;
@@ -120,8 +120,8 @@ public class HoldRtoReset : MonoBehaviour
     void RestartLevel()
     {
         // Use SceneManager to reload, and this logic will run again on Start
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        RespawnPlayer();
         // Disable holding functionality for 2 seconds after restart
     }
 

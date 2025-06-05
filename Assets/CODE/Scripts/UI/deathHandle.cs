@@ -27,7 +27,11 @@ public class deathHandle : MonoBehaviour
             PlayerDeath.playerDead=false;
             mainUI.SetActive(true);
             MusicManager.instance.SaveMusicTime();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (SceneManager.GetActiveScene().name != "Level_0_T")
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            
         }
     }
     public void ExitGame()
