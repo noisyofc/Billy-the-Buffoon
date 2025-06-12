@@ -52747,12 +52747,12 @@ PrefabInstance:
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
       propertyPath: currentBiome
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
       propertyPath: currentLevel
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
@@ -93088,7 +93088,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1341304795493850622, guid: 976cebd21dc99bb45981864edcfca749, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 976cebd21dc99bb45981864edcfca749, type: 3}

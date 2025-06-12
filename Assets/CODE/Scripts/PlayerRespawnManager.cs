@@ -119,6 +119,7 @@ public class PlayerRespawnManager : MonoBehaviour
             if (other.gameObject == point)
             {
                 currentRespawnPoint = point.transform;
+                point.GetComponent<Collider>().enabled = false;
                 break;
             }
         }
