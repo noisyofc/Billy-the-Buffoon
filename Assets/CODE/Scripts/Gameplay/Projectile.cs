@@ -93,6 +93,11 @@ public class Projectile : MonoBehaviour
             ContactPoint contact = collision.contacts[0]; // Get the first contact point
             if (contact.normal.y > 0.5f)
             {
+                for (int i = 0; i < glueParticles.Length; i++)
+                {
+                    Instantiate(glueParticles[i], contact.point, rotation);
+                }
+
                 bool result = CheckSupport();  // Check if the trampoline is sufficiently supported
 
                 // Ignore collision between projectile and player after placement
@@ -154,27 +159,41 @@ public class Projectile : MonoBehaviour
             {
                 Instantiate(glueParticles[i], contact.point, rotation);
             }
-            
+
 
             // Destroy the projectile once glued
-            Destroy(gameObject);
+            StartCoroutine(CountDown());
         }
 
         // If the object is in glueRdy state and hits the floor, destroy it
         if (collision.gameObject.CompareTag("floor") && gameObject.transform.CompareTag("glueRdy"))
         {
-            Destroy(gameObject);
+            ContactPoint contact = collision.contacts[0];
+
+            for (int i = 0; i < glueParticles.Length; i++)
+            {
+                Instantiate(glueParticles[i], contact.point, rotation);
+            }
+
+            StartCoroutine(CountDown());
         }
 
         // Start countdown if the collision object is not a wall or floor
         if (!collision.gameObject.CompareTag("floor") && !collision.gameObject.CompareTag("Wall"))
         {
+            ContactPoint contact = collision.contacts[0];
+
+            for (int i = 0; i < glueParticles.Length; i++)
+            {
+                Instantiate(glueParticles[i], contact.point, rotation);
+            }
+
             StartCoroutine(CountDown());
         }
 
         if (collision.gameObject.CompareTag("ocean"))
         {
-            Destroy(gameObject);
+            StartCoroutine(CountDown());
         }
     }
 
@@ -183,8 +202,17 @@ public class Projectile : MonoBehaviour
     /// </summary>
     IEnumerator CountDown()
     {
-        yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
+        if (gameObject.transform.tag == "glueRdy" || gameObject.transform.tag == "glue")
+        {
+            BrakeGlueBottle.PlaySound();
+            yield return new WaitForSeconds(0.1f);
+            Destroy(gameObject);
+        }
+        else
+        {
+            yield return new WaitForSeconds(2f);
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

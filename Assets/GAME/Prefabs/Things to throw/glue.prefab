@@ -260,7 +260,8 @@ MonoBehaviour:
   fallThreshold: 0.5
   rayLength: 1
   playerObject: {fileID: 0}
-  glueParticles: []
+  glueParticles:
+  - {fileID: 5238538877814813142, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
 --- !u!135 &6820677423875512492
 SphereCollider:
   m_ObjectHideFlags: 0
