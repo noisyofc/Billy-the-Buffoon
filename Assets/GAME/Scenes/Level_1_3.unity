@@ -18752,6 +18752,11 @@ PrefabInstance:
       objectReference: {fileID: 696602364}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
+      propertyPath: bestBalloons
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
+        type: 3}
       propertyPath: currentLevel
       value: 3
       objectReference: {fileID: 0}
@@ -18764,6 +18769,11 @@ PrefabInstance:
         type: 3}
       propertyPath: totalBalloons
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
+        type: 3}
+      propertyPath: bestTimeSeconds
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4626655811658397787, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}

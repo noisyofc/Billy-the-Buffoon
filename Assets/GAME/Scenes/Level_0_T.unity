@@ -52751,6 +52751,11 @@ PrefabInstance:
       objectReference: {fileID: 696602363}
     - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
+      propertyPath: bestBalloons
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
+        type: 3}
       propertyPath: currentBiome
       value: 1
       objectReference: {fileID: 0}
@@ -52768,6 +52773,11 @@ PrefabInstance:
         type: 3}
       propertyPath: totalBalloons
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2833604859178033201, guid: f6ea3cc46e50335408cc39831cc6198f,
+        type: 3}
+      propertyPath: bestTimeSeconds
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 4626655811658397787, guid: f6ea3cc46e50335408cc39831cc6198f,
         type: 3}
