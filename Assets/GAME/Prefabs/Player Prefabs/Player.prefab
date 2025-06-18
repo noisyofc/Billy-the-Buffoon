@@ -368,7 +368,7 @@ MonoBehaviour:
   respawnPoints:
   - {fileID: 0}
   holdToRespawnSlider: {fileID: 0}
-  requiredHoldTime: 2
+  requiredHoldTime: 1.2
   deathScreen: {fileID: 0}
   mainUI: {fileID: 0}
   playerRigidbody: {fileID: 3051714022879210221}

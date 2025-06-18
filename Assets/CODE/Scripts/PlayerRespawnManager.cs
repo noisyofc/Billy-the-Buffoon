@@ -20,9 +20,14 @@ public class PlayerRespawnManager : MonoBehaviour
     private float respawnCooldown = 2f;
     private float respawnCooldownTimer = 0f;
 
+    public GameObject[] baloons;
+
     void Start()
     {
-        if(playerDiedOnce == false)
+        
+        baloons = GameObject.FindGameObjectsWithTag("Star");
+
+        if (playerDiedOnce == false)
         {
             playerDiedOnce = true;
             // Set the player's initial position and rotation at the start of the game
@@ -78,6 +83,15 @@ public class PlayerRespawnManager : MonoBehaviour
 
             if (holdTime >= requiredHoldTime)
             {
+                if (currentRespawnPoint != null && respawnPoints.Length == 1)
+                {
+                    CountStars.stars = 0;
+                    Timer.timeElapsed = 0f;
+                    foreach (GameObject baloon in baloons)
+                    {
+                        baloon.SetActive(true);
+                    }
+                }
                 Respawn();
                 ResetHold();
             }
@@ -134,10 +148,21 @@ public class PlayerRespawnManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         //Time.timeScale = 0;
-        CountStars.stars = 0;
-        Timer.timeElapsed = 0f;
+
         mainUI.SetActive(false);
         // Handle death logic here if needed (animation, etc.)
+
+        if (currentRespawnPoint != null && respawnPoints.Length == 1)
+        {
+            CountStars.stars = 0;
+            Timer.timeElapsed = 0f;
+            
+            foreach (GameObject baloon in baloons)
+            {
+                baloon.SetActive(true);
+            }
+        }
+
         Respawn();
     }
 

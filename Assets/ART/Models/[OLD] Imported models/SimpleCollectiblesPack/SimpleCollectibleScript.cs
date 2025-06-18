@@ -60,44 +60,51 @@ public class SimpleCollectibleScript : MonoBehaviour {
 
 		//Below is space to add in your code for what happens based on the collectible type
 
-		if (CollectibleType == CollectibleTypes.NoType) {
+		if (CollectibleType == CollectibleTypes.NoType)
+		{
 
 			//Add in code here;
 			starsCollected += 1;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type1) {
+		if (CollectibleType == CollectibleTypes.Type1)
+		{
 
 			//Add in code here;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type2) {
+		if (CollectibleType == CollectibleTypes.Type2)
+		{
 
 			//Add in code here;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type3) {
+		if (CollectibleType == CollectibleTypes.Type3)
+		{
 
 			//Add in code here;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type4) {
+		if (CollectibleType == CollectibleTypes.Type4)
+		{
 
 			//Add in code here;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
-		if (CollectibleType == CollectibleTypes.Type5) {
+		if (CollectibleType == CollectibleTypes.Type5)
+		{
 
 			//Add in code here;
 
-			Debug.Log ("Do NoType Command");
+			Debug.Log("Do NoType Command");
 		}
 
-		Destroy (gameObject);
+		//Destroy (gameObject);
+		gameObject.SetActive(false);
 	}
 }
