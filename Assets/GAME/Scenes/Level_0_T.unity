@@ -502,11 +502,11 @@ GameObject:
   - component: {fileID: 7451168}
   m_Layer: 0
   m_Name: Cube (5)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &7451168
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -746,11 +746,11 @@ GameObject:
   - component: {fileID: 10874580}
   m_Layer: 0
   m_Name: Cube (3)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &10874580
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3193,7 +3193,7 @@ GameObject:
   - component: {fileID: 55596274}
   m_Layer: 0
   m_Name: Space
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8660,11 +8660,11 @@ GameObject:
   - component: {fileID: 170908764}
   m_Layer: 0
   m_Name: Cube (6)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &170908764
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9884,11 +9884,11 @@ GameObject:
   - component: {fileID: 194954154}
   m_Layer: 0
   m_Name: Cube (7)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &194954154
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11672,11 +11672,11 @@ GameObject:
   - component: {fileID: 230771815}
   m_Layer: 0
   m_Name: Cube (4)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &230771815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12764,7 +12764,7 @@ GameObject:
   - component: {fileID: 251893596}
   m_Layer: 0
   m_Name: baloniki
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12822,6 +12822,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1255441373}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
   todoEventOut:
     m_PersistentCalls:
@@ -25047,7 +25059,7 @@ GameObject:
   - component: {fileID: 542901692}
   m_Layer: 0
   m_Name: End
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27856,11 +27868,11 @@ GameObject:
   - component: {fileID: 597666363}
   m_Layer: 0
   m_Name: Cube (1)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &597666363
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33627,7 +33639,7 @@ GameObject:
   - component: {fileID: 730337136}
   m_Layer: 0
   m_Name: Glue and Trampoline
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34096,7 +34108,7 @@ GameObject:
   - component: {fileID: 737251704}
   m_Layer: 0
   m_Name: Shift
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38588,7 +38600,7 @@ GameObject:
   - component: {fileID: 852002524}
   m_Layer: 0
   m_Name: wsad
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41896,7 +41908,7 @@ GameObject:
   - component: {fileID: 940272586}
   m_Layer: 0
   m_Name: LPM
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55247,11 +55259,11 @@ GameObject:
   - component: {fileID: 1255441374}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1255441374
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -55896,11 +55908,11 @@ GameObject:
   - component: {fileID: 1263293290}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Myszor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1263293290
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -75043,7 +75055,7 @@ GameObject:
   - component: {fileID: 1718045401}
   m_Layer: 0
   m_Name: PPM
-  m_TagString: Untagged
+  m_TagString: TriggersTut
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerRespawnManager : MonoBehaviour
 {
@@ -19,20 +20,25 @@ public class PlayerRespawnManager : MonoBehaviour
 
     private float respawnCooldown = 2f;
     private float respawnCooldownTimer = 0f;
-
-    public GameObject[] baloons;
+    public bool playerHeldR;
+    public GameObject[] baloons, respawnTriggers, myszors;
 
     void Start()
     {
         
         baloons = GameObject.FindGameObjectsWithTag("Star");
-
-        if (playerDiedOnce == false)
+        respawnTriggers = GameObject.FindGameObjectsWithTag("TriggersTut");
+        myszors = GameObject.FindGameObjectsWithTag("Myszor");
+        foreach (GameObject myszor in myszors)
         {
-            playerDiedOnce = true;
-            // Set the player's initial position and rotation at the start of the game
-            Respawn();
+            myszor.SetActive(false);
         }
+        if (playerDiedOnce == false)
+            {
+                playerDiedOnce = true;
+                // Set the player's initial position and rotation at the start of the game
+                Respawn();
+            }
         // Start at the first respawn point by default
         if (respawnPoints.Length > 0)
             currentRespawnPoint = respawnPoints[0].transform;
@@ -54,6 +60,37 @@ public class PlayerRespawnManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
+                playerHeldR = true;
+                Respawn();
+                EndScreen.endLevel = false;
+                PlayerMovementAdvanced.Paused = false;
+                deathScreen.SetActive(false);
+                playerDead = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                mainUI.SetActive(true);
+                holdToRespawnSlider.gameObject.SetActive(false);
+                isHoldingR = false;
+                holdTime = 0f;
+                CountStars.stars = 0;
+                Timer.timeElapsed = 0f;
+                foreach (GameObject baloon in baloons)
+                {
+                    baloon.SetActive(true);
+                }
+                foreach (GameObject myszor in myszors)
+                {
+                    myszor.SetActive(false);
+                }
+                foreach (GameObject respawnTrigger in respawnTriggers)
+                {
+                    respawnTrigger.GetComponent<Collider>().enabled = true;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.T) && SceneManager.GetActiveScene().name == "Level_0_T")
+            {
+                playerHeldR = false;
+                Respawn();
                 EndScreen.endLevel = false;
                 PlayerMovementAdvanced.Paused = false;
                 deathScreen.SetActive(false);
@@ -83,15 +120,21 @@ public class PlayerRespawnManager : MonoBehaviour
 
             if (holdTime >= requiredHoldTime)
             {
-                if (currentRespawnPoint != null && respawnPoints.Length == 1)
+                CountStars.stars = 0;
+                Timer.timeElapsed = 0f;
+                foreach (GameObject baloon in baloons)
                 {
-                    CountStars.stars = 0;
-                    Timer.timeElapsed = 0f;
-                    foreach (GameObject baloon in baloons)
-                    {
-                        baloon.SetActive(true);
-                    }
+                    baloon.SetActive(true);
                 }
+                foreach (GameObject myszor in myszors)
+                {
+                    myszor.SetActive(false);
+                }
+                foreach (GameObject respawnTrigger in respawnTriggers)
+                {
+                    respawnTrigger.GetComponent<Collider>().enabled = true;
+                }
+                playerHeldR = true;
                 Respawn();
                 ResetHold();
             }
@@ -156,19 +199,29 @@ public class PlayerRespawnManager : MonoBehaviour
         {
             CountStars.stars = 0;
             Timer.timeElapsed = 0f;
-            
+
             foreach (GameObject baloon in baloons)
             {
                 baloon.SetActive(true);
             }
+            foreach (GameObject myszor in myszors)
+            {
+                myszor.SetActive(false);
+            }
+            foreach (GameObject respawnTrigger in respawnTriggers)
+            {
+                respawnTrigger.GetComponent<Collider>().enabled = true;
+            }
         }
-
-        Respawn();
+        playerRigidbody.isKinematic = true;
+        playerRigidbody.velocity = Vector3.zero;
+        playerRigidbody.angularVelocity = Vector3.zero;
+        //Respawn();
     }
 
     void Respawn()
     {
-        if (currentRespawnPoint != null)
+        if (currentRespawnPoint != null && playerHeldR == false)
         {
             respawnCooldownTimer = respawnCooldown;
             // Temporarily disable physics
@@ -183,6 +236,34 @@ public class PlayerRespawnManager : MonoBehaviour
             // Re-enable physics
             playerRigidbody.isKinematic = false;
             // Optionally reset velocity, animations, etc.
+        }
+        else if (currentRespawnPoint != null && playerHeldR == true)
+        {
+
+            currentRespawnPoint = respawnPoints[0].transform;
+
+            respawnCooldownTimer = respawnCooldown;
+            // Temporarily disable physics
+            playerRigidbody.isKinematic = true;
+
+            // Move player to respawn point
+            playerRigidbody.position = currentRespawnPoint.position;
+            playerRigidbody.rotation = currentRespawnPoint.rotation;
+            playerRigidbody.velocity = Vector3.zero;
+            playerRigidbody.angularVelocity = Vector3.zero;
+
+            // Re-enable physics
+            playerRigidbody.isKinematic = false;
+            // Optionally reset velocity, animations, etc.
+
+            foreach (GameObject point in respawnPoints)
+            {
+                if (point.GetComponent<Collider>() != null)
+                {
+                    point.GetComponent<Collider>().enabled = true;
+                }
+            }
+            playerHeldR = false;
         }
     }
 }

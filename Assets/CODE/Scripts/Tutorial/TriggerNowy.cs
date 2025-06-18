@@ -16,6 +16,7 @@ public class TriggerNowy : MonoBehaviour
         if (other.tag == "Player")
         {
             todoEventIN.Invoke();
+            gameObject.GetComponent<Collider>().enabled = false;
         }
     }
 
