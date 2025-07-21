@@ -48,6 +48,21 @@ public class PlayerRespawnManager : MonoBehaviour
     }
     void Update()
     {
+        if (deathScreen == null)
+        {
+            deathScreen = GameObject.Find("deathScreen");
+        }
+
+        if (mainUI == null)
+        {
+            mainUI = GameObject.Find("UI");
+        }
+
+        if (holdToRespawnSlider == null)
+        {
+            holdToRespawnSlider = GameObject.Find("SliderRestart").GetComponent<Slider>();
+        }
+
         if (respawnCooldownTimer > 0f)
             respawnCooldownTimer -= Time.deltaTime;
 
@@ -58,7 +73,7 @@ public class PlayerRespawnManager : MonoBehaviour
 
         if (deathScreen.activeInHierarchy && playerDead)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetButtonDown("Restart"))
             {
                 playerHeldR = true;
                 Respawn();
@@ -87,7 +102,7 @@ public class PlayerRespawnManager : MonoBehaviour
                     respawnTrigger.GetComponent<Collider>().enabled = true;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.T) && SceneManager.GetActiveScene().name == "Level_0_T")
+            if (Input.GetButtonDown("Restart") && SceneManager.GetActiveScene().name == "Level_0_T")
             {
                 playerHeldR = false;
                 Respawn();
@@ -107,7 +122,7 @@ public class PlayerRespawnManager : MonoBehaviour
 
     void HandleRespawnInput()
     {
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetButton("Restart"))
         {
             isHoldingR = true;
             holdTime += Time.deltaTime;
@@ -159,7 +174,6 @@ public class PlayerRespawnManager : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        // Check for Ocean collision
         if (other.gameObject.CompareTag("ocean"))
         {
             Die();
@@ -169,8 +183,6 @@ public class PlayerRespawnManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        // Check for respawn point triggers
         foreach (GameObject point in respawnPoints)
         {
             if (other.gameObject == point)

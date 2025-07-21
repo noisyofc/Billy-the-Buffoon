@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 3051714022879210001}
   - component: {fileID: 7385438046344069821}
   - component: {fileID: 8857053726507513399}
-  - component: {fileID: 1183863400525726064}
+  - component: {fileID: 4753128773481582676}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -353,7 +353,7 @@ MonoBehaviour:
   footstepSounds:
   - {fileID: 8300000, guid: 2b112423e90e5cc44809dfe9b576072e, type: 3}
   stepInterval: 0.25
---- !u!114 &1183863400525726064
+--- !u!114 &4753128773481582676
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -365,14 +365,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57da1c2b64f45a7448f090970da813d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  respawnPoints:
-  - {fileID: 0}
+  respawnPoints: []
   holdToRespawnSlider: {fileID: 0}
   requiredHoldTime: 1.2
   deathScreen: {fileID: 0}
   mainUI: {fileID: 0}
   playerRigidbody: {fileID: 3051714022879210221}
   playerDiedOnce: 0
+  playerHeldR: 0
+  baloons: []
+  respawnTriggers: []
+  myszors: []
 --- !u!1 &3051714023701967614
 GameObject:
   m_ObjectHideFlags: 0

@@ -2938,6 +2938,31 @@ PrefabInstance:
       propertyPath: attackPoint
       value: 
       objectReference: {fileID: 1361911861}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: mainUI
+      value: 
+      objectReference: {fileID: 1236171893}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: deathScreen
+      value: 
+      objectReference: {fileID: 1624014525}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: holdToRespawnSlider
+      value: 
+      objectReference: {fileID: 2094202941020962332}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: respawnPoints.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
+      propertyPath: respawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 2040120061}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
