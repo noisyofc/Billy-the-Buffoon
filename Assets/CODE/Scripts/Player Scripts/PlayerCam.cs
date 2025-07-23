@@ -22,6 +22,12 @@ public class PlayerCam : MonoBehaviour
     private float xRotation;
     private float yRotation;
 
+    public float yaw, pitch;
+
+    public float yawRes1, pitchRes1, yawRes2, pitchRes2, yawRes3, pitchRes3, yawRes4, pitchRes4, yawRes5, pitchRes5, yawRes6, pitchRes6;
+
+    public PlayerRespawnManager playerRespawnManager;
+
     private void Start()
     {
         // Lock the cursor and hide it for first-person control
@@ -29,7 +35,8 @@ public class PlayerCam : MonoBehaviour
         PadSensitivity = PlayerPrefs.GetFloat("PadSensitivity", 0.5f);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+        playerRespawnManager.respawn = true;
+
     }
 
     private void Update()
@@ -55,6 +62,45 @@ public class PlayerCam : MonoBehaviour
         // Apply the rotations to the camera holder and the player's orientation
         camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
+        if (playerRespawnManager.respawn == true)
+        {
+            xRotation = yaw;
+            yRotation = pitch;
+            camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            if (playerRespawnManager.lastResp == "Res1")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[1].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[1].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[1].gameObject.transform.rotation.y, 0);
+            }
+            if (playerRespawnManager.lastResp == "Res2")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[2].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[2].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[2].gameObject.transform.rotation.y, 0);
+            }
+            if (playerRespawnManager.lastResp == "Res3")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[3].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[3].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[3].gameObject.transform.rotation.y, 0);
+            }
+            if (playerRespawnManager.lastResp == "Res4")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[4].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[4].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[4].gameObject.transform.rotation.y, 0);
+            }
+            if (playerRespawnManager.lastResp == "Res5")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[5].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[5].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[5].gameObject.transform.rotation.y, 0);
+            }
+            if (playerRespawnManager.lastResp == "Res6")
+            {
+                camHolder.rotation = Quaternion.Euler(playerRespawnManager.respawnPoints[6].gameObject.transform.rotation.x, playerRespawnManager.respawnPoints[6].gameObject.transform.rotation.y, 0);
+                orientation.rotation = Quaternion.Euler(0, playerRespawnManager.respawnPoints[6].gameObject.transform.rotation.y, 0);
+            }
+            playerRespawnManager.respawn = false;   
+        }
     }
 
     /// <summary>

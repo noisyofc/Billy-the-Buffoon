@@ -7,8 +7,7 @@ public class PlayerRespawnManager : MonoBehaviour
     [Header("Respawn Settings")]
     public GameObject[] respawnPoints; // Set this in Inspector
     public Slider holdToRespawnSlider; // Reference to the UI slider
-
-    private Transform currentRespawnPoint;
+    public Transform currentRespawnPoint;
     private float holdTime = 0f;
     public float requiredHoldTime = 2f;
     public GameObject deathScreen, mainUI;
@@ -22,10 +21,14 @@ public class PlayerRespawnManager : MonoBehaviour
     private float respawnCooldownTimer = 0f;
     public bool playerHeldR;
     public GameObject[] baloons, respawnTriggers, myszors;
+    public bool respawn = false;
+    public string lastResp;
+
+    public PlayerCam playerCam;
 
     void Start()
     {
-        
+
         baloons = GameObject.FindGameObjectsWithTag("Star");
         respawnTriggers = GameObject.FindGameObjectsWithTag("TriggersTut");
         myszors = GameObject.FindGameObjectsWithTag("Myszor");
@@ -34,17 +37,22 @@ public class PlayerRespawnManager : MonoBehaviour
             myszor.SetActive(false);
         }
         if (playerDiedOnce == false)
-            {
-                playerDiedOnce = true;
-                // Set the player's initial position and rotation at the start of the game
-                Respawn();
-            }
+        {
+            playerDiedOnce = true;
+            // Set the player's initial position and rotation at the start of the game
+            Respawn();
+        }
         // Start at the first respawn point by default
         if (respawnPoints.Length > 0)
             currentRespawnPoint = respawnPoints[0].transform;
 
         if (holdToRespawnSlider != null)
             holdToRespawnSlider.gameObject.SetActive(false);
+
+        if (SceneManager.GetActiveScene().name == "Level_0_T")
+        {
+            lastResp = respawnTriggers[0].name;
+        }
     }
     void Update()
     {
@@ -102,7 +110,7 @@ public class PlayerRespawnManager : MonoBehaviour
                     respawnTrigger.GetComponent<Collider>().enabled = true;
                 }
             }
-            if (Input.GetButtonDown("Restart") && SceneManager.GetActiveScene().name == "Level_0_T")
+            if (Input.GetKeyDown(KeyCode.T) && SceneManager.GetActiveScene().name == "Level_0_T")
             {
                 playerHeldR = false;
                 Respawn();
@@ -188,6 +196,7 @@ public class PlayerRespawnManager : MonoBehaviour
             if (other.gameObject == point)
             {
                 currentRespawnPoint = point.transform;
+                lastResp = other.gameObject.name;
                 point.GetComponent<Collider>().enabled = false;
                 break;
             }
@@ -235,6 +244,7 @@ public class PlayerRespawnManager : MonoBehaviour
     {
         if (currentRespawnPoint != null && playerHeldR == false)
         {
+            respawn = true;
             respawnCooldownTimer = respawnCooldown;
             // Temporarily disable physics
             playerRigidbody.isKinematic = true;
@@ -251,9 +261,12 @@ public class PlayerRespawnManager : MonoBehaviour
         }
         else if (currentRespawnPoint != null && playerHeldR == true)
         {
-
+            respawn = true;
             currentRespawnPoint = respawnPoints[0].transform;
-
+            if (SceneManager.GetActiveScene().name == "Level_0_T")
+            {
+                lastResp = respawnTriggers[0].name;
+            }
             respawnCooldownTimer = respawnCooldown;
             // Temporarily disable physics
             playerRigidbody.isKinematic = true;

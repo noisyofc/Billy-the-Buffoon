@@ -16344,6 +16344,11 @@ PrefabInstance:
       objectReference: {fileID: 1236171893}
     - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
         type: 3}
+      propertyPath: playerCam
+      value: 
+      objectReference: {fileID: 398080508}
+    - target: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+        type: 3}
       propertyPath: deathScreen
       value: 
       objectReference: {fileID: 1300932455}
@@ -16379,6 +16384,18 @@ AudioSource:
     type: 3}
   m_PrefabInstance: {fileID: 3051714022367177107}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3051714022367177112 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4753128773481582676, guid: 8baad9e07c2f3cb45bc550bf7cab648f,
+    type: 3}
+  m_PrefabInstance: {fileID: 3051714022367177107}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57da1c2b64f45a7448f090970da813d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4467998052107966562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16459,9 +16476,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4467998051934560670, guid: 6c4df039a80357e488dd81909c54aec2,
         type: 3}
+      propertyPath: yaw
+      value: -13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4467998051934560670, guid: 6c4df039a80357e488dd81909c54aec2,
+        type: 3}
+      propertyPath: pitch
+      value: -144
+      objectReference: {fileID: 0}
+    - target: {fileID: 4467998051934560670, guid: 6c4df039a80357e488dd81909c54aec2,
+        type: 3}
       propertyPath: orientation
       value: 
       objectReference: {fileID: 398916369}
+    - target: {fileID: 4467998051934560670, guid: 6c4df039a80357e488dd81909c54aec2,
+        type: 3}
+      propertyPath: playerRespawnManager
+      value: 
+      objectReference: {fileID: 3051714022367177112}
     - target: {fileID: 4467998051934560671, guid: 6c4df039a80357e488dd81909c54aec2,
         type: 3}
       propertyPath: volumeLayer.m_Bits
