@@ -94,6 +94,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private bool devFlyMode = false; // DEV: fly mode toggle
     private GameObject mainUIObj;
+
+
+    public GameObject shadow;
+
+
     private void Start()
     {
         mainUIObj = GameObject.FindGameObjectWithTag("mainUI");
@@ -375,11 +380,15 @@ public class PlayerMovementAdvanced : MonoBehaviour
             else if (grounded)
             {
                 rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+                shadow.SetActive(false);
+                gameObject.GetComponent<Shadow>().enabled = false;
             }
             else if (!grounded)
             {
                 rb.useGravity = true;  // Ensure gravity is enabled while in the air
                 rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+                shadow.SetActive(true);
+                gameObject.GetComponent<Shadow>().enabled = true;
             }
         }
     }
