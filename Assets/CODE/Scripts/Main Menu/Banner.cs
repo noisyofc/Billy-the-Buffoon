@@ -39,7 +39,7 @@ public class Banner : MonoBehaviour
         quit.GetComponent<BoxCollider>().enabled = true;
     }
 
-        public void whatsNextEnter()
+    public void whatsNextEnter()
     {
         whatsNext.gameObject.SetActive(true);
         gameObject.SetActive(false);
@@ -57,6 +57,16 @@ public class Banner : MonoBehaviour
         settings.GetComponent<BoxCollider>().enabled = true;
         start.GetComponent<BoxCollider>().enabled = true;
         quit.GetComponent<BoxCollider>().enabled = true;
+    }
+
+    public void LinkFeedback()
+    {
+        Application.OpenURL("https://forms.gle/UWMg4uSt156JQEJq9");
+    }
+    
+    public void LinkBugReport()
+    {
+        Application.OpenURL("https://forms.gle/mTKvpieibTBNdz216");
     }
 
 }
