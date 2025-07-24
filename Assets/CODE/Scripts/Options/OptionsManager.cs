@@ -44,6 +44,7 @@ public class OptionsManager : MonoBehaviour
 
     public void Start()
     {
+        Screen.SetResolution(1280, 720, Screen.fullScreen);
         LoadSensitivity();
         sensitivitySliderMouse.value = currentSensitivity;
         sensitivitySliderPad.value = currentSensitivityPad;
@@ -178,7 +179,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720Pressed;
         toggle1920x1080Button.sprite = toggle1920x1080;
         toggle3840x2160Button.sprite = toggle3840x2160;
-        Debug.Log("Ustawiono rozdzielczoœæ 1280x720");
+        Debug.Log("Ustawiono rozdzielczoï¿½ï¿½ 1280x720");
     }
 
     public void SetResolution1920x1080()
@@ -189,7 +190,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720;
         toggle1920x1080Button.sprite = toggle1920x1080Pressed;
         toggle3840x2160Button.sprite = toggle3840x2160;
-        Debug.Log("Ustawiono rozdzielczoœæ 1920x1080");
+        Debug.Log("Ustawiono rozdzielczoï¿½ï¿½ 1920x1080");
     }
 
     public void SetResolution3840x2160()
@@ -200,7 +201,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720;
         toggle1920x1080Button.sprite = toggle1920x1080;
         toggle3840x2160Button.sprite = toggle3840x2160Pressed;
-        Debug.Log("Ustawiono rozdzielczoœæ 3840x2160");
+        Debug.Log("Ustawiono rozdzielczoï¿½ï¿½ 3840x2160");
     }
 
     public void SetResDefault()
