@@ -31,6 +31,10 @@ public class LevelSelectManager : MonoBehaviour
     private DepthOfField depthOfField;
     public Camera mainCamera;
     private GameObject credits;
+
+    public GameObject levelRender;
+    public Sprite[] levelSprites;
+    public string[] keys;
     //public MockMenuOptions mockMenuOptions;
     //public MockMenuSelectLevel mockMenuSelectLevel;
 
@@ -48,6 +52,8 @@ public class LevelSelectManager : MonoBehaviour
         // Add more level mappings as needed
     };
 
+    private Dictionary<string, Sprite> spriteDict;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -56,6 +62,39 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
+
+        
+        spriteDict = new Dictionary<string, Sprite>();
+
+        // Safety check
+        if (keys.Length != levelSprites.Length)
+        {
+            Debug.LogError("Keys and Sprites arrays must be the same length!");
+            return;
+        }
+
+        for (int i = 0; i < levelSprites.Length; i++)
+        {
+            string key = keys[i];
+            Sprite sprite = levelSprites[i];
+
+            if (!string.IsNullOrEmpty(key) && sprite != null)
+            {
+                if (!spriteDict.ContainsKey(key))
+                {
+                    spriteDict.Add(key, sprite);
+                }
+                else
+                {
+                    Debug.LogWarning($"Duplicate key skipped: {key}");
+                }
+            }
+        }
+
+        Debug.Log($"Loaded {spriteDict.Count} sprites into dictionary.");
+    
+
+
 
         //ONLY FOR 1 VERSION, DELETE LATER
         //ONLY FOR 1 VERSION, DELETE LATER
@@ -122,6 +161,7 @@ public class LevelSelectManager : MonoBehaviour
         bestTimeText.text = "Best Time: N/A";
         bestBalloonsText.text = "Collected: N/A";
         gradeText.text = "Grade: N/A";
+        levelRender.GetComponent<Image>().sprite = levelSprites[0];
     }
 
 
@@ -224,12 +264,28 @@ public class LevelSelectManager : MonoBehaviour
 
         if (levelData != null)
         {
+            if (spriteDict.TryGetValue(levelKey, out Sprite result))
+                {
+                    levelRender.GetComponent<Image>().sprite = result;
+                }
+            else
+            {
+                Debug.LogWarning($"Sprite not found for key: {levelKey}");
+            }
             bestTimeText.text = $"Best Time: {levelData.bestTime}";
             bestBalloonsText.text = $"Collected: {levelData.bestBalloons}";
             gradeText.text = $"Grade: {levelData.grade}";
         }
         else
         {
+            if (spriteDict.TryGetValue(levelKey, out Sprite result))
+            {
+                levelRender.GetComponent<Image>().sprite = result;
+            }
+            else
+            {
+                Debug.LogWarning($"Sprite not found for key: {levelKey}");
+            }
             bestTimeText.text = "Best Time: N/A";
             bestBalloonsText.text = "Collected: N/A";
             gradeText.text = "Grade: N/A";

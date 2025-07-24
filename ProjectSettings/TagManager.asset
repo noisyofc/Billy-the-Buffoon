@@ -27,6 +27,7 @@ TagManager:
   - TriggersTut
   - Myszor
   - Credits
+  - mainUI
   layers:
   - Default
   - TransparentFX

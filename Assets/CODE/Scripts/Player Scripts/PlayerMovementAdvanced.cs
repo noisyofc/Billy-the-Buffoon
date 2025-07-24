@@ -92,8 +92,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     public ParticleSystem slideParticles;
 
+    private bool devFlyMode = false; // DEV: fly mode toggle
+    private GameObject mainUIObj;
     private void Start()
     {
+        mainUIObj = GameObject.FindGameObjectWithTag("mainUI");
         // Initialize Rigidbody and prevent rotation
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -159,6 +162,20 @@ public class PlayerMovementAdvanced : MonoBehaviour
                 StartCoroutine(umbrellaWait()); //wait as umbrella shows for a second
             }
         }
+
+        // DEV: Toggle fly mode with Page Up
+        if (Input.GetKeyDown(KeyCode.PageUp))
+        {
+            devFlyMode = !devFlyMode;
+            rb.useGravity = !devFlyMode;
+
+            // Find the mainUI object by tag and set active state
+            
+            if (mainUIObj != null)
+            {
+                mainUIObj.SetActive(!devFlyMode);
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -166,7 +183,14 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         if (Paused == false)
         {
-        MovePlayer();
+            if (devFlyMode)
+            {
+                DevFlyMove();
+            }
+            else
+            {
+                MovePlayer();
+            }
         }
     }
 
@@ -442,5 +466,20 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         return false;
+    }
+
+    // DEV: Fly movement logic
+    private void DevFlyMove()
+    {
+        // Get input for all axes
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        float up = 0f;
+        if (Input.GetKey(KeyCode.Space)) up += 1f;
+        if (Input.GetKey(KeyCode.LeftControl)) up -= 1f;
+
+        // Move in orientation's local axes
+        Vector3 move = orientation.forward * v + orientation.right * h + Vector3.up * up;
+        rb.velocity = move.normalized * sprintSpeed; // Use sprintSpeed for flying
     }
 }
