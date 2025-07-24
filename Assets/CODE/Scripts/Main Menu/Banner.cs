@@ -6,7 +6,7 @@ using TMPro;
 
 public class Banner : MonoBehaviour
 {
-    public GameObject credits, levels, settings, start, quit;
+    public GameObject credits, levels, settings, start, quit, whatsNext;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,4 +38,25 @@ public class Banner : MonoBehaviour
         start.GetComponent<BoxCollider>().enabled = true;
         quit.GetComponent<BoxCollider>().enabled = true;
     }
+
+        public void whatsNextEnter()
+    {
+        whatsNext.gameObject.SetActive(true);
+        gameObject.SetActive(false);
+        levels.GetComponent<BoxCollider>().enabled = false;
+        settings.GetComponent<BoxCollider>().enabled = false;
+        start.GetComponent<BoxCollider>().enabled = false;
+        quit.GetComponent<BoxCollider>().enabled = false;
+    }
+
+    public void whatsNextExit()
+    {
+        whatsNext.gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        levels.GetComponent<BoxCollider>().enabled = true;
+        settings.GetComponent<BoxCollider>().enabled = true;
+        start.GetComponent<BoxCollider>().enabled = true;
+        quit.GetComponent<BoxCollider>().enabled = true;
+    }
+
 }
