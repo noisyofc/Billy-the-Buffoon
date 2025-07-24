@@ -63,10 +63,15 @@ public class Banner : MonoBehaviour
     {
         Application.OpenURL("https://forms.gle/UWMg4uSt156JQEJq9");
     }
-    
+
     public void LinkBugReport()
     {
         Application.OpenURL("https://forms.gle/mTKvpieibTBNdz216");
+    }
+    
+    public void LinkDiscord()
+    {
+        Application.OpenURL("https://discord.gg/CnRB7PF5");
     }
 
 }
