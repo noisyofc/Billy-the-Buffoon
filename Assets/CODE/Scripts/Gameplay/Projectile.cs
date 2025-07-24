@@ -47,6 +47,7 @@ public class Projectile : MonoBehaviour
         // Get the Rigidbody component and center of mass
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
+        rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
         // Get all the Mesh Renderers for visibility control
         meshRenderers = GetComponentsInChildren<Renderer>();

@@ -554,10 +554,10 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2154841847
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -599,6 +599,7 @@ MonoBehaviour:
   fallThreshold: 0.8
   rayLength: 1
   playerObject: {fileID: 0}
+  glueParticles: []
 --- !u!65 &1735707881604005787
 BoxCollider:
   m_ObjectHideFlags: 0

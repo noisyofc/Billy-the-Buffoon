@@ -80,6 +80,19 @@ public class ThrowingTutorial : MonoBehaviour
 
         // Instantiate the object to throw at the attack point with the camera's rotation
         GameObject projectile = Instantiate(objectToThrow, attackPoint.position, cam.rotation);
+        Collider projectileCollider1 = objectToThrow.GetComponent<Collider>();
+
+        // Find all objects with tag "res"
+        GameObject[] resObjects = GameObject.FindGameObjectsWithTag("res");
+
+        foreach (GameObject resObj in resObjects)
+        {
+            Collider resCollider = resObj.GetComponent<Collider>();
+            if (resCollider != null)
+            {
+                Physics.IgnoreCollision(projectileCollider1, resCollider);
+            }
+        }
 
         // Get the Rigidbody component of the projectile
         Rigidbody projectileRb = projectile.GetComponent<Rigidbody>();

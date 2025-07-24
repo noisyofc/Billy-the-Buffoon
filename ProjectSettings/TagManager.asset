@@ -28,11 +28,12 @@ TagManager:
   - Myszor
   - Credits
   - mainUI
+  - res
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Respawns
   - Water
   - UI
   - whatIsPlayer

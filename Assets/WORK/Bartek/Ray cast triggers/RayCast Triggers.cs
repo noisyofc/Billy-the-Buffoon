@@ -1,37 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class TriggerNowy : MonoBehaviour
+public class RayCastTriggers : MonoBehaviour
 {
-    [Header("On Trigger Event")]
-    [SerializeField] private UnityEvent todoEventIN;
-
-    [Header("Off Trigger Event")]
-    [SerializeField] private UnityEvent todoEventOut;
-
     public float spacing = 0.75f;     // Distance between each ray
     public float rayDistance = 10f;   // Length of each raycast
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            todoEventIN.Invoke();
-            gameObject.GetComponent<Collider>().enabled = false;
-        }
-    }
+    public PlayerRespawnManager playerRespawnManager;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            todoEventOut.Invoke();
-        }
-    }
-
-        void Update()
+    void Update()
     {
         // Pole direction is local X (assuming length is along X axis)
         Vector3 poleDirection = transform.right;
@@ -58,8 +36,8 @@ public class TriggerNowy : MonoBehaviour
 
                 if (hit.collider.CompareTag("Player"))
                 {
-                    todoEventIN.Invoke();
-                    gameObject.GetComponent<Collider>().enabled = false;
+                    playerRespawnManager.currentRespawnPoint = gameObject.transform;
+                    playerRespawnManager.lastResp = gameObject.name;
                     Debug.Log("HIT");
                 }
             }
