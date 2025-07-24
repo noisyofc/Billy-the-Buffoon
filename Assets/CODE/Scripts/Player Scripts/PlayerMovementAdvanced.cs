@@ -121,12 +121,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         // Pause
-#if UNITY_WEBGL
-        if (Input.GetButtonDown("Cancel") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
-#endif
-#if !UNITY_WEBGL
+        /* #if UNITY_WEBGL
+                if (Input.GetButtonDown("Cancel") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
+        #endif
+        #if !UNITY_WEBGL
+                if (Input.GetButtonDown("Pause") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
+        #endif */
         if (Input.GetButtonDown("Pause") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
-#endif
         {
             Paused = true;
             Time.timeScale = 0;
