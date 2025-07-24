@@ -16,12 +16,13 @@ public class BackButton : MonoBehaviour
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
     public Camera mainCamera;
-
+    private GameObject credits;
     // Start is called before the first frame update
     void Start()
     {
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
+        credits = GameObject.FindGameObjectWithTag("Credits");
     }
 
     // Update is called once per frame
@@ -45,5 +46,6 @@ public class BackButton : MonoBehaviour
         MockMenuSelectLevel.isMouseOver = false;
         MockMenuOptions.isMouseOver = false;
         depthOfField.active = false;
+        credits.SetActive(true);
     }
 }

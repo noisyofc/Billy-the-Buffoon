@@ -30,7 +30,7 @@ public class LevelSelectManager : MonoBehaviour
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
     public Camera mainCamera;
-
+    private GameObject credits;
     //public MockMenuOptions mockMenuOptions;
     //public MockMenuSelectLevel mockMenuSelectLevel;
 
@@ -69,7 +69,7 @@ public class LevelSelectManager : MonoBehaviour
         //ONLY FOR 1 VERSION, DELETE LATER
         //ONLY FOR 1 VERSION, DELETE LATER
         //ONLY FOR 1 VERSION, DELETE LATER
-
+        credits = GameObject.FindGameObjectWithTag("Credits");
 
         //levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
 
@@ -283,6 +283,7 @@ public class LevelSelectManager : MonoBehaviour
         MockMenuSelectLevel.isMouseOver = false;
         MockMenuOptions.isMouseOver = false;
         depthOfField.active = false;
+        credits.SetActive(true);
     }
 
     public void LockAllLevels()

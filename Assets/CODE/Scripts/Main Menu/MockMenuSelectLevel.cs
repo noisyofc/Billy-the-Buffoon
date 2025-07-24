@@ -25,7 +25,7 @@ public class MockMenuSelectLevel : MonoBehaviour
     
     // Flickering interval in seconds (adjust to control flicker speed)
     public float flickerInterval = 0.2f;
-
+    private GameObject credits;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +42,7 @@ public class MockMenuSelectLevel : MonoBehaviour
         // Find the post-process volume attached to the Main Camera
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
+        credits = GameObject.FindGameObjectWithTag("Credits");
 
     }
 
@@ -98,6 +99,7 @@ public class MockMenuSelectLevel : MonoBehaviour
             OptionsButton.GetComponent<Collider>().enabled = false;
 
             EnableBlur();
+            credits.SetActive(false);
         }
     }
 

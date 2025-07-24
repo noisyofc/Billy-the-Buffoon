@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
+using System.Runtime.CompilerServices;
 
 public class MockMenuOptions : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class MockMenuOptions : MonoBehaviour
     // Flickering interval in seconds (adjust to control flicker speed)
     public float flickerInterval = 0.5f;
 
+    private GameObject credits;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +44,8 @@ public class MockMenuOptions : MonoBehaviour
         // Find the post-process volume attached to the Main Camera
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
+
+        credits = GameObject.FindGameObjectWithTag("Credits");
     }
 
     // Update is called once per frame
@@ -93,6 +98,8 @@ public class MockMenuOptions : MonoBehaviour
             StartButton.GetComponent<Collider>().enabled = false;
             OptionsButton.GetComponent<MockMenuOptions>().enabled = false;
             OptionsButton.GetComponent<Collider>().enabled = false;
+
+            credits.SetActive(false);
 
             EnableBlur();
         }

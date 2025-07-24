@@ -7,7 +7,13 @@ public class ButtonEscape : MonoBehaviour
 {
     [Header("Button, kt�ry ma by� wywo�any")]
     public Button button;
+    private GameObject credits;
 
+
+    void Start()
+    {
+        credits = GameObject.FindGameObjectWithTag("Credits");
+    }
     void Update()
     {
 #if UNITY_WEBGL
@@ -20,6 +26,7 @@ public class ButtonEscape : MonoBehaviour
             if (button.interactable)
             {
                 button.onClick.Invoke();
+                //credits.SetActive(true);
             }
         }
     }
