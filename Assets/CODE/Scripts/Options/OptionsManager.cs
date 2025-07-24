@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class OptionsManager : MonoBehaviour
@@ -42,6 +43,13 @@ public class OptionsManager : MonoBehaviour
     public Sprite toggle1920x1080Pressed;
     public Sprite toggle3840x2160Pressed;
 
+    public Toggle vibrationToggle;
+
+    private static bool isVibrating = false;
+    private static float vibrationStopTime = 0f;
+
+    public static bool enableVibration;
+
     public void Start()
     {
         Screen.SetResolution(1280, 720, Screen.fullScreen);
@@ -51,6 +59,21 @@ public class OptionsManager : MonoBehaviour
         sensitivitySliderMouse.onValueChanged.AddListener(delegate { OnSensitivityChange(); });
         sensitivitySliderPad.onValueChanged.AddListener(delegate { OnSensitivityChangePad(); });
         CheckRes();
+        CheckVibration();
+    }
+
+    public void Update()
+    {
+        if (isVibrating && Time.unscaledTime >= vibrationStopTime)
+        {
+            var gamepad = Gamepad.current;
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(0f, 0f);
+            }
+
+            isVibrating = false;
+        }
     }
 
     public void ShowGeneral()
@@ -148,6 +171,10 @@ public class OptionsManager : MonoBehaviour
 
         SaveSensitivity();
         SaveSensitivityPad();
+
+        enableVibration = true;
+        PlayerPrefs.SetInt("Vib", 1);
+        vibrationToggle.isOn = true;
     }
 
     public void CheckRes()
@@ -207,5 +234,66 @@ public class OptionsManager : MonoBehaviour
     public void SetResDefault()
     {
         SetResolution1920x1080();
+    }
+
+    public void ToggleVibration()
+    {
+        enableVibration = vibrationToggle.isOn;
+        PlayerPrefs.SetInt("Vib", enableVibration ? 1 : 0);
+
+        Debug.Log("VIB " + enableVibration);
+    }
+
+    public void CheckVibration()
+    {
+        if (!PlayerPrefs.HasKey("Vib"))
+        {
+            enableVibration = true;
+            PlayerPrefs.SetInt("Vib", 1);
+            vibrationToggle.isOn = enableVibration;
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("Vib") == 1)
+            {
+                enableVibration = true;
+                vibrationToggle.isOn = enableVibration;
+            }
+            else if (PlayerPrefs.GetInt("Vib") == 0)
+            {
+                enableVibration = false;
+                vibrationToggle.isOn = enableVibration;
+            }
+        }
+    }
+
+    public static void TriggerVibration()
+    {
+        if (!enableVibration) return;
+
+        float lowFrequency = 0.5f;
+        float highFrequency = 0.5f;
+
+        var gamepad = Gamepad.current;
+
+        if (gamepad != null)
+        {
+            gamepad.SetMotorSpeeds(lowFrequency, highFrequency);
+            isVibrating = true;
+            vibrationStopTime = Time.unscaledTime + 1f;
+        }
+        else
+        {
+            Debug.Log("Nie wykryto gamepada.");
+        }
+    }
+
+    public static void StopVibration()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad != null)
+        {
+            gamepad.SetMotorSpeeds(0, 0);
+        }
     }
 }

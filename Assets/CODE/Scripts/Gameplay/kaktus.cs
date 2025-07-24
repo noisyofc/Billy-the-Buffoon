@@ -53,6 +53,7 @@ public class kaktus : MonoBehaviour
                 pushDirection.y = 0;
                 pushDirection.Normalize();
 
+                OptionsManager.TriggerVibration();
                 player.AddForce(pushDirection * pushForce, ForceMode.Impulse);
 
                 ShowHitEffect();

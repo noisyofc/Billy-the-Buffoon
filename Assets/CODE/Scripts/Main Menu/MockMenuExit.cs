@@ -71,6 +71,7 @@ public class MockMenuExit : MonoBehaviour
     {
         if(panelSelectLevel.gameObject.activeSelf == false && panelOptions.gameObject.activeSelf == false) 
         {
+            OptionsManager.StopVibration();
             Application.Quit();
             Debug.Log("Application Quit");
         }

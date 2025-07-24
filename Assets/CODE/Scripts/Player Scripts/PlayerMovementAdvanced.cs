@@ -238,6 +238,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // Stop sliding when exiting a banana collision
         if (collision.transform.tag == "banana")
         {
+            OptionsManager.TriggerVibration();
             StartCoroutine(stopSlide());
         }
     }

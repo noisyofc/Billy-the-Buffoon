@@ -213,6 +213,7 @@ public class PlayerRespawnManager : MonoBehaviour
         Cursor.visible = true;
         //Time.timeScale = 0;
 
+        OptionsManager.TriggerVibration();
         mainUI.SetActive(false);
         // Handle death logic here if needed (animation, etc.)
 
