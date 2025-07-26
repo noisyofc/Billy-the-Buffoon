@@ -296,6 +296,12 @@ public class OptionsManager : MonoBehaviour
     public void SetResDefault()
     {
         SetResolution1920x1080();
+
+        fullscreenToggle.isOn = true;
+        int resIndex = PlayerPrefs.GetInt("Res", 0);
+        SetScreenMode(resIndex, true);
+        PlayerPrefs.SetInt("FullScreen", 1);
+        PlayerPrefs.Save();
     }
 
     public void ToggleVibration()
