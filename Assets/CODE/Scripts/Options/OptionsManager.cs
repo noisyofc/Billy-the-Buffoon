@@ -53,6 +53,10 @@ public class OptionsManager : MonoBehaviour
     public GameObject[] videoSettingsITCHIO;
     public GameObject textITCHIO;
 
+    public GameObject toggleVib;
+
+    public Toggle fullscreenToggle;
+
     public void Start()
     {
         textITCHIO.SetActive(false);
@@ -62,16 +66,33 @@ public class OptionsManager : MonoBehaviour
         sensitivitySliderPad.value = currentSensitivityPad;
         sensitivitySliderMouse.onValueChanged.AddListener(delegate { OnSensitivityChange(); });
         sensitivitySliderPad.onValueChanged.AddListener(delegate { OnSensitivityChangePad(); });
+
+#if !UNITY_WEBGL
         CheckRes();
+        CheckFullScreen();
         CheckVibration();
+#endif
 
 #if UNITY_WEBGL
         foreach (GameObject item in videoSettingsITCHIO)
         {
             item.SetActive(false);
         }
+
+        toggleVib.SetActive(false);
+
         textITCHIO.SetActive(true);
-        #endif
+#endif
+#if !UNITY_WEBGL
+        foreach (GameObject item in videoSettingsITCHIO)
+        {
+            item.SetActive(true);
+        }
+
+        toggleVib.SetActive(true);
+
+        textITCHIO.SetActive(false);
+#endif
 
     }
 
@@ -244,6 +265,34 @@ public class OptionsManager : MonoBehaviour
         Debug.Log("Ustawiono rozdzielczo�� 3840x2160");
     }
 
+    private void SetScreenMode(int resIndex, bool isFullscreen)
+    {
+        int width = 1920;
+        int height = 1080;
+
+        switch (resIndex)
+        {
+            case 1:
+                width = 1280;
+                height = 720;
+                break;
+            case 2:
+                width = 1920;
+                height = 1080;
+                break;
+            case 3:
+                width = 3840;
+                height = 2160;
+                break;
+            default:
+                Debug.LogWarning("Nieznana wartość 'Res' w PlayerPrefs!");
+                break;
+        }
+
+        var mode = isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Screen.SetResolution(width, height, mode);
+    }
+
     public void SetResDefault()
     {
         SetResolution1920x1080();
@@ -308,5 +357,44 @@ public class OptionsManager : MonoBehaviour
         {
             gamepad.SetMotorSpeeds(0, 0);
         }
+    }
+
+    public void CheckFullScreen()
+    {
+        int resIndex = PlayerPrefs.GetInt("Res", 0);
+        bool isFullscreen = PlayerPrefs.GetInt("FullScreen", 0) == 1;
+
+        if (!PlayerPrefs.HasKey("FullScreen"))
+        {
+            isFullscreen = true;
+            PlayerPrefs.SetInt("FullScreen", 1);
+            PlayerPrefs.Save();
+        }
+
+        SetScreenMode(resIndex, isFullscreen);
+
+        fullscreenToggle.onValueChanged.RemoveAllListeners();
+        fullscreenToggle.isOn = isFullscreen;
+        fullscreenToggle.onValueChanged.AddListener(_ => SetFullscreen());
+    }
+
+    public void SetFullscreen()
+    {
+        bool isFullscreen = fullscreenToggle.isOn;
+
+        int resIndex = PlayerPrefs.GetInt("Res", 2);
+
+        SetScreenMode(resIndex, isFullscreen);
+
+        PlayerPrefs.SetInt("FullScreen", isFullscreen ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    private void SetScreenMode(bool isFullscreen)
+    {
+        var width = Screen.width;
+        var height = Screen.height;
+        var mode = isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Screen.SetResolution(width, height, mode);
     }
 }
