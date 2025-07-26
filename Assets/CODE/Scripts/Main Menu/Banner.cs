@@ -6,7 +6,7 @@ using TMPro;
 
 public class Banner : MonoBehaviour
 {
-    public GameObject credits, levels, settings, start, quit, whatsNext;
+    public GameObject credits, levels, settings, start, quit, whatsNext, ITCHIO_F11;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,40 +23,52 @@ public class Banner : MonoBehaviour
     {
         credits.gameObject.SetActive(true);
         gameObject.SetActive(false);
-        levels.GetComponent<BoxCollider>().enabled = false;
-        settings.GetComponent<BoxCollider>().enabled = false;
-        start.GetComponent<BoxCollider>().enabled = false;
-        quit.GetComponent<BoxCollider>().enabled = false;
+        if (ITCHIO_F11.activeInHierarchy == false)
+        {
+            levels.GetComponent<BoxCollider>().enabled = false;
+            settings.GetComponent<BoxCollider>().enabled = false;
+            start.GetComponent<BoxCollider>().enabled = false;
+            quit.GetComponent<BoxCollider>().enabled = false;
+        }
     }
 
     public void ExitCredits()
     {
         credits.gameObject.SetActive(false);
         gameObject.SetActive(true);
-        levels.GetComponent<BoxCollider>().enabled = true;
-        settings.GetComponent<BoxCollider>().enabled = true;
-        start.GetComponent<BoxCollider>().enabled = true;
-        quit.GetComponent<BoxCollider>().enabled = true;
+        if (ITCHIO_F11.activeInHierarchy == false)
+        {
+            levels.GetComponent<BoxCollider>().enabled = true;
+            settings.GetComponent<BoxCollider>().enabled = true;
+            start.GetComponent<BoxCollider>().enabled = true;
+            quit.GetComponent<BoxCollider>().enabled = true;
+        }
     }
 
     public void whatsNextEnter()
     {
         whatsNext.gameObject.SetActive(true);
         gameObject.SetActive(false);
-        levels.GetComponent<BoxCollider>().enabled = false;
-        settings.GetComponent<BoxCollider>().enabled = false;
-        start.GetComponent<BoxCollider>().enabled = false;
-        quit.GetComponent<BoxCollider>().enabled = false;
+        if (ITCHIO_F11.activeInHierarchy == false)
+        {
+            levels.GetComponent<BoxCollider>().enabled = false;
+            settings.GetComponent<BoxCollider>().enabled = false;
+            start.GetComponent<BoxCollider>().enabled = false;
+            quit.GetComponent<BoxCollider>().enabled = false;
+        }
     }
 
     public void whatsNextExit()
     {
         whatsNext.gameObject.SetActive(false);
         gameObject.SetActive(true);
-        levels.GetComponent<BoxCollider>().enabled = true;
-        settings.GetComponent<BoxCollider>().enabled = true;
-        start.GetComponent<BoxCollider>().enabled = true;
-        quit.GetComponent<BoxCollider>().enabled = true;
+        if (ITCHIO_F11.activeInHierarchy == false)
+        {
+            levels.GetComponent<BoxCollider>().enabled = true;
+            settings.GetComponent<BoxCollider>().enabled = true;
+            start.GetComponent<BoxCollider>().enabled = true;
+            quit.GetComponent<BoxCollider>().enabled = true;
+        }
     }
 
     public void LinkFeedback()

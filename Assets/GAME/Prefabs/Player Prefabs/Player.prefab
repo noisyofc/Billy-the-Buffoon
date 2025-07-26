@@ -208,7 +208,7 @@ MonoBehaviour:
   stuckSpeed: 0.5
   speedIncreaseMultiplier: 1.5
   slopeIncreaseMultiplier: 2.5
-  jumpForce: 20
+  jumpForce: 22
   jumpCooldown: 0.25
   airMultiplier: 0.4
   readyToJump: 0

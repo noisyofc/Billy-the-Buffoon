@@ -50,9 +50,13 @@ public class OptionsManager : MonoBehaviour
 
     public static bool enableVibration;
 
+    public GameObject[] videoSettingsITCHIO;
+    public GameObject textITCHIO;
+
     public void Start()
     {
-        Screen.SetResolution(1280, 720, Screen.fullScreen);
+        textITCHIO.SetActive(false);
+        //Screen.SetResolution(1920, 1080, Screen.fullScreen);
         LoadSensitivity();
         sensitivitySliderMouse.value = currentSensitivity;
         sensitivitySliderPad.value = currentSensitivityPad;
@@ -60,6 +64,15 @@ public class OptionsManager : MonoBehaviour
         sensitivitySliderPad.onValueChanged.AddListener(delegate { OnSensitivityChangePad(); });
         CheckRes();
         CheckVibration();
+
+#if UNITY_WEBGL
+        foreach (GameObject item in videoSettingsITCHIO)
+        {
+            item.SetActive(false);
+        }
+        textITCHIO.SetActive(true);
+        #endif
+
     }
 
     public void Update()

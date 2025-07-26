@@ -110,7 +110,7 @@ public class PlayerRespawnManager : MonoBehaviour
                     respawnTrigger.GetComponent<Collider>().enabled = true;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.T) && SceneManager.GetActiveScene().name == "Level_0_T")
+            if (Input.GetButtonDown("LoadSave") && SceneManager.GetActiveScene().name == "Level_0_T")
             {
                 playerHeldR = false;
                 Respawn();
