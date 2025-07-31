@@ -19,6 +19,9 @@ public class MockMenuExit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+#if UNITY_WEBGL
+        this.gameObject.SetActive(false);
+        #endif
         // Initialize flickering by setting all lights to "off" (material[0]) initially
         int numOfChildren = transform.childCount;
         for (int i = 0; i < numOfChildren; i++)
