@@ -83,7 +83,7 @@ public class Banner : MonoBehaviour
     
     public void LinkDiscord()
     {
-        Application.OpenURL("https://discord.gg/CnRB7PF5");
+        Application.OpenURL("https://discord.gg/bnCr9Ab4KM");
     }
 
 }
