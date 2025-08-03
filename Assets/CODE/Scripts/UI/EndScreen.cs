@@ -164,42 +164,49 @@ public class EndScreen : MonoBehaviour
 
             grade.text = gradeAchieved;
             
+            // --- FIXED LOGIC STARTS HERE ---
             GameData gameData = SaveSystem.LoadGame();
             LevelData levelData = gameData.levels.Find(level =>
-                level.biomeNumber == currentBiome.ToString() && 
+                level.biomeNumber == currentBiome.ToString() &&
                 level.levelNumber == currentLevel.ToString());
-            if (levelData != null)
+
+            if (levelData == null)
+            {
+                // Create a new entry for this level
+                levelData = new LevelData
+                {
+                    biomeNumber = currentBiome.ToString(),
+                    levelNumber = currentLevel.ToString(),
+                    isUnlocked = "true",
+                    bestTime = bestTime,
+                    bestBalloons = balloonsCollected,
+                    grade = gradeAchieved
+                };
+                gameData.levels.Add(levelData);
+                SaveSystem.SaveGame(gameData);
+                highScore.SetActive(true);
+                highTime.text = bestTime;
+                highBalloons.text = balloonsCollected;
+                highGrade.text = gradeAchieved;
+            }
+            else
             {
                 gradeCheck = levelData.grade;
                 if (GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
                 {
                     LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
                     highScore.SetActive(true);
-                    //highBalloons.text = starsEnd.text;
-                    //highTime.text = timeEnd.text;
-                    //highGrade.text = grade.text;
-
                     highTime.text = bestTime;
                     highBalloons.text = balloonsCollected;
                     highGrade.text = gradeAchieved;
-
                 }
                 else
                 {
-                    Debug.Log("Previous grade is better or equal.");
                     highScore.SetActive(false);
                     highGrade.text = levelData.grade;
                     highTime.text = levelData.bestTime;
                     highBalloons.text = levelData.bestBalloons;
                 }
-            }
-            else
-            {
-                LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
-                highScore.SetActive(true);
-                highTime.text = bestTime;
-                highBalloons.text = balloonsCollected;
-                highGrade.text = gradeAchieved;
             }
                 // Always save the grade, even if it's not better than the previous one
                 LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
