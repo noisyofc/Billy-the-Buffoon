@@ -30,6 +30,7 @@ TagManager:
   - mainUI
   - res
   - ITCHIO
+  - tramNoga
   layers:
   - Default
   - TransparentFX
