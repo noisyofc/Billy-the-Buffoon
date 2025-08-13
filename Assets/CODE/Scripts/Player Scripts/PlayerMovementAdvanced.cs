@@ -219,6 +219,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         // Jump when hitting a trampoline
         if (collision.transform.tag == "tramp")
         {
+            SpringOnTramp.PlaySound();
             Jump();
         }
 
@@ -239,6 +240,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         if (collision.transform.tag == "banana")
         {
             OptionsManager.TriggerVibration();
+            BananSlide.PlaySound();
             StartCoroutine(stopSlide());
         }
     }

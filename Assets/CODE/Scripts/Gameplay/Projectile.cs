@@ -209,6 +209,18 @@ public class Projectile : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
             Destroy(gameObject);
         }
+        else if (gameObject.transform.tag == "trampRdy")
+        {
+            TrampLanding.PlaySound();
+            yield return new WaitForSeconds(2f);
+            Destroy(gameObject);
+        }
+        else if (gameObject.transform.tag == "bananaRdy")
+        {
+            BananLand.PlaySound();
+            yield return new WaitForSeconds(2f);
+            Destroy(gameObject);
+        }
         else
         {
             yield return new WaitForSeconds(2f);
