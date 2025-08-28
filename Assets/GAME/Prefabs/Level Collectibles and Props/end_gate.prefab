@@ -131,6 +131,10 @@ MonoBehaviour:
   stars: 0
   time: 0
   gradeCheck: 
+  highScore: {fileID: 0}
+  highTime: {fileID: 0}
+  highBalloons: {fileID: 0}
+  highGrade: {fileID: 0}
 --- !u!1 &1135134118189486980
 GameObject:
   m_ObjectHideFlags: 0
@@ -4970,6 +4974,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8898321418790500547}
+  - component: {fileID: 2253679496233345628}
   m_Layer: 0
   m_Name: end_gate
   m_TagString: Untagged
@@ -4995,6 +5000,27 @@ Transform:
   - {fileID: 3323459139527916711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -89.998, z: 0}
+--- !u!65 &2253679496233345628
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4626655811658397787}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 5.39, z: 4.2}
+  m_Center: {x: 1.03, y: 3.01, z: 0}
 --- !u!1001 &997879667161835239
 PrefabInstance:
   m_ObjectHideFlags: 0
