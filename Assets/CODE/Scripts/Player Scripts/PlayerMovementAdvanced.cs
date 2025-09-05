@@ -364,15 +364,15 @@ public class PlayerMovementAdvanced : MonoBehaviour
         {
 //////////// Sposób 1: Natychmiastowe zatrzymanie://////////////////////////////
 
-            // rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+             rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
 
 //////////// Sposób 2: p³ynne hamowanie:////////////
 
-            rb.velocity = new Vector3(
-                Mathf.Lerp(rb.velocity.x, 0f, Time.deltaTime * 10f),
-                rb.velocity.y,
-                Mathf.Lerp(rb.velocity.z, 0f, Time.deltaTime * 10f)
-            );
+            //rb.velocity = new Vector3(
+            //    Mathf.Lerp(rb.velocity.x, 0f, Time.deltaTime * 10f),
+            //    rb.velocity.y,
+            //    Mathf.Lerp(rb.velocity.z, 0f, Time.deltaTime * 10f)
+           // );
         }
 
         // Handle wall running movement
