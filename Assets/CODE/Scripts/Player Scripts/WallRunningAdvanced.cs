@@ -212,6 +212,14 @@ public class WallRunningAdvanced : MonoBehaviour
         // Counter gravity while wall running
         if (useGravity)
             rb.AddForce(transform.up * gravityCounterForce, ForceMode.Force);
+
+        // --- Camera tilt based on wall side ---
+        if (wallLeft)
+            cam.DoTilt(-5f);
+        else if (wallRight)
+            cam.DoTilt(5f);
+        else
+            cam.DoTilt(0f);
     }
 
     /// <summary>

@@ -28,6 +28,8 @@ public class PlayerCam : MonoBehaviour
 
     public PlayerRespawnManager playerRespawnManager;
 
+    private float tiltZ = 0f; // Add this at the top of your class
+
     private void Start()
     {
         // Lock the cursor and hide it for first-person control
@@ -43,31 +45,27 @@ public class PlayerCam : MonoBehaviour
     {
         mouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
         PadSensitivity = PlayerPrefs.GetFloat("PadSensitivity", 0.5f);
-        // Get mouse input for both X and Y axes
+
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX * mouseSensitivity;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY * mouseSensitivity;
-
         float PadX = Input.GetAxisRaw("Pad X") * Time.deltaTime * sensX * PadSensitivity;
         float PadY = Input.GetAxisRaw("Pad Y") * Time.deltaTime * sensY * PadSensitivity;
 
-        // Adjust the yaw (Y rotation) based on mouse X movement
         yRotation += mouseX;
         yRotation += PadX;
-
-        // Adjust the pitch (X rotation) based on mouse Y movement and clamp it between -90 and 90 degrees
         xRotation -= mouseY;
         xRotation -= PadY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        // Apply the rotations to the camera holder and the player's orientation
-        camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        // Apply the rotations to the camera holder and the player's orientation, including tilt
+        camHolder.rotation = Quaternion.Euler(xRotation, yRotation, tiltZ);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
 
         if (playerRespawnManager.respawn == true)
         {
             xRotation = yaw;
             yRotation = pitch;
-            camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            camHolder.rotation = Quaternion.Euler(xRotation, yRotation, tiltZ);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
             if (playerRespawnManager.lastResp == "Res1")
             {
@@ -118,7 +116,8 @@ public class PlayerCam : MonoBehaviour
     /// <param name="zTilt">The amount of tilt on the Z-axis.</param>
     public void DoTilt(float zTilt)
     {
-        // Smoothly rotate the camera along the Z-axis (disabled for now, uncomment when needed)
-        // camHolder.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
+        tiltZ = zTilt;
+        // Optionally keep the DOTween for smoothness, but always update tiltZ
+        camHolder.DOLocalRotate(new Vector3(xRotation, yRotation, tiltZ), 0.25f);
     }
 }
