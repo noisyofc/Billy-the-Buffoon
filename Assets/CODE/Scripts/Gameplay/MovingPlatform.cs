@@ -1,25 +1,25 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
+[RequireComponent(typeof(Collider))]
 public class MovingPlatform : MonoBehaviour
 {
-    [Header("DODAĆ RIGIDBODY DO PLATFORMY I USTWAIĆ isKinematic!" )]
+    [Header("Kierunek ruchu (np. (1,0,0) → prawo/lewo, (0,1,0) → góra/dół, (1,1,0) → po skosie)")]
+    public Vector3 moveDirection = Vector3.right;
 
-    [Header("Ustawienia ruchu (np. (1,0,0) → prawo/lewo, (0,1,0) → góra/dół, (1,1,0) → po skosie)")]
-    public Vector3 moveDirection = new Vector3(1, 0, 0);
-
-    [Header("jak daleko platforma się przesunie")]
+    [Header("Jak daleko platforma się przesunie")]
     public float distance = 3f;
 
-    [Header("prędkość ruchu")]
+    [Header("Prędkość ruchu")]
     public float speed = 2f;
 
     private Vector3 startPosition;
-    private Vector3 lastPosition;
+
+    private readonly List<Transform> objectsOnPlatform = new List<Transform>();
 
     private void Start()
     {
         startPosition = transform.position;
-        lastPosition = startPosition;
     }
 
     private void FixedUpdate()
@@ -28,19 +28,23 @@ public class MovingPlatform : MonoBehaviour
         transform.position = startPosition + moveDirection.normalized * movement;
     }
 
-    private void LateUpdate()
+    private void OnTriggerEnter(Collider other)
     {
-        lastPosition = transform.position;
+        if (other.transform == transform || other.transform.IsChildOf(transform)) return;
+
+        if (!objectsOnPlatform.Contains(other.transform))
+        {
+            objectsOnPlatform.Add(other.transform);
+            other.transform.SetParent(transform);
+        }
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        Rigidbody rb = collision.rigidbody;
-        if (rb != null && !rb.isKinematic)
+        if (objectsOnPlatform.Contains(other.transform))
         {
-            Vector3 platformMovement = transform.position - lastPosition;
-
-            rb.MovePosition(rb.position + platformMovement);
+            other.transform.SetParent(null);
+            objectsOnPlatform.Remove(other.transform);
         }
     }
 }

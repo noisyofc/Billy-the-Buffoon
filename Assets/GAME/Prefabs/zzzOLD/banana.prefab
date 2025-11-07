@@ -130,6 +130,14 @@ MonoBehaviour:
   spawnY: 1
   spawnYshelf: 1
   glueWall: {fileID: 0}
+  supportPoints: []
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  fallThreshold: 0.5
+  rayLength: 1
+  playerObject: {fileID: 0}
+  glueParticles: []
 --- !u!1 &8850736861906534803
 GameObject:
   m_ObjectHideFlags: 0
