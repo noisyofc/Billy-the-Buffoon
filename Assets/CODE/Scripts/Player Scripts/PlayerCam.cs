@@ -30,6 +30,12 @@ public class PlayerCam : MonoBehaviour
 
     private float tiltZ = 0f; // Add this at the top of your class
 
+    private bool isCameraLimited = false; // Whether the camera is limited
+    private float cameraLimitYawCenter = 0f;   // Center yaw (horizontal rotation)
+    private float cameraLimitPitchCenter = 0f; // Center pitch (vertical rotation)
+    private float cameraLimitYawHalf = 30f;    // Half-range for yaw (degrees)
+    private float cameraLimitPitchHalf = 30f;  // Half-range for pitch (degrees)
+
     private void Start()
     {
         // Lock the cursor and hide it for first-person control
@@ -39,6 +45,22 @@ public class PlayerCam : MonoBehaviour
         Cursor.visible = false;
         playerRespawnManager.respawn = true;
 
+    }
+
+    // Method to enable camera limits
+    public void EnableCameraLimits(float yawHalf, float pitchHalf)
+    {
+        isCameraLimited = true;
+        cameraLimitYawHalf = yawHalf;
+        cameraLimitPitchHalf = pitchHalf;
+        cameraLimitYawCenter = yRotation;
+        cameraLimitPitchCenter = xRotation;
+    }
+
+    // Method to disable camera limits
+    public void DisableCameraLimits()
+    {
+        isCameraLimited = false;
     }
 
     private void Update()
@@ -55,7 +77,13 @@ public class PlayerCam : MonoBehaviour
         yRotation += PadX;
         xRotation -= mouseY;
         xRotation -= PadY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Clamp pitch (up/down)
+
+        if (isCameraLimited)
+        {
+            yRotation = Mathf.Clamp(yRotation, cameraLimitYawCenter - cameraLimitYawHalf, cameraLimitYawCenter + cameraLimitYawHalf);
+            xRotation = Mathf.Clamp(xRotation, cameraLimitPitchCenter - cameraLimitPitchHalf, cameraLimitPitchCenter + cameraLimitPitchHalf);
+        }
 
         // Apply the rotations to the camera holder and the player's orientation, including tilt
         camHolder.rotation = Quaternion.Euler(xRotation, yRotation, tiltZ);
@@ -116,8 +144,6 @@ public class PlayerCam : MonoBehaviour
     /// <param name="zTilt">The amount of tilt on the Z-axis.</param>
     public void DoTilt(float zTilt)
     {
-        tiltZ = zTilt;
-        // Optionally keep the DOTween for smoothness, but always update tiltZ
-        camHolder.DOLocalRotate(new Vector3(xRotation, yRotation, tiltZ), 0.25f);
+        tiltZ = zTilt; // Update the tilt value
     }
 }
