@@ -18,7 +18,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public float speedIncreaseMultiplier;
     public float slopeIncreaseMultiplier;
 
-    public float moveSpeed;
+    private float moveSpeed;
     private float desiredMoveSpeed;
     private float lastDesiredMoveSpeed;
 
@@ -362,11 +362,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         if (horizontalInput == 0 && verticalInput == 0 && grounded && !wallrunning)
         {
-//////////// Sposï¿½b 1: Natychmiastowe zatrzymanie://////////////////////////////
+//////////// Sposób 1: Natychmiastowe zatrzymanie://////////////////////////////
 
              rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
 
-//////////// Sposï¿½b 2: pï¿½ynne hamowanie:////////////
+//////////// Sposób 2: p³ynne hamowanie:////////////
 
             //rb.velocity = new Vector3(
             //    Mathf.Lerp(rb.velocity.x, 0f, Time.deltaTime * 10f),
