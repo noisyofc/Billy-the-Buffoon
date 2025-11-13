@@ -12,29 +12,77 @@ EditorBuildSettings:
     path: Assets/GAME/Scenes/Level_0_T.unity
     guid: 8d2aca08bc633c94096c93e75d0f6fcb
   - enabled: 1
-    path: Assets/GAME/Scenes/Level_1_1.unity
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_1.unity
     guid: 29a7b900d738c0f4385412f6b8bd216e
   - enabled: 1
-    path: Assets/GAME/Scenes/Level_1_2.unity
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_2.unity
     guid: 8abb27f9195d51042aae199f5a0f2bab
   - enabled: 1
-    path: Assets/GAME/Scenes/Level_1_3.unity
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_3.unity
     guid: e763583bdb890dc469cea25e8a3d6cc5
   - enabled: 1
-    path: Assets/GAME/Scenes/Level_1_4.unity
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_4.unity
     guid: 7e080e634d72e4849bbf0022ecc56080
-  - enabled: 0
-    path: Assets/GAME/Scenes/Level_2_1.unity
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_5.unity
+    guid: f69ca68e2926db74ba43a301ad08e490
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_6.unity
+    guid: ac89b62e830c964469b2476427f37353
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_7.unity
+    guid: f503a0abc272d024591099c89811df88
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_8.unity
+    guid: d1c064509ed9cd94a87cfffae39e9c29
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_9.unity
+    guid: d8d99ca3cf47c11419d73d5545983d94
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_10.unity
+    guid: d2c20e8802a38f842b54f33a35b78f01
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_11.unity
+    guid: 06402cd9389241c45b793051ff557ad7
+  - enabled: 1
+    path: Assets/GAME/Scenes/[AAA] Biome 1 - FOREST/Level_1_12.unity
+    guid: 8656aa2d18d95e04b9ee91affb8e0dda
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_1.unity
     guid: ce4e14b131ceb9e469519ef0988758bd
-  - enabled: 0
-    path: Assets/GAME/Scenes/Level_2_2.unity
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_2.unity
     guid: df791b550f01704429edd08efc717264
-  - enabled: 0
-    path: Assets/GAME/Scenes/Level_2_3.unity
-    guid: 85a05e4ebe2038a489ec9de755ebaf30
-  - enabled: 0
-    path: Assets/GAME/Scenes/Level_2_4.unity
-    guid: 1640dd266c29a834784fe2ecf1219866
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_3.unity
+    guid: a048ff079d23f4949a39f62c3dc92784
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_4.unity
+    guid: 7a23ccda6a97d2d4d8e21d654eaa46c6
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_5.unity
+    guid: 12d48dbdb7f36e149b87ab27a0166432
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_6.unity
+    guid: d3ba682b6902874418df2f0a16ae2973
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_7.unity
+    guid: 0504f797487e9f1428e1e53cc88d7abb
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_8.unity
+    guid: 583e07fe95c666c46936b4f33d424008
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_9.unity
+    guid: d3c5517f71a950744b5de5e585de4f09
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_10.unity
+    guid: cdb08515873df38449594dfe90d57e86
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_11.unity
+    guid: a50d806cd7a6c8147bf60dcf8bc6d6ea
+  - enabled: 1
+    path: Assets/GAME/Scenes/[BBB] Biome 2 - DESERT/Level_2_12.unity
+    guid: 852a8b716065dd144a87f9bfd625d683
   - enabled: 0
     path: Assets/GAME/Scenes/Level_0_0.unity
     guid: ab743d22ab2498949917a6fa629078cd

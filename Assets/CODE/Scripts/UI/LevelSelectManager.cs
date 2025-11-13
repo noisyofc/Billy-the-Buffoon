@@ -18,7 +18,7 @@ public class LevelSelectManager : MonoBehaviour
     public TextMeshProUGUI bestBalloonsText;
     public TextMeshProUGUI gradeText;
 
-    private BiomeSelector biomeSelector; // Reference to the BiomeSelector
+    public BiomeSelector biomeSelector; // Reference to the BiomeSelector
     private int selectedBiomeIndex;
     public List<LevelButton> levelButtons;
 
@@ -41,14 +41,30 @@ public class LevelSelectManager : MonoBehaviour
     // Dictionary to map level scene names to custom display names
     private Dictionary<string, string> levelDisplayNames = new Dictionary<string, string>
     {
-        { "Level_1_1", "Aerial Acrobatics" },
-        { "Level_1_2", "Mountain Climber" },
-        { "Level_1_3", "Desert Dash" },
-        { "Level_1_4", "Sandy Sprint" },
-        { "Level_2_1", "Boulder Breaker" },
-        { "Level_2_2", "Desert Disaster" },
-        { "Level_2_3", "Rocky Rockslide" },
-        { "Level_2_4", "Sunny Slide" },
+        { "Level_1_1", "Forest Frenzy" },
+        { "Level_1_2", "Cave Crawler" },
+        { "Level_1_3", "Aerial Acribatics" },
+        { "Level_1_4", "Wall Walker" },
+        { "Level_1_5", "XYZ_1" },
+        { "Level_1_6", "XYZ_2" },
+        { "Level_1_7", "XYZ_3" },
+        { "Level_1_8", "XYZ_4" },
+        { "Level_1_9", "XYZ_5" },
+        { "Level_1_10", "XYZ_6" },
+        { "Level_1_11", "XYZ_7" },
+        { "Level_1_12", "XYZ_8" },
+        { "Level_2_1", "Sandy Spirit" },
+        { "Level_2_2", "Desert Dash" },
+        { "Level_2_3", "ZYX_1" },
+        { "Level_2_4", "ZYX_2" },
+        { "Level_2_5", "ZYX_3" },
+        { "Level_2_6", "ZYX_4" },
+        { "Level_2_7", "ZYX_5" },
+        { "Level_2_8", "ZYX_6" },
+        { "Level_2_9", "ZYX_7" },
+        { "Level_2_10", "ZYX_8" },
+        { "Level_2_11", "ZYX_9" },
+        { "Level_2_12", "ZYX_10" },
         // Add more level mappings as needed
     };
 
@@ -62,8 +78,6 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Start()
     {
-
-        
         spriteDict = new Dictionary<string, Sprite>();
 
         // Safety check
@@ -92,37 +106,38 @@ public class LevelSelectManager : MonoBehaviour
         }
 
         Debug.Log($"Loaded {spriteDict.Count} sprites into dictionary.");
-    
 
-
-
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        UnlockAllLevels();
-        LockLevelsPast1_4();
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        //ONLY FOR 1 VERSION, DELETE LATER
-        credits = GameObject.FindGameObjectWithTag("Credits");
-
-        //levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
-
+        // ensure we have the LevelButton instances (don't overwrite inspector assignment)
+        if (levelButtons == null || levelButtons.Count == 0)
+        {
+            levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
+            if (levelButtons.Count == 0)
+                Debug.LogWarning("No LevelButton instances found in scene.");
+            else
+                EnsureLevelButtonsOrder(); // sort found buttons by UI sibling index (fallback: name)
+        }
+ 
+        // find biome selector early and set selectedBiomeIndex (safe null check)
         biomeSelector = FindObjectOfType<BiomeSelector>();
-        selectedBiomeIndex = biomeSelector.currentBiomeIndex;
+        if (biomeSelector != null)
+            selectedBiomeIndex = biomeSelector.currentBiomeIndex;
+        else
+            selectedBiomeIndex = 0;
+
+        // Initialize button biome/level numbers for the currently active layout
+        // This ensures levelButton.biomeNumber/levelNumber are set before saving/unlocking
+        UpdateLevelButtonsForBiome(selectedBiomeIndex);
+
+        // NOW unlock levels (will write correct biome/level into save)
+        UnlockAllLevels();
+
+        credits = GameObject.FindGameObjectWithTag("Credits");
 
         playButton.interactable = false;
         playButton.onClick.AddListener(StartSelectedLevel);
 
         LoadLevelUnlockStatus(); // Load initial level unlock status
         DeselectCurrentLevel(); // Ensure no level is selected on canvas open
-
-        //mockMenuSelectLevel = GetComponent<MockMenuSelectLevel>();
-        //mockMenuOptions = GetComponent<MockMenuOptions>();
 
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
@@ -132,6 +147,8 @@ public class LevelSelectManager : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log(selectedBiomeIndex);
+        Debug.Log(biomeSelector.currentBiomeIndex);
         // Check if the biome has changed
         if (selectedBiomeIndex != biomeSelector.currentBiomeIndex)
         {
@@ -396,25 +413,35 @@ public class LevelSelectManager : MonoBehaviour
         // Load the current game data
         GameData gameData = SaveSystem.LoadGame();
 
-        // Iterate through all level buttons
-        foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
+        if (keys == null || keys.Length == 0)
         {
-            // Unlock the level
-            levelButton.isUnlocked = true;
-            levelButton.UpdateButtonState();
+            Debug.LogWarning("UnlockAllLevels: keys array is empty. Populate 'keys' in the inspector with scene names like 'Level_1_1'.");
+            return;
+        }
 
-            // Update the game data to reflect the unlocked status
+        foreach (string key in keys)
+        {
+            if (string.IsNullOrEmpty(key)) continue;
+
+            // Expect keys in format "Level_{biome}_{level}"
+            string[] parts = key.Split('_');
+            if (parts.Length < 3) continue;
+
+            if (!int.TryParse(parts[1], out int biomeNum) || !int.TryParse(parts[2], out int levelNum))
+                continue;
+
+            string biomeStr = biomeNum.ToString();
+            string levelStr = levelNum.ToString();
+
             LevelData levelData = gameData.levels.Find(level =>
-                level.biomeNumber == levelButton.biomeNumber.ToString() &&
-                level.levelNumber == levelButton.levelNumber.ToString());
+                level.biomeNumber == biomeStr && level.levelNumber == levelStr);
 
             if (levelData == null)
             {
-                // If the level data doesn't exist, create a new entry
                 levelData = new LevelData
                 {
-                    biomeNumber = levelButton.biomeNumber.ToString(),
-                    levelNumber = levelButton.levelNumber.ToString(),
+                    biomeNumber = biomeStr,
+                    levelNumber = levelStr,
                     isUnlocked = "true",
                     bestTime = "N/A",
                     bestBalloons = "N/A",
@@ -424,15 +451,20 @@ public class LevelSelectManager : MonoBehaviour
             }
             else
             {
-                // Update the existing level data
                 levelData.isUnlocked = "true";
             }
         }
 
-        // Save the updated game data
         SaveSystem.SaveGame(gameData);
 
-        Debug.Log("All levels have been unlocked.");
+        // Update any LevelButton instances in the scene so UI reflects unlocked state
+        foreach (LevelButton lb in FindObjectsOfType<LevelButton>())
+        {
+            lb.isUnlocked = true;
+            lb.UpdateButtonState();
+        }
+
+        Debug.Log("All levels have been unlocked (based on keys array).");
     }
 
     public void LockLevelsPast1_4()
@@ -469,6 +501,45 @@ public class LevelSelectManager : MonoBehaviour
         
 
         Debug.Log("All levels past Level_1_4 have been locked.");
+    }
+
+    // Sort levelButtons so their indices match the visual order in the hierarchy.
+    // Called only when we auto-populated levelButtons.
+    private void EnsureLevelButtonsOrder()
+    {
+        if (levelButtons == null || levelButtons.Count <= 1) return;
+
+        // If all buttons share the same parent, sort by sibling index (UI layout order)
+        Transform parent = levelButtons[0].transform.parent;
+        bool sameParent = true;
+        foreach (var b in levelButtons)
+            if (b.transform.parent != parent) { sameParent = false; break; }
+
+        if (sameParent)
+        {
+            levelButtons.Sort((a, b) => a.transform.GetSiblingIndex().CompareTo(b.transform.GetSiblingIndex()));
+            return;
+        }
+
+        // Fallback: try to sort by trailing number in the GameObject name (LevelButton_1, btn5, etc.)
+        levelButtons.Sort((a, b) => ParseTrailingNumber(a.gameObject.name).CompareTo(ParseTrailingNumber(b.gameObject.name)));
+    }
+
+    private int ParseTrailingNumber(string name)
+    {
+        for (int i = name.Length - 1; i >= 0; i--)
+        {
+            if (!char.IsDigit(name[i]))
+            {
+                string digits = name.Substring(i + 1);
+                if (int.TryParse(digits, out int v)) return v;
+                break;
+            }
+        }
+        // fallback: first numeric sequence
+        var m = System.Text.RegularExpressions.Regex.Match(name, @"\d+");
+        if (m.Success && int.TryParse(m.Value, out int val)) return val;
+        return int.MaxValue; // put at the end
     }
 
 }
