@@ -3,6 +3,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 public class EndScreen : MonoBehaviour
 {
@@ -45,6 +47,11 @@ public class EndScreen : MonoBehaviour
     public GameObject highScore;
     public TextMeshProUGUI highTime, highBalloons, highGrade;
 
+    public LevelsDictionary levelsDictionary;
+    public TMP_Text levelNameText;
+    private string levelKey;
+    public Dictionary<string, string> levelDisplayNames;
+
     public enum Grade
     {
         D = 1,
@@ -71,6 +78,8 @@ public class EndScreen : MonoBehaviour
     {
         // wy��cza bool, aby gra na starcie mog�a reagowa� na przycisk pauzy
         endLevel = false;
+        levelDisplayNames = levelsDictionary.levelDisplayNames;
+        levelKey = SceneManager.GetActiveScene().name;
     }
 
     private void Update()
@@ -235,7 +244,16 @@ public class EndScreen : MonoBehaviour
                     }
         }
 
+    levelNameText = GameObject.Find("Level_Name").GetComponent<TMP_Text>();
 
+    if (levelDisplayNames.TryGetValue(levelKey, out string displayName))
+    {
+        levelNameText.text = displayName;
+    }
+    else
+    {
+        levelNameText.text = "Unknown Level";
+    }
 
 
     }

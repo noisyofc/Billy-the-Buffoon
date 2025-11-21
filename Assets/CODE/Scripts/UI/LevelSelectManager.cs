@@ -39,34 +39,9 @@ public class LevelSelectManager : MonoBehaviour
     //public MockMenuSelectLevel mockMenuSelectLevel;
 
     // Dictionary to map level scene names to custom display names
-    private Dictionary<string, string> levelDisplayNames = new Dictionary<string, string>
-    {
-        { "Level_1_1", "Forest Frenzy" },
-        { "Level_1_2", "Cave Crawler" },
-        { "Level_1_3", "Aerial Acribatics" },
-        { "Level_1_4", "Wall Walker" },
-        { "Level_1_5", "XYZ_1" },
-        { "Level_1_6", "XYZ_2" },
-        { "Level_1_7", "XYZ_3" },
-        { "Level_1_8", "XYZ_4" },
-        { "Level_1_9", "XYZ_5" },
-        { "Level_1_10", "XYZ_6" },
-        { "Level_1_11", "XYZ_7" },
-        { "Level_1_12", "XYZ_8" },
-        { "Level_2_1", "Sandy Spirit" },
-        { "Level_2_2", "Desert Dash" },
-        { "Level_2_3", "ZYX_1" },
-        { "Level_2_4", "ZYX_2" },
-        { "Level_2_5", "ZYX_3" },
-        { "Level_2_6", "ZYX_4" },
-        { "Level_2_7", "ZYX_5" },
-        { "Level_2_8", "ZYX_6" },
-        { "Level_2_9", "ZYX_7" },
-        { "Level_2_10", "ZYX_8" },
-        { "Level_2_11", "ZYX_9" },
-        { "Level_2_12", "ZYX_10" },
-        // Add more level mappings as needed
-    };
+    public LevelsDictionary levelsDictionary;
+    public Dictionary<string, string> levelDisplayNames;
+
 
     private Dictionary<string, Sprite> spriteDict;
 
@@ -74,6 +49,7 @@ public class LevelSelectManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        levelDisplayNames = levelsDictionary.levelDisplayNames;
     }
 
     private void Start()
@@ -148,7 +124,7 @@ public class LevelSelectManager : MonoBehaviour
     private void Update()
     {
         //Debug.Log(selectedBiomeIndex);
-        Debug.Log(biomeSelector.currentBiomeIndex);
+        //Debug.Log(biomeSelector.currentBiomeIndex);
         // Check if the biome has changed
         if (selectedBiomeIndex != biomeSelector.currentBiomeIndex)
         {

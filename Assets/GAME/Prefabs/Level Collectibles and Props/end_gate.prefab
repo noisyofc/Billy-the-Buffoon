@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7932086364484109540}
   - component: {fileID: 3806840281014191895}
   - component: {fileID: 2833604859178033201}
+  - component: {fileID: 8067641166394147088}
   m_Layer: 0
   m_Name: end level trigger
   m_TagString: Untagged
@@ -135,6 +136,20 @@ MonoBehaviour:
   highTime: {fileID: 0}
   highBalloons: {fileID: 0}
   highGrade: {fileID: 0}
+  levelsDictionary: {fileID: 8067641166394147088}
+  levelNameText: {fileID: 0}
+--- !u!114 &8067641166394147088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293507240807085393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 000a0e2bb28d96b49b9fe58f7a8bf8d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1135134118189486980
 GameObject:
   m_ObjectHideFlags: 0
