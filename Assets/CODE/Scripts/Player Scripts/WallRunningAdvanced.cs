@@ -176,6 +176,8 @@ public class WallRunningAdvanced : MonoBehaviour
                 cam.DoFov(90f);
                 if (wallLeft) cam.DoTilt(-5f);
                 if (wallRight) cam.DoTilt(5f);
+
+                cam.LockCamera(new Vector2(cam.xRotation, cam.yRotation));
             }
         }
     }
@@ -232,6 +234,7 @@ public class WallRunningAdvanced : MonoBehaviour
         // Reset camera effects
         cam.DoFov(80f);
         cam.DoTilt(0f);
+        cam.UnlockCamera();
     }
 
     /// <summary>
