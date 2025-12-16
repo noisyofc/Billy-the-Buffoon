@@ -88,7 +88,7 @@ public class Projectile : MonoBehaviour
         }
 
         // Handle collision with the floor
-        if (collision.gameObject.CompareTag("floor") && !isFalling)
+        if ((collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("ruchomaPlatforma")) && !isFalling)
         {
             // Check if the collision was with the top of the floor (normal.y > 0.5)
             ContactPoint contact = collision.contacts[0]; // Get the first contact point
