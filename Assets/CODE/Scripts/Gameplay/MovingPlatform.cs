@@ -35,7 +35,17 @@ public class MovingPlatform : MonoBehaviour
         if (!objectsOnPlatform.Contains(other.transform))
         {
             objectsOnPlatform.Add(other.transform);
-            other.transform.SetParent(transform);
+
+            Vector3 originalScale = other.transform.lossyScale;
+
+            other.transform.SetParent(transform, true);
+
+            Vector3 parentScale = transform.lossyScale;
+            other.transform.localScale = new Vector3(
+                originalScale.x / parentScale.x,
+                originalScale.y / parentScale.y,
+                originalScale.z / parentScale.z
+            );
         }
     }
 
