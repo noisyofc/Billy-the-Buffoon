@@ -73,7 +73,7 @@ public class StaminaBar : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough stamina!");
+            GameLog.Info("Not enough stamina!");
         }
     }
 

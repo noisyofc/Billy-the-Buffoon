@@ -1,17 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Orientation : MonoBehaviour
 {
-    private Transform orientator;
-    private GameObject player;
+    [SerializeField] private Transform orientator;
+    [SerializeField] private Transform player;
 
     void Start()
     {
-        orientator = GameObject.Find("Orientation").GetComponent<Transform>();
-        player = GameObject.Find("Player");
+        if (orientator == null)
+        {
+            GameObject orientationGo = GameObject.Find("Orientation");
+            if (orientationGo != null)
+                orientator = orientationGo.transform;
+        }
 
-        orientator.position = player.transform.position;
+        if (player == null)
+        {
+            GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
+            if (playerGo == null)
+                playerGo = GameObject.Find("Player");
+            if (playerGo != null)
+                player = playerGo.transform;
+        }
+
+        if (orientator != null && player != null)
+            orientator.position = player.position;
     }
 }

@@ -32,6 +32,6 @@ public class RestartLevel : MonoBehaviour
         ResumeGame();
         MusicManager.instance.SaveMusicTime();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        Debug.Log(SceneManager.GetActiveScene().name);
+        GameLog.Info(SceneManager.GetActiveScene().name);
     }
 }

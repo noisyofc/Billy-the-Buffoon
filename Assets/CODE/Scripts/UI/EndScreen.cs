@@ -39,9 +39,19 @@ public class EndScreen : MonoBehaviour
     public float time = 0f;  // Total time spent
 
     public string gradeCheck;
-    public static EndScreen instance;
+    public static EndScreen instance
+    {
+        get => Instance;
+        set => Instance = value;
+    }
 
-    public static bool endLevel;
+    /// <summary>Forwards to <see cref="GameState.IsLevelEnded"/>.</summary>
+    public static bool endLevel
+    {
+        get => GameState.IsLevelEnded;
+        set => GameState.IsLevelEnded = value;
+    }
+
     public static EndScreen Instance;
 
     public GameObject highScore;
@@ -51,16 +61,6 @@ public class EndScreen : MonoBehaviour
     public TMP_Text levelNameText;
     private string levelKey;
     public Dictionary<string, string> levelDisplayNames;
-
-    public enum Grade
-    {
-        D = 1,
-        C = 2,
-        B = 3,
-        A = 4,
-        S = 5,
-        SPlus = 6  // Highest rank
-    }
 
     void Awake()
     {
@@ -76,22 +76,51 @@ public class EndScreen : MonoBehaviour
 
     public void Start()
     {
-        // wy��cza bool, aby gra na starcie mog�a reagowa� na przycisk pauzy
-        endLevel = false;
-        levelDisplayNames = levelsDictionary.levelDisplayNames;
+        GameState.IsLevelEnded = false;
+        levelDisplayNames = levelsDictionary != null ? levelsDictionary.levelDisplayNames : null;
         levelKey = SceneManager.GetActiveScene().name;
+        TryApplyBiomeLevelFromSceneName(levelKey);
     }
 
-    private void Update()
+    /// <summary>
+    /// Prefer scene name Level_{biome}_{level} over stale prefab defaults.
+    /// </summary>
+    private void TryApplyBiomeLevelFromSceneName(string sceneName)
     {
-        // Update the stars display
-        starsEnd.text = string.Format("{0}/{1}", stars.ToString(), totalBalloons);
+        if (string.IsNullOrEmpty(sceneName))
+            return;
 
-        // Format the time to MM:SS and update the time display
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time % 60f);
-        int milliseconds = Mathf.FloorToInt((time * 100) % 100);
-        timeEnd.text = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
+        string[] parts = sceneName.Split('_');
+        if (parts.Length < 3)
+            return;
+
+        if (int.TryParse(parts[1], out int biome) && int.TryParse(parts[2], out int level))
+        {
+            currentBiome = biome;
+            currentLevel = level;
+        }
+    }
+
+    private void RefreshEndUi()
+    {
+        if (starsEnd != null)
+            starsEnd.text = $"{stars}/{totalBalloons}";
+
+        if (timeEnd != null)
+        {
+            int minutes = Mathf.FloorToInt(time / 60f);
+            int seconds = Mathf.FloorToInt(time % 60f);
+            int milliseconds = Mathf.FloorToInt((time * 100) % 100);
+            timeEnd.text = $"{minutes:00}:{seconds:00}:{milliseconds:00}";
+        }
+
+        if (levelNameText == null)
+            return;
+
+        if (levelDisplayNames != null && levelDisplayNames.TryGetValue(levelKey, out string displayName))
+            levelNameText.text = displayName;
+        else
+            levelNameText.text = "Unknown Level";
     }
 
     /// <summary>
@@ -103,12 +132,8 @@ public class EndScreen : MonoBehaviour
         // Check if the object entering the trigger is the player
         if (other.CompareTag("Player"))
         {
-            // w��cza bool, aby gra nie reagowa�a na przycisk pauzy
-            endLevel = true;
-
-            // Pause the game
-            //Time.timeScale = 0;
-            PlayerMovementAdvanced.Paused = true;
+            GameState.IsLevelEnded = true;
+            GameState.IsPaused = true;
 
             // Unlock and make the cursor visible
             Cursor.lockState = CursorLockMode.None;
@@ -121,13 +146,11 @@ public class EndScreen : MonoBehaviour
             // Get stars collected and time from other game components
             stars = CountStars.stars;
             time = Timer.timeElapsed;
+            RefreshEndUi();
 
             int minutes = Mathf.FloorToInt(time / 60f);
             int seconds = Mathf.FloorToInt(time % 60f);
             int milliseconds = Mathf.FloorToInt((time * 100) % 100);
-            string bestTime = string.Format("{0:00}:{1:00}:{2:00}", minutes, seconds, milliseconds);
-
-            string balloonsCollected = string.Format("{0}/{1}", stars.ToString(), totalBalloons);
 
             //Grading system
             if (seconds <= bestTimeSeconds && stars >= bestBalloons)
@@ -172,90 +195,50 @@ public class EndScreen : MonoBehaviour
             }
 
             grade.text = gradeAchieved;
-            
-            // --- FIXED LOGIC STARTS HERE ---
-            GameData gameData = SaveSystem.LoadGame();
-            LevelData levelData = gameData.levels.Find(level =>
-                level.biomeNumber == currentBiome.ToString() &&
-                level.levelNumber == currentLevel.ToString());
 
-            if (levelData == null)
+            string bestTimeDisplay = $"{minutes:00}:{seconds:00}:{milliseconds:00}";
+            string balloonsDisplay = $"{stars}/{totalBalloons}";
+
+            GameData gameData = LevelProgress.Load();
+            LevelData levelData = gameData.FindLevel(currentBiome, currentLevel);
+            gradeCheck = levelData != null ? levelData.grade : "N/A";
+
+            bool isNewBest = levelData == null ||
+                             !levelData.HasTime ||
+                             GradeRanking.IsAchievedGradeBetter(gradeAchieved, gradeCheck) ||
+                             time < levelData.bestTimeSeconds;
+
+            // Always persist via Core — LevelSelectManager does not exist in level scenes.
+            LevelProgress.SaveCompletedLevel(
+                currentBiome,
+                currentLevel,
+                time,
+                stars,
+                totalBalloons,
+                gradeAchieved);
+
+            if (isNewBest)
             {
-                // Create a new entry for this level
-                levelData = new LevelData
-                {
-                    biomeNumber = currentBiome.ToString(),
-                    levelNumber = currentLevel.ToString(),
-                    isUnlocked = "true",
-                    bestTime = bestTime,
-                    bestBalloons = balloonsCollected,
-                    grade = gradeAchieved
-                };
-                gameData.levels.Add(levelData);
-                SaveSystem.SaveGame(gameData);
                 highScore.SetActive(true);
-                highTime.text = bestTime;
-                highBalloons.text = balloonsCollected;
+                highTime.text = bestTimeDisplay;
+                highBalloons.text = balloonsDisplay;
                 highGrade.text = gradeAchieved;
+            }
+            else if (levelData != null)
+            {
+                highScore.SetActive(false);
+                highGrade.text = levelData.grade;
+                highTime.text = levelData.FormatTime();
+                highBalloons.text = levelData.FormatBalloons();
             }
             else
             {
-                gradeCheck = levelData.grade;
-                if (GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
-                {
-                    LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
-                    highScore.SetActive(true);
-                    highTime.text = bestTime;
-                    highBalloons.text = balloonsCollected;
-                    highGrade.text = gradeAchieved;
-                }
-                else
-                {
-                    highScore.SetActive(false);
-                    highGrade.text = levelData.grade;
-                    highTime.text = levelData.bestTime;
-                    highBalloons.text = levelData.bestBalloons;
-                }
+                highScore.SetActive(true);
+                highTime.text = bestTimeDisplay;
+                highBalloons.text = balloonsDisplay;
+                highGrade.text = gradeAchieved;
             }
-                // Always save the grade, even if it's not better than the previous one
-                LevelSelectManager.Instance.SaveLevelProgress(currentBiome, currentLevel, bestTime, balloonsCollected, gradeAchieved);
-
-                // Update the high score UI based on grade comparison
-                if (levelData != null && GradeComparison.IsAchievedGradeBetter(gradeAchieved, gradeCheck))
-                    {
-                        highScore.SetActive(true);
-                        highTime.text = bestTime;
-                        highBalloons.text = balloonsCollected;
-                        highGrade.text = gradeAchieved;
-                    }
-                    else if (levelData != null)
-                    {
-                        highScore.SetActive(false);
-                        highGrade.text = levelData.grade;
-                        highTime.text = levelData.bestTime;
-                        highBalloons.text = levelData.bestBalloons;
-                    }
-                    else
-                    {
-                        highScore.SetActive(true);
-                        highTime.text = bestTime;
-                        highBalloons.text = balloonsCollected;
-                        highGrade.text = gradeAchieved;
-                    }
         }
-
-    levelNameText = GameObject.Find("Level_Name").GetComponent<TMP_Text>();
-
-    if (levelDisplayNames.TryGetValue(levelKey, out string displayName))
-    {
-        levelNameText.text = displayName;
-    }
-    else
-    {
-        levelNameText.text = "Unknown Level";
-    }
-
-
     }
 
     public void StartNextLevel()
@@ -271,39 +254,12 @@ public class EndScreen : MonoBehaviour
         {
             // Load the next scene
             SceneTransitionManager.Instance.LoadScene(nextSceneIndex);
-            Debug.Log("Loading next level: " + nextSceneIndex);
+            GameLog.Info("Loading next level: " + nextSceneIndex);
         }
         else
         {
             // Optional: handle end of levels (e.g., loop to start, show end screen)
-            Debug.Log("No more levels. End of game.");
-        }
-    }
-
-    public class GradeComparison
-    {
-        // Helper method to convert string to enum
-        public static Grade GetGradeValue(string gradeString)
-        {
-            return gradeString switch
-            {
-                "S+" => Grade.SPlus,
-                "S" => Grade.S,
-                "A" => Grade.A,
-                "B" => Grade.B,
-                "C" => Grade.C,
-                "D" => Grade.D,
-                _ => Grade.D // Default to D if input is invalid
-            };
-        }
-
-        // Method to check if the achieved grade is better than the saved grade
-        public static bool IsAchievedGradeBetter(string gradeAchieved, string gradeCheck)
-        {
-            Grade achieved = GetGradeValue(gradeAchieved);
-            Grade saved = GetGradeValue(gradeCheck);
-
-            return achieved > saved; // Higher enum value means a better grade
+            GameLog.Info("No more levels. End of game.");
         }
     }
 }

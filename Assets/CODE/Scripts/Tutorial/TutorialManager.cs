@@ -15,109 +15,83 @@ public class TutorialManager : MonoBehaviour
     public bool Tut4Done = false;
     public bool Tut5Done = false;
     public bool Tut6Done = false;
-    public static bool TutActive = false;
+    public static bool TutActive
+    {
+        get => GameState.IsTutorialActive;
+        set => GameState.IsTutorialActive = value;
+    }
 
     public GameObject mainUI;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Pause"))
-        {
-
-        }
+        // reserved for tutorial skip input
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Tut1" && !Tut1Done)
+        if (other.CompareTag("Tut1") && !Tut1Done)
         {
-            tutorialScreens[0].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(0);
             Tut1Done = true;
-            TutActive = true;
         }
-        else if (other.tag == "Tut2" && !Tut2Done)
+        else if (other.CompareTag("Tut2") && !Tut2Done)
         {
-            tutorialScreens[1].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(1);
             Tut2Done = true;
-            TutActive = true;
         }
-        else if (other.tag == "Tut3" && !Tut3Done)
+        else if (other.CompareTag("Tut3") && !Tut3Done)
         {
-            tutorialScreens[2].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(2);
             Tut3Done = true;
-            TutActive = true;
         }
-        else if (other.tag == "Tut4" && !Tut4Done)
+        else if (other.CompareTag("Tut4") && !Tut4Done)
         {
-            tutorialScreens[3].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(3);
             Tut4Done = true;
-            TutActive = true;
         }
-        else if (other.tag == "Tut5" && !Tut5Done)
+        else if (other.CompareTag("Tut5") && !Tut5Done)
         {
-            tutorialScreens[4].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(4);
             Tut5Done = true;
-            TutActive = true;
         }
-        else if (other.tag == "Tut6" && !Tut6Done)
+        else if (other.CompareTag("Tut6") && !Tut6Done)
         {
-            tutorialScreens[5].SetActive(true);
-            PlayerMovementAdvanced.Paused = true;
-            Time.timeScale = 0;
-            mainUI.SetActive(false);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            ShowTutorial(5);
             Tut6Done = true;
-            TutActive = true;
         }
+    }
+
+    void ShowTutorial(int index)
+    {
+        if (tutorialScreens == null || index < 0 || index >= tutorialScreens.Length)
+            return;
+
+        tutorialScreens[index].SetActive(true);
+        GameState.IsPaused = true;
+        GameState.IsTutorialActive = true;
+        Time.timeScale = 0;
+        if (mainUI != null) mainUI.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void CloseWindow()
     {
-        tutorialScreens[0].SetActive(false);
-        tutorialScreens[1].SetActive(false);
-        tutorialScreens[2].SetActive(false);
-        tutorialScreens[3].SetActive(false);
-        tutorialScreens[4].SetActive(false);
-        tutorialScreens[5].SetActive(false);
+        if (tutorialScreens != null)
+        {
+            for (int i = 0; i < tutorialScreens.Length; i++)
+            {
+                if (tutorialScreens[i] != null)
+                    tutorialScreens[i].SetActive(false);
+            }
+        }
 
-        PlayerMovementAdvanced.Paused = false;
+        GameState.IsPaused = false;
+        GameState.IsTutorialActive = false;
         Time.timeScale = 1;
-        mainUI.SetActive(true);
+        if (mainUI != null) mainUI.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        TutActive = false;
     }
 }

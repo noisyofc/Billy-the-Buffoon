@@ -1,221 +1,322 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
     [Header("Object Spawn Settings")]
-    [Tooltip("Y offset when the object is spawned on a platform")]
     public float spawnY = 0.05f;
-    [Tooltip("Y offset when the object is spawned on a shelf")]
     public float spawnYshelf = 0.7f;
 
     [Header("Glue Wall Settings")]
-    [Tooltip("Prefab for glue wall")]
     public GameObject glueWall;
     private GameObject glued;
 
     [Header("Glue Wall Placement Variables")]
-    private Vector3 position;         // Stores position for glue wall placement
-    private Quaternion rotation;      // Stores rotation for glue wall placement
+    private Vector3 position;
+    private Quaternion rotation;
 
     [Header("Trampoline Support Settings")]
-    [Tooltip("Support points of the trampoline to check for platform support")]
-    public Transform[] supportPoints;  // Define support points (corners or key points)
-    [Tooltip("Layer mask used to identify platform layer")]
-    public LayerMask platformLayer;   // Define what the platform layer is  // Define what the platform layer is
-    [Tooltip("Threshold for how much of the trampoline needs to be supported - 50% of points should hit platform")]
-    public float fallThreshold = 0.5f; // Define threshold for how much of the trampoline needs to be unsupported
-    [Tooltip("Maximum distance for the raycast to check if the support points are on a platform")]
-    public float rayLength = 1.0f;     // Maximum distance for the raycast
+    public Transform[] supportPoints;
+    public LayerMask platformLayer;
+    public float fallThreshold = 0.5f;
+    public float rayLength = 1.0f;
 
     [Header("Player Reference")]
-    [Tooltip("Reference to the player object")]
-    public GameObject playerObject;
+    [SerializeField] private GameObject playerObject;
 
-    private Rigidbody rb;  // Rigidbody of the projectile
-    private Renderer[] meshRenderers;  // Mesh renderers to show/hide object
-    private bool isFalling = false;  // Indicates whether the trampoline is falling
+    private Rigidbody rb;
+    private Renderer[] meshRenderers;
+    private bool isFalling;
+    private bool _visibilityResolved;
+    private Collider _playerCollider;
+    private Collider _projectileCollider;
 
     public GameObject[] glueParticles;
 
     private void Start()
     {
-        // Get the platform layer mask (whatIsGround layer)
         platformLayer = LayerMask.GetMask("whatIsGround", "whatIsPlayer");
 
-        // Get the Rigidbody component and center of mass
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = Vector3.zero;
         rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
 
-        // Get all the Mesh Renderers for visibility control
         meshRenderers = GetComponentsInChildren<Renderer>();
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].enabled = false;
 
-        // Initially disable all renderers
-        foreach (Renderer renderer in meshRenderers)
-        {
-            renderer.enabled = false;
-        }
+        if (playerObject == null)
+            playerObject = GameObject.FindGameObjectWithTag("Player");
 
-        // Find the player object by tag
-        playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+            _playerCollider = playerObject.GetComponent<Collider>();
+        _projectileCollider = GetComponent<Collider>();
     }
 
     private void Update()
     {
-        // Calculate the distance between the player and the object
-        float dist = Vector3.Distance(playerObject.transform.position, transform.position);
-
-        // Show renderers when the object is ready and the player is far enough away
-        if ((gameObject.transform.tag == "trampRdy" && dist > 1) ||
-            (gameObject.transform.tag == "bananaRdy" && dist > 1) ||
-            (gameObject.transform.tag == "glueRdy" && dist > 1))
+        if (_visibilityResolved || playerObject == null)
         {
-            foreach (Renderer renderer in meshRenderers)
-            {
-                renderer.enabled = true;
-            }
+            enabled = false;
+            return;
         }
+
+        if (!CompareTag("trampRdy") && !CompareTag("bananaRdy") && !CompareTag("glueRdy"))
+            return;
+
+        float distSq = (playerObject.transform.position - transform.position).sqrMagnitude;
+        if (distSq <= 1f)
+            return;
+
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].enabled = true;
+
+        _visibilityResolved = true;
+        enabled = false;
+    }
+
+    private void SpawnHitParticles(Vector3 point)
+    {
+        SimpleParticlePool.PlayAll(glueParticles, point, rotation, this);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Enable all renderers upon collision
-        foreach (Renderer renderer in meshRenderers)
-        {
-            renderer.enabled = true;
-        }
+        for (int i = 0; i < meshRenderers.Length; i++)
+            meshRenderers[i].enabled = true;
+        _visibilityResolved = true;
+        enabled = false;
 
-        // Handle collision with the floor
-        if ((collision.gameObject.CompareTag("floor") || collision.gameObject.CompareTag("ruchomaPlatforma")) && !isFalling)
+        bool hitFloor = collision.gameObject.CompareTag("floor");
+        bool hitMovingPlatform = collision.gameObject.CompareTag("ruchomaPlatforma");
+        bool hitWall = collision.gameObject.CompareTag("Wall");
+
+        if ((hitFloor || hitMovingPlatform) && !isFalling)
         {
-            // Check if the collision was with the top of the floor (normal.y > 0.5)
-            ContactPoint contact = collision.contacts[0]; // Get the first contact point
-            if (contact.normal.y > 0.5f)
+            if (TryGetBestUpwardContact(collision, out ContactPoint contact))
             {
-                for (int i = 0; i < glueParticles.Length; i++)
-                {
-                    Instantiate(glueParticles[i], contact.point, rotation);
-                }
+                SpawnHitParticles(contact.point);
 
-                bool result = CheckSupport();  // Check if the trampoline is sufficiently supported
+                // Snap first — support rays are unreliable while the throw is still tilted.
+                SnapUprightOnPlatform(collision, contact, hitMovingPlatform);
 
-                // Ignore collision between projectile and player after placement
-                Collider playerCollider = playerObject.GetComponent<Collider>();
-                Collider projectileCollider = GetComponent<Collider>();
-                Physics.IgnoreCollision(projectileCollider, playerCollider, false);
+                if (CompareTag("trampRdy"))
+                    tag = "tramp";
+                else if (CompareTag("bananaRdy"))
+                    tag = "banana";
 
-                // Place the projectile on top of the surface (adjusted by spawnY)
-                gameObject.transform.position = new Vector3(transform.position.x, contact.point.y + spawnY, transform.position.z);
-                gameObject.transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 0f, transform.rotation.z));
-
-                // Freeze the object in place
-                rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-                rb.isKinematic = true;
-
-                // Start countdown before the object is destroyed
-                StartCoroutine(CountDown());
-
-                // Change tag for specific object types
-                if (gameObject.transform.tag == "trampRdy")
-                {
-                    gameObject.transform.tag = "tramp";
-                }
-                else if (gameObject.transform.tag == "bananaRdy")
-                {
-                    gameObject.transform.tag = "banana";
-                }
-
-                // If the object is not sufficiently supported, make it fall
-                if (result)
+                bool shouldFall = CheckSupport();
+                if (shouldFall)
                 {
                     isFalling = true;
                     StartCoroutine(CountDownFall());
                     EnableFalling();
                 }
+                else if (hitMovingPlatform)
+                {
+                    MovingPlatform platform = collision.gameObject.GetComponentInParent<MovingPlatform>();
+                    if (platform != null)
+                        platform.AttachProp(transform);
+                }
+
+                if (CompareTag("tramp"))
+                {
+                    // Under-foot throw: IgnoreCollision is still on, so OnCollisionEnter never fires — bounce manually.
+                    TryBouncePlayerOnPlacedTramp();
+                }
+                else if (_projectileCollider != null && _playerCollider != null)
+                {
+                    // Banana etc.: wait until clear so the player doesn't shove the prop.
+                    StartCoroutine(EnablePlayerCollisionWhenClear());
+                }
+
+                StartCoroutine(CountDown());
             }
         }
 
-        // Handle collision with walls
-        if (collision.gameObject.CompareTag("Wall") && gameObject.transform.CompareTag("glueRdy"))
+        if (hitWall && CompareTag("glueRdy"))
         {
-            // Store current position and rotation for glue wall
             position = transform.position;
             rotation = Quaternion.Euler(collision.transform.rotation.eulerAngles);
 
-            // Freeze the object in place
             rb.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
             rb.isKinematic = true;
 
-            // Set the wall as glued
-            collision.gameObject.transform.tag = "glued";
-            
+            collision.gameObject.tag = "glued";
             collision.gameObject.transform.GetChild(0).gameObject.SetActive(true);
             collision.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+            GlueRegistry.MarkDirty();
 
-            ContactPoint contact = collision.contacts[0]; // Get the first contact point
-
-            for (int i = 0; i < glueParticles.Length; i++)
-            {
-                Instantiate(glueParticles[i], contact.point, rotation);
-            }
-
-
-            // Destroy the projectile once glued
+            SpawnHitParticles(collision.contacts[0].point);
             StartCoroutine(CountDown());
         }
 
-        // If the object is in glueRdy state and hits the floor, destroy it
-        if (collision.gameObject.CompareTag("floor") && gameObject.transform.CompareTag("glueRdy"))
+        if (hitFloor && CompareTag("glueRdy"))
         {
-            ContactPoint contact = collision.contacts[0];
-
-            for (int i = 0; i < glueParticles.Length; i++)
-            {
-                Instantiate(glueParticles[i], contact.point, rotation);
-            }
-
+            SpawnHitParticles(collision.contacts[0].point);
             StartCoroutine(CountDown());
         }
 
-        // Start countdown if the collision object is not a wall or floor
-        if (!collision.gameObject.CompareTag("floor") && !collision.gameObject.CompareTag("Wall"))
+        // Misc surfaces only — do not double-fire for floor / wall / moving platforms.
+        if (!hitFloor && !hitWall && !hitMovingPlatform)
         {
-            ContactPoint contact = collision.contacts[0];
-
-            for (int i = 0; i < glueParticles.Length; i++)
-            {
-                Instantiate(glueParticles[i], contact.point, rotation);
-            }
-
+            SpawnHitParticles(collision.contacts[0].point);
             StartCoroutine(CountDown());
         }
 
         if (collision.gameObject.CompareTag("ocean"))
-        {
             StartCoroutine(CountDown());
+    }
+
+    private static bool TryGetBestUpwardContact(Collision collision, out ContactPoint best)
+    {
+        best = default;
+        bool found = false;
+        float bestY = 0.5f;
+
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            ContactPoint c = collision.GetContact(i);
+            if (c.normal.y >= bestY)
+            {
+                bestY = c.normal.y;
+                best = c;
+                found = true;
+            }
         }
+
+        return found;
     }
 
     /// <summary>
-    /// Coroutine to destroy the object after a set delay.
+    /// Places tramp/banana upright on the hit surface. Uses a down-ray so elevators
+    /// don't get a stale contact point from mid-motion collision.
     /// </summary>
+    private void SnapUprightOnPlatform(Collision collision, ContactPoint contact, bool onMovingPlatform)
+    {
+        float yaw = transform.eulerAngles.y;
+        Quaternion upright = Quaternion.Euler(0f, yaw, 0f);
+
+        Vector3 surfacePoint = ResolveSurfacePoint(collision, contact, onMovingPlatform);
+        Vector3 pos = surfacePoint + Vector3.up * spawnY;
+
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.isKinematic = true;
+            rb.useGravity = false;
+            rb.interpolation = RigidbodyInterpolation.None;
+            rb.position = pos;
+            rb.rotation = upright;
+            // Moving-platform props lose their Rigidbody in AttachProp; floor keeps a freeze.
+            rb.constraints = onMovingPlatform
+                ? RigidbodyConstraints.FreezeRotation
+                : RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
+        }
+
+        transform.SetPositionAndRotation(pos, upright);
+    }
+
+    private Vector3 ResolveSurfacePoint(Collision collision, ContactPoint contact, bool onMovingPlatform)
+    {
+        // Prefer XZ from the contact — projectile transform can still be off to the side mid-bounce.
+        Vector3 hint = contact.point;
+        int mask = LayerMask.GetMask("whatIsGround");
+        MovingPlatform hitPlatform = onMovingPlatform
+            ? collision.gameObject.GetComponentInParent<MovingPlatform>()
+            : null;
+
+        Vector3 origin = new Vector3(hint.x, hint.y + 2f, hint.z);
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 5f, mask, QueryTriggerInteraction.Ignore))
+        {
+            if (!onMovingPlatform)
+                return hit.point;
+
+            MovingPlatform rayPlatform = hit.collider.GetComponentInParent<MovingPlatform>();
+            if (rayPlatform != null && (hitPlatform == null || rayPlatform == hitPlatform))
+                return hit.point;
+        }
+
+        // Fallback: ray from slightly above the projectile XZ.
+        origin = new Vector3(transform.position.x, hint.y + 2f, transform.position.z);
+        if (Physics.Raycast(origin, Vector3.down, out hit, 5f, mask, QueryTriggerInteraction.Ignore))
+        {
+            if (!onMovingPlatform)
+                return hit.point;
+
+            MovingPlatform rayPlatform = hit.collider.GetComponentInParent<MovingPlatform>();
+            if (rayPlatform != null && (hitPlatform == null || rayPlatform == hitPlatform))
+                return hit.point;
+        }
+
+        return hint;
+    }
+
+    private void TryBouncePlayerOnPlacedTramp()
+    {
+        if (_projectileCollider != null && _playerCollider != null)
+            Physics.IgnoreCollision(_projectileCollider, _playerCollider, false);
+
+        if (playerObject == null)
+            return;
+
+        PlayerMovementAdvanced movement = playerObject.GetComponent<PlayerMovementAdvanced>();
+        if (movement == null)
+            return;
+
+        // Always bounce when tramp appears under the player (overlap or very close above).
+        float verticalGap = playerObject.transform.position.y - transform.position.y;
+        bool nearFeet = verticalGap > -0.5f && verticalGap < playerObject.transform.localScale.y * 2.5f;
+        float flatDistSq = new Vector3(
+            playerObject.transform.position.x - transform.position.x,
+            0f,
+            playerObject.transform.position.z - transform.position.z).sqrMagnitude;
+
+        bool overlapping = _projectileCollider != null && _playerCollider != null &&
+            Physics.ComputePenetration(
+                _projectileCollider, _projectileCollider.transform.position, _projectileCollider.transform.rotation,
+                _playerCollider, _playerCollider.transform.position, _playerCollider.transform.rotation,
+                out _, out _);
+
+        if (overlapping || (nearFeet && flatDistSq < 1.2f * 1.2f))
+            movement.BounceFromTrampoline();
+    }
+
+    private IEnumerator EnablePlayerCollisionWhenClear()
+    {
+        // Wait until the player is no longer overlapping (under-foot throws).
+        while (_projectileCollider != null && _playerCollider != null)
+        {
+            if (!Physics.ComputePenetration(
+                    _projectileCollider, _projectileCollider.transform.position, _projectileCollider.transform.rotation,
+                    _playerCollider, _playerCollider.transform.position, _playerCollider.transform.rotation,
+                    out _, out _))
+            {
+                Physics.IgnoreCollision(_projectileCollider, _playerCollider, false);
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
     IEnumerator CountDown()
     {
-        if (gameObject.transform.tag == "glueRdy" || gameObject.transform.tag == "glue")
+        if (CompareTag("glueRdy") || CompareTag("glue"))
         {
             BrakeGlueBottle.PlaySound();
             yield return new WaitForSeconds(0.1f);
+            GlueRegistry.MarkDirty();
             Destroy(gameObject);
         }
-        else if (gameObject.transform.tag == "trampRdy")
+        else if (CompareTag("trampRdy") || CompareTag("tramp"))
         {
             TrampLanding.PlaySound();
             yield return new WaitForSeconds(2f);
             Destroy(gameObject);
         }
-        else if (gameObject.transform.tag == "bananaRdy")
+        else if (CompareTag("bananaRdy") || CompareTag("banana"))
         {
             BananLand.PlaySound();
             yield return new WaitForSeconds(2f);
@@ -228,48 +329,36 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coroutine for falling logic, providing a short delay before falling.
-    /// </summary>
     IEnumerator CountDownFall()
     {
         yield return new WaitForSeconds(0.5f);
     }
 
-    /// <summary>
-    /// Check if the trampoline is sufficiently supported based on raycasts from support points.
-    /// </summary>
-    /// <returns>True if the trampoline is unsupported and should fall, false otherwise.</returns>
     private bool CheckSupport()
     {
+        if (supportPoints == null || supportPoints.Length == 0)
+            return true;
+
         int supportedPoints = 0;
-
-        // Cast raycasts from each support point to check if they are on a platform within ray length
-        foreach (Transform point in supportPoints)
+        for (int i = 0; i < supportPoints.Length; i++)
         {
-            // Debug to see if raycasts are working
-            Debug.DrawRay(point.position, Vector3.down * rayLength, Color.red, 2f);  // Visualize raycast in the scene
+            Transform point = supportPoints[i];
+            if (point == null)
+                continue;
 
-            if (Physics.Raycast(point.position, Vector3.down, out RaycastHit hit, rayLength, platformLayer))
-            {
+            Debug.DrawRay(point.position, Vector3.down * rayLength, Color.red, 2f);
+            if (Physics.Raycast(point.position, Vector3.down, out _, rayLength, platformLayer))
                 supportedPoints++;
-            }
         }
 
-        // Calculate support percentage
         float supportPercentage = (float)supportedPoints / supportPoints.Length;
-
-        // Return true if less than the threshold percentage of points are supported
         return supportPercentage < fallThreshold;
     }
 
-    /// <summary>
-    /// Enable falling by disabling isKinematic and re-enabling gravity.
-    /// </summary>
     private void EnableFalling()
     {
-        rb.constraints = RigidbodyConstraints.None;  // Release all constraints
-        rb.isKinematic = false;  // Allow physics to take over
-        rb.useGravity = true;    // Ensure gravity is applied
+        rb.constraints = RigidbodyConstraints.None;
+        rb.isKinematic = false;
+        rb.useGravity = true;
     }
 }

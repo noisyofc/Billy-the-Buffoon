@@ -1,146 +1,144 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
-using System.Runtime.CompilerServices;
 
 public class MockMenuOptions : MonoBehaviour
 {
-    Renderer rend;
     public Material[] material;
     public GameObject panelSelectLevel, panelOptions;
-    private float timer = 0f;
-    private bool isOnState = true;
-    public static bool isMouseOver = false;
+    public float flickerInterval = 0.5f;
 
     public GameObject OptionsButton;
     public GameObject LevelButton;
     public GameObject QuitButton;
     public GameObject StartButton;
+    public Camera mainCamera;
+
+    public static bool isMouseOver;
+
+    private Renderer[] _neonRenderers;
+    private float timer;
+    private bool isOnState = true;
 
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
-    public Camera mainCamera;
-    
-    // Flickering interval in seconds (adjust to control flicker speed)
-    public float flickerInterval = 0.5f;
-
     private GameObject credits;
+    private Canvas _optionsCanvas;
 
-    // Start is called before the first frame update
+    private MockMenuSelectLevel _levelMenu;
+    private Collider _levelCollider;
+    private MockMenuExit _quitMenu;
+    private Collider _quitCollider;
+    private MockMenuStartGame _startMenu;
+    private Collider _startCollider;
+    private MockMenuOptions _optionsMenu;
+    private Collider _optionsCollider;
+
     void Start()
     {
-        // Initialize flickering by setting all lights to "off" (material[0]) initially
-        int numOfChildren = transform.childCount;
-        for (int i = 0; i < numOfChildren; i++)
-        {
-            GameObject child = transform.GetChild(i).gameObject;
-            rend = child.GetComponent<Renderer>();
-            rend.enabled = true;
-            rend.sharedMaterial = material[0];
-        }
+        _neonRenderers = MenuNeonFlicker.CacheChildRenderers(transform);
+        MenuNeonFlicker.SetAll(_neonRenderers, material[0]);
 
-        // Find the post-process volume attached to the Main Camera
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
-
         credits = GameObject.FindGameObjectWithTag("Credits");
+
+        if (panelOptions != null)
+            _optionsCanvas = panelOptions.GetComponent<Canvas>();
+
+        CacheMenuButtons();
     }
 
-    // Update is called once per frame
+    void CacheMenuButtons()
+    {
+        if (LevelButton != null)
+        {
+            _levelMenu = LevelButton.GetComponent<MockMenuSelectLevel>();
+            _levelCollider = LevelButton.GetComponent<Collider>();
+        }
+        if (QuitButton != null)
+        {
+            _quitMenu = QuitButton.GetComponent<MockMenuExit>();
+            _quitCollider = QuitButton.GetComponent<Collider>();
+        }
+        if (StartButton != null)
+        {
+            _startMenu = StartButton.GetComponent<MockMenuStartGame>();
+            _startCollider = StartButton.GetComponent<Collider>();
+        }
+        if (OptionsButton != null)
+        {
+            _optionsMenu = OptionsButton.GetComponent<MockMenuOptions>();
+            _optionsCollider = OptionsButton.GetComponent<Collider>();
+        }
+    }
+
     void Update()
     {
-        // Only perform flickering if the mouse is not over the object
-        if (!isMouseOver)
-        {
-            // Increment the timer by the time elapsed since the last frame
-            timer += Time.deltaTime;
+        if (isMouseOver || _neonRenderers == null)
+            return;
 
-            // Check if the flicker interval has passed
-            if (timer >= flickerInterval)
-            {
-                // Toggle the state and reset the timer
-                isOnState = !isOnState;
-                timer = 0f;
+        timer += Time.deltaTime;
+        if (timer < flickerInterval)
+            return;
 
-                int numOfChildren = transform.childCount;
+        isOnState = !isOnState;
+        timer = 0f;
+        MenuNeonFlicker.ApplyAlternating(_neonRenderers, material[1], material[0], isOnState);
+    }
 
-                for (int i = 0; i < numOfChildren; i++)
-                {
-                    GameObject child = transform.GetChild(i).gameObject;
-                    Renderer rend = child.GetComponent<Renderer>();
-
-                    // Set the material based on the alternating pattern and state
-                    if ((i % 2 == 0 && isOnState) || (i % 2 != 0 && !isOnState))
-                    {
-                        rend.sharedMaterial = material[1];  // Turn on
-                    }
-                    else
-                    {
-                        rend.sharedMaterial = material[0];  // Turn off
-                    }
-                }
-            }
-        }
+    private bool CanInteract()
+    {
+        return !panelSelectLevel.activeSelf && _optionsCanvas != null && !_optionsCanvas.enabled;
     }
 
     private void OnMouseUpAsButton()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
-        {
-            panelOptions.GetComponent<Canvas>().enabled = true;
-            LevelButton.GetComponent<MockMenuSelectLevel>().enabled = false;
-            LevelButton.GetComponent<Collider>().enabled = false;
-            QuitButton.GetComponent<MockMenuExit>().enabled = false;
-            QuitButton.GetComponent<Collider>().enabled = false;
-            StartButton.GetComponent<MockMenuStartGame>().enabled = false;
-            StartButton.GetComponent<Collider>().enabled = false;
-            OptionsButton.GetComponent<MockMenuOptions>().enabled = false;
-            OptionsButton.GetComponent<Collider>().enabled = false;
+        if (!CanInteract())
+            return;
 
+        _optionsCanvas.enabled = true;
+        SetMenuButtonsInteractable(false);
+        if (credits != null)
             credits.SetActive(false);
+        EnableBlur();
+    }
 
-            EnableBlur();
-        }
+    private void SetMenuButtonsInteractable(bool enabled)
+    {
+        if (_levelMenu != null) _levelMenu.enabled = enabled;
+        if (_levelCollider != null) _levelCollider.enabled = enabled;
+        if (_quitMenu != null) _quitMenu.enabled = enabled;
+        if (_quitCollider != null) _quitCollider.enabled = enabled;
+        if (_startMenu != null) _startMenu.enabled = enabled;
+        if (_startCollider != null) _startCollider.enabled = enabled;
+        if (_optionsMenu != null) _optionsMenu.enabled = enabled;
+        if (_optionsCollider != null) _optionsCollider.enabled = enabled;
     }
 
     private void OnMouseEnter()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
-        {
-            // Set isMouseOver to true to stop flickering
-            isMouseOver = true;
+        if (!CanInteract())
+            return;
 
-            // Turn all lights on
-            int numOfChildren = transform.childCount;
-            for (int i = 0; i < numOfChildren; i++)
-            {
-                GameObject child = transform.GetChild(i).gameObject;
-                rend = child.GetComponent<Renderer>();
-                rend.enabled = true;
-                rend.sharedMaterial = material[1];
-            }
-        }
+        isMouseOver = true;
+        MenuNeonFlicker.SetAll(_neonRenderers, material[1]);
     }
 
     private void OnMouseExit()
     {
-        if (panelSelectLevel.gameObject.activeSelf == false && panelOptions.GetComponent<Canvas>().enabled == false)
-        {
-            // Set isMouseOver to false to resume flickering
+        if (CanInteract())
             isMouseOver = false;
-        }
     }
 
     public void EnableBlur()
     {
-        depthOfField.active = true;
-
+        if (depthOfField != null)
+            depthOfField.active = true;
     }
 
     public void DisableBlur()
     {
-        depthOfField.active = false;
+        if (depthOfField != null)
+            depthOfField.active = false;
     }
 }

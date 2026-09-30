@@ -1,51 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 public class BackButton : MonoBehaviour
 {
-
     public GameObject OptionsButton;
     public GameObject LevelButton;
     public GameObject QuitButton;
     public GameObject StartButton;
-
     public GameObject panelOptions;
+    public Camera mainCamera;
 
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
-    public Camera mainCamera;
     private GameObject credits;
-    // Start is called before the first frame update
+    private Canvas _optionsCanvas;
+
+    private MockMenuSelectLevel _levelMenu;
+    private Collider _levelCollider;
+    private MockMenuExit _quitMenu;
+    private Collider _quitCollider;
+    private MockMenuStartGame _startMenu;
+    private Collider _startCollider;
+    private MockMenuOptions _optionsMenu;
+    private Collider _optionsCollider;
+
     void Start()
     {
         postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
         postProcessVolume.profile.TryGetSettings(out depthOfField);
         credits = GameObject.FindGameObjectWithTag("Credits");
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (panelOptions != null)
+            _optionsCanvas = panelOptions.GetComponent<Canvas>();
+
+        if (LevelButton != null)
+        {
+            _levelMenu = LevelButton.GetComponent<MockMenuSelectLevel>();
+            _levelCollider = LevelButton.GetComponent<Collider>();
+        }
+        if (QuitButton != null)
+        {
+            _quitMenu = QuitButton.GetComponent<MockMenuExit>();
+            _quitCollider = QuitButton.GetComponent<Collider>();
+        }
+        if (StartButton != null)
+        {
+            _startMenu = StartButton.GetComponent<MockMenuStartGame>();
+            _startCollider = StartButton.GetComponent<Collider>();
+        }
+        if (OptionsButton != null)
+        {
+            _optionsMenu = OptionsButton.GetComponent<MockMenuOptions>();
+            _optionsCollider = OptionsButton.GetComponent<Collider>();
+        }
     }
 
     public void goBack()
     {
-        //gameObject.SetActive(false);
-        panelOptions.GetComponent<Canvas>().enabled = false;
-        LevelButton.GetComponent<MockMenuSelectLevel>().enabled = true;
-        LevelButton.GetComponent<Collider>().enabled = true;
-        QuitButton.GetComponent<MockMenuExit>().enabled = true;
-        QuitButton.GetComponent<Collider>().enabled = true;
-        StartButton.GetComponent<MockMenuStartGame>().enabled = true;
-        StartButton.GetComponent<Collider>().enabled = true;
-        OptionsButton.GetComponent<MockMenuOptions>().enabled = true;
-        OptionsButton.GetComponent<Collider>().enabled = true;
+        if (_optionsCanvas != null)
+            _optionsCanvas.enabled = false;
+
+        if (_levelMenu != null) _levelMenu.enabled = true;
+        if (_levelCollider != null) _levelCollider.enabled = true;
+        if (_quitMenu != null) _quitMenu.enabled = true;
+        if (_quitCollider != null) _quitCollider.enabled = true;
+        if (_startMenu != null) _startMenu.enabled = true;
+        if (_startCollider != null) _startCollider.enabled = true;
+        if (_optionsMenu != null) _optionsMenu.enabled = true;
+        if (_optionsCollider != null) _optionsCollider.enabled = true;
+
         MockMenuSelectLevel.isMouseOver = false;
         MockMenuOptions.isMouseOver = false;
-        depthOfField.active = false;
-        credits.SetActive(true);
+
+        if (depthOfField != null)
+            depthOfField.active = false;
+        if (credits != null)
+            credits.SetActive(true);
     }
 }

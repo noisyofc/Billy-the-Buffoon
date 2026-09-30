@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class deathHandle : MonoBehaviour
+public class DeathScreenController : MonoBehaviour
 {
     public GameObject mainUI;
     public string mainMenuScene = "GAME/Scenes/Menu";
@@ -17,14 +17,13 @@ public class deathHandle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Restart") && PlayerMovementAdvanced.Paused==true && PlayerDeath.playerDead==true)
+        if (GameInput.RestartPressedThisFrame && GameState.IsPaused && GameState.IsPlayerDead)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             gameObject.SetActive(false);
             Time.timeScale = 1;
-            PlayerMovementAdvanced.Paused=false;
-            PlayerDeath.playerDead=false;
+            GameState.ResetForGameplay();
             mainUI.SetActive(true);
             MusicManager.instance.SaveMusicTime();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);

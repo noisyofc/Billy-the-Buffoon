@@ -42,21 +42,23 @@ public class ThrowingTutorial : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Handle throwing based on key input
-        if ((Input.GetKeyDown(trampKey) || Input.GetAxis("Tramp") != 0) && readyToThrow && totalThrows > 0 && PlayerMovementAdvanced.Paused==false)
+        if (GameState.IsPaused || !readyToThrow || totalThrows <= 0)
+            return;
+
+        if (GameInput.ThrowTrampPressedThisFrame)
         {
             ThrowSound.PlaySound();
-            Throw(0);  // Throw trampoline object
+            Throw(0);
         }
-        if (Input.GetButtonDown("Banana") && readyToThrow && totalThrows > 0 && PlayerMovementAdvanced.Paused==false)
+        else if (GameInput.ThrowBananaPressedThisFrame)
         {
             ThrowSound.PlaySound();
-            Throw(1);  // Throw banana object
+            Throw(1);
         }
-        if (Input.GetButtonDown("Glue") && readyToThrow && totalThrows > 0 && PlayerMovementAdvanced.Paused==false)
+        else if (GameInput.ThrowGluePressedThisFrame)
         {
             ThrowSound.PlaySound();
-            Throw(2);  // Throw glue object
+            Throw(2);
         }
     }
 

@@ -3,75 +3,70 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.PostProcessing;
 
+/// <summary>
+/// In-game pause panel controller. Settings persistence is shared with OptionsManager via PlayerPrefs.
+/// </summary>
 public class OptionsMenu : MonoBehaviour
 {
-
     public Slider sensitivitySlider;
     public float defaultSensitivity = 1.0f;
-    private float currentSensitivity;
     public string mainMenuScene = "GAME/Scenes/Menu";
-    public GameObject optionsCanvas; 
+    public GameObject optionsCanvas;
     public GameObject mainUI;
+    public Camera mainCamera;
 
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
-    public Camera mainCamera;
-    
-    public static bool Paused { get; private set; } = false;  // Centralized pause state
+    private float currentSensitivity;
 
     void Start()
     {
-        LoadSensitivity();
-        sensitivitySlider.value = currentSensitivity;
-        sensitivitySlider.onValueChanged.AddListener(delegate { OnSensitivityChange(); });
+        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
+        if (sensitivitySlider != null)
+        {
+            sensitivitySlider.value = currentSensitivity;
+            sensitivitySlider.onValueChanged.AddListener(_ => OnSensitivityChange());
+        }
 
-        postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
-        postProcessVolume.profile.TryGetSettings(out depthOfField);
+        if (mainCamera != null)
+        {
+            postProcessVolume = mainCamera.GetComponent<PostProcessVolume>();
+            if (postProcessVolume != null)
+                postProcessVolume.profile.TryGetSettings(out depthOfField);
+        }
     }
-
 
     public void PauseGame()
     {
-        Paused = true;
+        GameState.IsPaused = true;
         Time.timeScale = 0;
-        optionsCanvas.SetActive(true);
-        mainUI.SetActive(false);
+        if (optionsCanvas != null) optionsCanvas.SetActive(true);
+        if (mainUI != null) mainUI.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        PlayerMovementAdvanced.Paused = true;
-        depthOfField.active = true;
+        if (depthOfField != null) depthOfField.active = true;
     }
 
     public void ResumeGame()
     {
-        Paused = false;
+        GameState.IsPaused = false;
         Time.timeScale = 1;
-        optionsCanvas.SetActive(false);
-        mainUI.SetActive(true);
+        if (optionsCanvas != null) optionsCanvas.SetActive(false);
+        if (mainUI != null) mainUI.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        PlayerMovementAdvanced.Paused = false;
-        depthOfField.active = false;
-        LoadSensitivity();
+        if (depthOfField != null) depthOfField.active = false;
+        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
     }
 
     public void OnSensitivityChange()
     {
-        currentSensitivity = sensitivitySlider.value;
-        SaveSensitivity();
-    }
+        if (sensitivitySlider == null)
+            return;
 
-    public void SaveSensitivity()
-    {
+        currentSensitivity = sensitivitySlider.value;
         PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
         PlayerPrefs.Save();
-        Debug.Log("Sensitivity Saved: " + currentSensitivity);
-    }
-
-    public void LoadSensitivity()
-    {
-        currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
-        Debug.Log("Sensitivity Loaded: " + currentSensitivity);
     }
 
     public void ExitGame()
@@ -81,15 +76,16 @@ public class OptionsMenu : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene(mainMenuScene);
+        GameState.ResetForGameplay();
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        SceneManager.LoadScene(mainMenuScene);
     }
 
     public void restartLevel()
     {
         ResumeGame();
-        MusicManager.instance.SaveMusicTime();
+        if (MusicManager.instance != null)
+            MusicManager.instance.SaveMusicTime();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

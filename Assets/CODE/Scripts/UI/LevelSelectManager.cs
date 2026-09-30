@@ -32,6 +32,15 @@ public class LevelSelectManager : MonoBehaviour
     public Camera mainCamera;
     private GameObject credits;
 
+    private MockMenuSelectLevel _levelMenu;
+    private Collider _levelCollider;
+    private MockMenuExit _quitMenu;
+    private Collider _quitCollider;
+    private MockMenuStartGame _startMenu;
+    private Collider _startCollider;
+    private MockMenuOptions _optionsMenu;
+    private Collider _optionsCollider;
+
     public GameObject levelRender;
     public Sprite[] levelSprites;
     public string[] keys;
@@ -59,7 +68,7 @@ public class LevelSelectManager : MonoBehaviour
         // Safety check
         if (keys.Length != levelSprites.Length)
         {
-            Debug.LogError("Keys and Sprites arrays must be the same length!");
+            GameLog.Error("Keys and Sprites arrays must be the same length!");
             return;
         }
 
@@ -76,19 +85,19 @@ public class LevelSelectManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"Duplicate key skipped: {key}");
+                    GameLog.Warn($"Duplicate key skipped: {key}");
                 }
             }
         }
 
-        Debug.Log($"Loaded {spriteDict.Count} sprites into dictionary.");
+        GameLog.Info($"Loaded {spriteDict.Count} sprites into dictionary.");
 
         // ensure we have the LevelButton instances (don't overwrite inspector assignment)
         if (levelButtons == null || levelButtons.Count == 0)
         {
             levelButtons = new List<LevelButton>(FindObjectsOfType<LevelButton>());
             if (levelButtons.Count == 0)
-                Debug.LogWarning("No LevelButton instances found in scene.");
+                GameLog.Warn("No LevelButton instances found in scene.");
             else
                 EnsureLevelButtonsOrder(); // sort found buttons by UI sibling index (fallback: name)
         }
@@ -104,10 +113,9 @@ public class LevelSelectManager : MonoBehaviour
         // This ensures levelButton.biomeNumber/levelNumber are set before saving/unlocking
         UpdateLevelButtonsForBiome(selectedBiomeIndex);
 
-        // NOW unlock levels (will write correct biome/level into save)
-        UnlockAllLevels();
-
         credits = GameObject.FindGameObjectWithTag("Credits");
+
+        CacheMenuButtons();
 
         playButton.interactable = false;
         playButton.onClick.AddListener(StartSelectedLevel);
@@ -121,10 +129,34 @@ public class LevelSelectManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    void CacheMenuButtons()
+    {
+        if (LevelButton != null)
+        {
+            _levelMenu = LevelButton.GetComponent<MockMenuSelectLevel>();
+            _levelCollider = LevelButton.GetComponent<Collider>();
+        }
+        if (QuitButton != null)
+        {
+            _quitMenu = QuitButton.GetComponent<MockMenuExit>();
+            _quitCollider = QuitButton.GetComponent<Collider>();
+        }
+        if (StartButton != null)
+        {
+            _startMenu = StartButton.GetComponent<MockMenuStartGame>();
+            _startCollider = StartButton.GetComponent<Collider>();
+        }
+        if (OptionsButton != null)
+        {
+            _optionsMenu = OptionsButton.GetComponent<MockMenuOptions>();
+            _optionsCollider = OptionsButton.GetComponent<Collider>();
+        }
+    }
+
     private void Update()
     {
-        //Debug.Log(selectedBiomeIndex);
-        //Debug.Log(biomeSelector.currentBiomeIndex);
+        //GameLog.Info(selectedBiomeIndex);
+        //GameLog.Info(biomeSelector.currentBiomeIndex);
         // Check if the biome has changed
         if (selectedBiomeIndex != biomeSelector.currentBiomeIndex)
         {
@@ -174,7 +206,7 @@ public class LevelSelectManager : MonoBehaviour
 
         if (!levelButton.isUnlocked)
         {
-            Debug.Log("This level is locked!");
+            GameLog.Info("This level is locked!");
             levelNameText.text += " (Locked)";
         }
         
@@ -189,7 +221,7 @@ public class LevelSelectManager : MonoBehaviour
             string levelName = string.Format("Level_{0}_{1}", biomeToLoad, levelToLoad);
             SceneTransitionManager.Instance.LoadScene(levelName);
 
-            Debug.Log("Starting Level: " + levelName);
+            GameLog.Info("Starting Level: " + levelName);
 
             Time.timeScale = 1;
             Cursor.lockState = CursorLockMode.Locked;
@@ -199,31 +231,21 @@ public class LevelSelectManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Cannot start a locked level!");
+            GameLog.Warn("Cannot start a locked level!");
         }
     }
 
     private void LoadLevelUnlockStatus()
     {
-        GameData gameData = SaveSystem.LoadGame();
+        GameData gameData = LevelProgress.Load();
+        SaveSystem.SaveGame(gameData); // persist default unlock of 1_1 for new saves
 
         foreach (LevelButton levelButton in FindObjectsOfType<LevelButton>())
         {
             if (levelButton.biomeNumber == selectedBiomeIndex)
             {
-                LevelData levelData = gameData.levels.Find(level =>
-                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
-                    level.levelNumber == levelButton.levelNumber.ToString());
-
-                if (levelData != null)
-                {
-                    levelButton.isUnlocked = levelData.isUnlocked == "true";
-                }
-                else
-                {
-                    levelButton.isUnlocked = false;
-                }
-
+                LevelData levelData = gameData.FindLevel(levelButton.biomeNumber, levelButton.levelNumber);
+                levelButton.isUnlocked = levelData != null && levelData.isUnlocked;
                 levelButton.UpdateButtonState();
             }
             else
@@ -250,89 +272,59 @@ public class LevelSelectManager : MonoBehaviour
             levelNameText.text = "Unknown Level";
         }
 
-        GameData gameData = SaveSystem.LoadGame();
-        LevelData levelData = gameData.levels.Find(level =>
-            level.biomeNumber == selectedLevelButton.biomeNumber.ToString() &&
-            level.levelNumber == selectedLevelButton.levelNumber.ToString());
+        GameData gameData = LevelProgress.Load();
+        LevelData levelData = gameData.FindLevel(selectedLevelButton.biomeNumber, selectedLevelButton.levelNumber);
+
+        if (spriteDict.TryGetValue(levelKey, out Sprite result))
+            levelRender.GetComponent<Image>().sprite = result;
+        else
+            GameLog.Warn($"Sprite not found for key: {levelKey}");
 
         if (levelData != null)
         {
-            if (spriteDict.TryGetValue(levelKey, out Sprite result))
-                {
-                    levelRender.GetComponent<Image>().sprite = result;
-                }
-            else
-            {
-                Debug.LogWarning($"Sprite not found for key: {levelKey}");
-            }
-            bestTimeText.text = $"Best Time: {levelData.bestTime}";
-            bestBalloonsText.text = $"Collected: {levelData.bestBalloons}";
+            bestTimeText.text = $"Best Time: {levelData.FormatTime()}";
+            bestBalloonsText.text = $"Collected: {levelData.FormatBalloons()}";
             gradeText.text = $"Grade: {levelData.grade}";
         }
         else
         {
-            if (spriteDict.TryGetValue(levelKey, out Sprite result))
-            {
-                levelRender.GetComponent<Image>().sprite = result;
-            }
-            else
-            {
-                Debug.LogWarning($"Sprite not found for key: {levelKey}");
-            }
             bestTimeText.text = "Best Time: N/A";
             bestBalloonsText.text = "Collected: N/A";
             gradeText.text = "Grade: N/A";
         }
     }
 
-    public void SaveLevelProgress(int biomeNumber, int levelNumber, string timeElapsed, string balloonsCollected, string grade)
+    public void SaveLevelProgress(int biomeNumber, int levelNumber, float timeSeconds, int balloonsCollected, int totalBalloons, string grade)
     {
-        GameData gameData = SaveSystem.LoadGame();
-
-        LevelData levelData = gameData.levels.Find(level =>
-            level.biomeNumber == biomeNumber.ToString() &&
-            level.levelNumber == levelNumber.ToString());
-
-        if (levelData == null)
-        {
-            levelData = new LevelData
-            {
-                biomeNumber = biomeNumber.ToString(),
-                levelNumber = levelNumber.ToString(),
-                isUnlocked = "true",
-                bestTime = timeElapsed,
-                bestBalloons = balloonsCollected,
-                grade = grade
-            };
-            gameData.levels.Add(levelData);
-        }
-        else
-        {
-            levelData.isUnlocked = "true";
-            levelData.bestTime = timeElapsed;
-            levelData.bestBalloons = balloonsCollected;
-            levelData.grade = grade;
-        }
-
-        SaveSystem.SaveGame(gameData);
+        LevelProgress.SaveCompletedLevel(
+            biomeNumber,
+            levelNumber,
+            timeSeconds,
+            balloonsCollected,
+            totalBalloons,
+            grade);
     }
 
     public void goBack()
     {
         DeselectCurrentLevel();
         gameObject.SetActive(false);
-        LevelButton.GetComponent<MockMenuSelectLevel>().enabled = true;
-        LevelButton.GetComponent<Collider>().enabled = true;
-        QuitButton.GetComponent<MockMenuExit>().enabled = true;
-        QuitButton.GetComponent<Collider>().enabled = true;
-        StartButton.GetComponent<MockMenuStartGame>().enabled = true;
-        StartButton.GetComponent<Collider>().enabled = true;
-        OptionsButton.GetComponent<MockMenuOptions>().enabled = true;
-        OptionsButton.GetComponent<Collider>().enabled = true;
+
+        if (_levelMenu != null) _levelMenu.enabled = true;
+        if (_levelCollider != null) _levelCollider.enabled = true;
+        if (_quitMenu != null) _quitMenu.enabled = true;
+        if (_quitCollider != null) _quitCollider.enabled = true;
+        if (_startMenu != null) _startMenu.enabled = true;
+        if (_startCollider != null) _startCollider.enabled = true;
+        if (_optionsMenu != null) _optionsMenu.enabled = true;
+        if (_optionsCollider != null) _optionsCollider.enabled = true;
+
         MockMenuSelectLevel.isMouseOver = false;
         MockMenuOptions.isMouseOver = false;
-        depthOfField.active = false;
-        credits.SetActive(true);
+        if (depthOfField != null)
+            depthOfField.active = false;
+        if (credits != null)
+            credits.SetActive(true);
     }
 
     public void LockAllLevels()
@@ -347,7 +339,7 @@ public class LevelSelectManager : MonoBehaviour
             levelButton.UpdateButtonState();
         }
 
-        Debug.Log("All levels have been locked.");
+        GameLog.Info("All levels have been locked.");
     }
 
     public void UpdateLevelButtonsForBiome(int biomeIndex)
@@ -364,19 +356,9 @@ public class LevelSelectManager : MonoBehaviour
             levelButton.levelNumber = i + 1;      // Set level number based on index (1, 2, 3, 4)
 
             // Check if this level is unlocked based on saved data
-            GameData gameData = SaveSystem.LoadGame();
-            LevelData levelData = gameData.levels.Find(level =>
-                level.biomeNumber == levelButton.biomeNumber.ToString() &&
-                level.levelNumber == levelButton.levelNumber.ToString());
-
-            if (levelData != null)
-            {
-                levelButton.isUnlocked = levelData.isUnlocked == "true";
-            }
-            else
-            {
-                levelButton.isUnlocked = false;
-            }
+            GameData gameData = LevelProgress.Load();
+            LevelData levelData = gameData.FindLevel(levelButton.biomeNumber, levelButton.levelNumber);
+            levelButton.isUnlocked = levelData != null && levelData.isUnlocked;
 
             levelButton.UpdateButtonState(); // Update button appearance
         }
@@ -384,6 +366,11 @@ public class LevelSelectManager : MonoBehaviour
 
 
 
+    /// <summary>
+    /// Debug helper — unlocks every level in <see cref="keys"/>.
+    /// Not called at runtime; use the component context menu in the Editor.
+    /// </summary>
+    [ContextMenu("DEBUG/Unlock All Levels")]
     public void UnlockAllLevels()
     {
         // Load the current game data
@@ -391,7 +378,7 @@ public class LevelSelectManager : MonoBehaviour
 
         if (keys == null || keys.Length == 0)
         {
-            Debug.LogWarning("UnlockAllLevels: keys array is empty. Populate 'keys' in the inspector with scene names like 'Level_1_1'.");
+            GameLog.Warn("UnlockAllLevels: keys array is empty. Populate 'keys' in the inspector with scene names like 'Level_1_1'.");
             return;
         }
 
@@ -406,28 +393,15 @@ public class LevelSelectManager : MonoBehaviour
             if (!int.TryParse(parts[1], out int biomeNum) || !int.TryParse(parts[2], out int levelNum))
                 continue;
 
-            string biomeStr = biomeNum.ToString();
-            string levelStr = levelNum.ToString();
-
-            LevelData levelData = gameData.levels.Find(level =>
-                level.biomeNumber == biomeStr && level.levelNumber == levelStr);
+            LevelData levelData = gameData.FindLevel(biomeNum, levelNum);
 
             if (levelData == null)
             {
-                levelData = new LevelData
-                {
-                    biomeNumber = biomeStr,
-                    levelNumber = levelStr,
-                    isUnlocked = "true",
-                    bestTime = "N/A",
-                    bestBalloons = "N/A",
-                    grade = "N/A"
-                };
-                gameData.levels.Add(levelData);
+                gameData.levels.Add(LevelData.CreateUnlocked(biomeNum, levelNum));
             }
             else
             {
-                levelData.isUnlocked = "true";
+                levelData.isUnlocked = true;
             }
         }
 
@@ -440,7 +414,7 @@ public class LevelSelectManager : MonoBehaviour
             lb.UpdateButtonState();
         }
 
-        Debug.Log("All levels have been unlocked (based on keys array).");
+        GameLog.Info("All levels have been unlocked (based on keys array).");
     }
 
     public void LockLevelsPast1_4()
@@ -459,13 +433,11 @@ public class LevelSelectManager : MonoBehaviour
                 levelButton.UpdateButtonState();
 
                 // Update the game data to reflect the locked status
-                LevelData levelData = gameData.levels.Find(level =>
-                    level.biomeNumber == levelButton.biomeNumber.ToString() &&
-                    level.levelNumber == levelButton.levelNumber.ToString());
+                LevelData levelData = gameData.FindLevel(levelButton.biomeNumber, levelButton.levelNumber);
 
                 if (levelData != null)
                 {
-                    levelData.isUnlocked = "false";
+                    levelData.isUnlocked = false;
                 }
                 levelButton.isUnlocked = false;
                 levelButton.UpdateButtonState();
@@ -476,7 +448,7 @@ public class LevelSelectManager : MonoBehaviour
         SaveSystem.SaveGame(gameData);
         
 
-        Debug.Log("All levels past Level_1_4 have been locked.");
+        GameLog.Info("All levels past Level_1_4 have been locked.");
     }
 
     // Sort levelButtons so their indices match the visual order in the hierarchy.

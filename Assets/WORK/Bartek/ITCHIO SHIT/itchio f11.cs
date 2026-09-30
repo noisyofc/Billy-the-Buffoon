@@ -1,59 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.InteropServices;
 
 public class itchiof11 : MonoBehaviour
 {
     public static itchiof11 Instance;
     public GameObject levels, settings, start, quit;
-    private bool pressedF11 = false;
 
-    // Start is called before the first frame update
+#if UNITY_WEBGL
+    private bool pressedF11;
+#endif
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Persist across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else if (Instance != this)
         {
-            Destroy(gameObject); // Destroy duplicate
+            Destroy(gameObject);
         }
     }
 
     void Start()
     {
 #if UNITY_WEBGL
-        if (pressedF11 == false)
+        if (!pressedF11)
         {
             levels.GetComponent<BoxCollider>().enabled = false;
             settings.GetComponent<BoxCollider>().enabled = false;
             start.GetComponent<BoxCollider>().enabled = false;
             quit.GetComponent<BoxCollider>().enabled = false;
         }
-        #endif
-#if !UNITY_WEBGL
+#else
         gameObject.SetActive(false);
-
 #endif
-        }
+    }
 
-    // Update is called once per frame
     void Update()
     {
 #if UNITY_WEBGL
-        if (pressedF11 == false)
-        {
+        if (!pressedF11)
             gameObject.SetActive(true);
-        }
-        if (pressedF11 == true)
-        {
+        else
             gameObject.SetActive(false);
-        }
-        if (Input.GetKeyDown(KeyCode.F11) && gameObject.activeInHierarchy == true && pressedF11 == false)
+
+        if (Input.GetKeyDown(KeyCode.F11) && gameObject.activeInHierarchy && !pressedF11)
         {
             gameObject.SetActive(false);
             levels.GetComponent<BoxCollider>().enabled = true;
@@ -61,10 +53,7 @@ public class itchiof11 : MonoBehaviour
             start.GetComponent<BoxCollider>().enabled = true;
             quit.GetComponent<BoxCollider>().enabled = true;
             pressedF11 = true;
-            // Add your logic here
         }
-
 #endif
-
     }
 }

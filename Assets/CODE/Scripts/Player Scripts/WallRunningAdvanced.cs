@@ -53,10 +53,8 @@ public class WallRunningAdvanced : MonoBehaviour
     [Header("References")]
     public Transform orientation;
     public PlayerCam cam;
-    private PlayerMovementAdvanced pm;  // Reference to PlayerMovementAdvanced script
+    private PlayerMovementAdvanced pm;
     private Rigidbody rb;
-
-    private GameObject[] walls;
 
     private float horizontalInput;
     private float verticalInput;
@@ -105,19 +103,18 @@ public class WallRunningAdvanced : MonoBehaviour
     /// </summary>
     private void StateMachine()
     {
-        // Get player inputs
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 move = GameInput.Move;
+        horizontalInput = move.x;
+        verticalInput = move.y;
 
-        upwardsRunning = Input.GetKey(upwardsRunKey);
-        downwardsRunning = Input.GetKey(downwardsRunKey);
+        upwardsRunning = GameInput.ClimbUpHeld;
+        downwardsRunning = GameInput.ClimbDownHeld;
 
         // State 1: Wall Running
         if ((wallLeft || wallRight) && verticalInput > 0 && AboveGround() && !exitingWall)
         {
             if (!pm.wallrunning) StartWallRun();
 
-            // Handle wall run timer
             if (wallRunTimer > 0)
                 wallRunTimer -= Time.deltaTime;
             if (wallRunTimer <= 0 && pm.wallrunning)
@@ -126,8 +123,7 @@ public class WallRunningAdvanced : MonoBehaviour
                 exitWallTimer = exitWallTime;
             }
 
-            // Wall jump
-            if (Input.GetButtonDown("A/Space"))
+            if (GameInput.JumpPressedThisFrame)
             {
                 WallJump();
             }
@@ -159,27 +155,19 @@ public class WallRunningAdvanced : MonoBehaviour
     /// </summary>
     private void StartWallRun()
     {
-        // Check if any "glue" walls are active before starting wall run
-        walls = GameObject.FindGameObjectsWithTag("glue");
+        if (!GlueRegistry.HasActiveGlue())
+            return;
 
-        for (int i = 0; i < walls.Length; i++)
-        {
-            if (walls[i].gameObject.activeInHierarchy)
-            {
-                pm.wallrunning = true;
-                wallRunTimer = maxWallRunTime;  // Start the wall run timer
+        pm.wallrunning = true;
+        wallRunTimer = maxWallRunTime;
 
-                // Zero out vertical velocity for smoother transition
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-                // Apply camera effects for wall running
-                cam.DoFov(90f);
-                if (wallLeft) cam.DoTilt(-5f);
-                if (wallRight) cam.DoTilt(5f);
+        cam.DoFov(90f);
+        if (wallLeft) cam.DoTilt(-5f);
+        if (wallRight) cam.DoTilt(5f);
 
-                cam.LockCamera(new Vector2(cam.xRotation, cam.yRotation));
-            }
-        }
+        cam.LockCamera(new Vector2(cam.xRotation, cam.yRotation));
     }
 
     /// <summary>

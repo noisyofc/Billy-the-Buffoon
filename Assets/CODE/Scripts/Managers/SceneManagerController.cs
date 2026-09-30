@@ -21,8 +21,8 @@ public class SceneManagerController : MonoBehaviour
     public void LoadTestLevel()
     {
         SceneTransitionManager.Instance.LoadScene(testLevelScene);
-        Time.timeScale = 1;  // Ensure time is running normally
-        PlayerMovementAdvanced.Paused = false;
+        Time.timeScale = 1;
+        GameState.ResetForGameplay();
     }
 
     // Start the game by loading Level 1
@@ -30,7 +30,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneTransitionManager.Instance.LoadScene(startGameScene);
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        GameState.ResetForGameplay();
     }
 
     // Load the next level (Level 2)
@@ -38,7 +38,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneTransitionManager.Instance.LoadScene(nextLevelScene);
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        GameState.ResetForGameplay();
     }
 
     // Load a saved game (Level 3)
@@ -46,7 +46,7 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneTransitionManager.Instance.LoadScene(loadGameScene);
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        GameState.ResetForGameplay();
     }
 
     // Exit the game application
@@ -61,7 +61,7 @@ public class SceneManagerController : MonoBehaviour
         Cursor.visible = false;
         gameObject.SetActive(false);
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused=false;
+        GameState.ResetForGameplay();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -70,13 +70,13 @@ public class SceneManagerController : MonoBehaviour
     {
         SceneManager.LoadScene(mainMenuScene);
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        GameState.ResetForGameplay();
     }
 
     public void StartNextLevel()
     {
         Time.timeScale = 1;
-        PlayerMovementAdvanced.Paused = false;
+        GameState.ResetForGameplay();
 
         MusicManager.musicTime = 0f;
 
@@ -91,12 +91,12 @@ public class SceneManagerController : MonoBehaviour
         {
             // Load the next scene
             SceneTransitionManager.Instance.LoadScene(nextSceneIndex);
-            Debug.Log("Loading next level: " + nextSceneIndex);
+            GameLog.Info("Loading next level: " + nextSceneIndex);
         }
         else
         {
             // Optional: handle end of levels (e.g., loop to start, show end screen)
-            Debug.Log("No more levels. End of game.");
+            GameLog.Info("No more levels. End of game.");
         }
     }
 }

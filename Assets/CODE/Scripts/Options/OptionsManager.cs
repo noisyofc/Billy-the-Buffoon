@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class OptionsManager : MonoBehaviour
@@ -22,7 +23,8 @@ public class OptionsManager : MonoBehaviour
     public Image controlsButton;
 
     public Sprite general;
-    public Sprite audio;
+    [FormerlySerializedAs("audio")]
+    public Sprite audioSprite;
     public Sprite video;
     public Sprite controls;
 
@@ -118,7 +120,7 @@ public class OptionsManager : MonoBehaviour
         controlsPanel.SetActive(false);
 
         generalButton.sprite = generalPressed;
-        audioButton.sprite = audio;
+        audioButton.sprite = audioSprite;
         videoButton.sprite = video;
         controlsButton.sprite = controls;
     }
@@ -131,7 +133,7 @@ public class OptionsManager : MonoBehaviour
         controlsPanel.SetActive(false);
 
         generalButton.sprite = general;
-        audioButton.sprite = audio;
+        audioButton.sprite = audioSprite;
         videoButton.sprite = videoPressed;
         controlsButton.sprite = controls;
     }
@@ -157,7 +159,7 @@ public class OptionsManager : MonoBehaviour
         audioPanel.SetActive(false);
 
         generalButton.sprite = general;
-        audioButton.sprite = audio;
+        audioButton.sprite = audioSprite;
         videoButton.sprite = video;
         controlsButton.sprite = controlsPressed;
     }
@@ -178,21 +180,21 @@ public class OptionsManager : MonoBehaviour
     {
         PlayerPrefs.SetFloat("MouseSensitivity", currentSensitivity);
         PlayerPrefs.Save();
-        Debug.Log("Sensitivity Saved: " + currentSensitivity);
+        GameLog.Info("Sensitivity Saved: " + currentSensitivity);
     }
 
     public void SaveSensitivityPad()
     {
         PlayerPrefs.SetFloat("PadSensitivity", currentSensitivityPad);
         PlayerPrefs.Save();
-        Debug.Log("Sensitivity Pad Saved: " + currentSensitivityPad);
+        GameLog.Info("Sensitivity Pad Saved: " + currentSensitivityPad);
     }
 
     public void LoadSensitivity()
     {
         currentSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", defaultSensitivity);
         currentSensitivityPad = PlayerPrefs.GetFloat("PadSensitivity", defaultSensitivity);
-        Debug.Log("Sensitivity Loaded: " + currentSensitivity);
+        GameLog.Info("Sensitivity Loaded: " + currentSensitivity);
     }
 
     public void SetSenseToDefault()
@@ -240,7 +242,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720Pressed;
         toggle1920x1080Button.sprite = toggle1920x1080;
         toggle3840x2160Button.sprite = toggle3840x2160;
-        Debug.Log("Ustawiono rozdzielczo�� 1280x720");
+        GameLog.Info("Ustawiono rozdzielczo�� 1280x720");
     }
 
     public void SetResolution1920x1080()
@@ -251,7 +253,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720;
         toggle1920x1080Button.sprite = toggle1920x1080Pressed;
         toggle3840x2160Button.sprite = toggle3840x2160;
-        Debug.Log("Ustawiono rozdzielczo�� 1920x1080");
+        GameLog.Info("Ustawiono rozdzielczo�� 1920x1080");
     }
 
     public void SetResolution3840x2160()
@@ -262,7 +264,7 @@ public class OptionsManager : MonoBehaviour
         toggle1280x720Button.sprite = toggle1280x720;
         toggle1920x1080Button.sprite = toggle1920x1080;
         toggle3840x2160Button.sprite = toggle3840x2160Pressed;
-        Debug.Log("Ustawiono rozdzielczo�� 3840x2160");
+        GameLog.Info("Ustawiono rozdzielczo�� 3840x2160");
     }
 
     private void SetScreenMode(int resIndex, bool isFullscreen)
@@ -285,7 +287,7 @@ public class OptionsManager : MonoBehaviour
                 height = 2160;
                 break;
             default:
-                Debug.LogWarning("Nieznana wartość 'Res' w PlayerPrefs!");
+                GameLog.Warn("Nieznana wartość 'Res' w PlayerPrefs!");
                 break;
         }
 
@@ -309,7 +311,7 @@ public class OptionsManager : MonoBehaviour
         enableVibration = vibrationToggle.isOn;
         PlayerPrefs.SetInt("Vib", enableVibration ? 1 : 0);
 
-        Debug.Log("VIB " + enableVibration);
+        GameLog.Info("VIB " + enableVibration);
     }
 
     public void CheckVibration()
@@ -352,7 +354,7 @@ public class OptionsManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Nie wykryto gamepada.");
+            GameLog.Info("Nie wykryto gamepada.");
         }
     }
 

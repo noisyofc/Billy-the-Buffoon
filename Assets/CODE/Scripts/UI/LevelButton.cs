@@ -25,12 +25,12 @@ public class LevelButton : MonoBehaviour
 
         if (button == null)
         {
-            Debug.LogError("Button component not found on LevelButton object.");
+            GameLog.Error("Button component not found on LevelButton object.");
             return;
         }
         if (image == null)
         {
-            Debug.LogError("Image component not found on LevelButton object.");
+            GameLog.Error("Image component not found on LevelButton object.");
             return;
         }
 
@@ -52,11 +52,11 @@ public class LevelButton : MonoBehaviour
     {
         if (button == null || image == null)
         {
-            Debug.LogError("Button or Image component is missing.");
+            GameLog.Error("Button or Image component is missing.");
             return;
         }
 
-        Debug.Log($"Updating button state: Biome {biomeNumber}, Level {levelNumber}, isUnlocked: {isUnlocked}");
+        GameLog.Info($"Updating button state: Biome {biomeNumber}, Level {levelNumber}, isUnlocked: {isUnlocked}");
 
         button.interactable = isUnlocked;
         image.sprite = isUnlocked ? defaultSprite : disabledSprite;

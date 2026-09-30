@@ -12,7 +12,14 @@ public class PlayerDeath : MonoBehaviour
 
     public Rigidbody playerRigidbody;
     public GameObject deathScreen;
-    public static bool playerDead = false;
+
+    /// <summary>Forwards to <see cref="GameState.IsPlayerDead"/>.</summary>
+    public static bool playerDead
+    {
+        get => GameState.IsPlayerDead;
+        set => GameState.IsPlayerDead = value;
+    }
+
     public GameObject mainUI;
 
     private void Start()
@@ -30,17 +37,18 @@ public class PlayerDeath : MonoBehaviour
         // Check if the player collided with the ocean
         if (collision.gameObject.CompareTag("ocean"))
         {
-            EndScreen.endLevel = true;
-            RespawnPlayer();  // Respawn the player if they fall into the ocean
-            PlayerMovementAdvanced.Paused = true;
-            deathScreen.SetActive(true);
-            playerDead = true;
+            GameState.IsLevelEnded = true;
+            GameState.IsPaused = true;
+            GameState.IsPlayerDead = true;
+            RespawnPlayer();
+            if (deathScreen != null)
+                deathScreen.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            //Time.timeScale = 0;
             CountStars.stars = 0;
             Timer.timeElapsed = 0f;
-            mainUI.SetActive(false);
+            if (mainUI != null)
+                mainUI.SetActive(false);
         }
         
     }

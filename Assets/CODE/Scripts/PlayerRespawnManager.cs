@@ -11,7 +11,14 @@ public class PlayerRespawnManager : MonoBehaviour
     private float holdTime = 0f;
     public float requiredHoldTime = 2f;
     public GameObject deathScreen, mainUI;
-    public static bool playerDead = false;
+
+    /// <summary>Forwards to <see cref="GameState.IsPlayerDead"/> so death scripts stay in sync.</summary>
+    public static bool playerDead
+    {
+        get => GameState.IsPlayerDead;
+        set => GameState.IsPlayerDead = value;
+    }
+
     private bool isHoldingR = false;
     public Rigidbody playerRigidbody;
 
@@ -28,6 +35,7 @@ public class PlayerRespawnManager : MonoBehaviour
 
     void Start()
     {
+        ResolveUiRefsOnce();
 
         baloons = GameObject.FindGameObjectsWithTag("Star");
         respawnTriggers = GameObject.FindGameObjectsWithTag("TriggersTut");
@@ -39,37 +47,38 @@ public class PlayerRespawnManager : MonoBehaviour
         if (playerDiedOnce == false)
         {
             playerDiedOnce = true;
-            // Set the player's initial position and rotation at the start of the game
             Respawn();
         }
-        // Start at the first respawn point by default
         if (respawnPoints.Length > 0)
             currentRespawnPoint = respawnPoints[0].transform;
 
         if (holdToRespawnSlider != null)
             holdToRespawnSlider.gameObject.SetActive(false);
 
-        if (SceneManager.GetActiveScene().name == "Level_0_T")
+        if (SceneManager.GetActiveScene().name == "Level_0_T" && respawnTriggers != null && respawnTriggers.Length > 0)
         {
             lastResp = respawnTriggers[0].name;
         }
     }
+
+    void ResolveUiRefsOnce()
+    {
+        if (deathScreen == null)
+            deathScreen = GameObject.Find("deathScreen");
+        if (mainUI == null)
+            mainUI = GameObject.Find("UI");
+        if (holdToRespawnSlider == null)
+        {
+            GameObject sliderGo = GameObject.Find("SliderRestart");
+            if (sliderGo != null)
+                holdToRespawnSlider = sliderGo.GetComponent<Slider>();
+        }
+    }
+
     void Update()
     {
         if (deathScreen == null)
-        {
-            deathScreen = GameObject.Find("deathScreen");
-        }
-
-        if (mainUI == null)
-        {
-            mainUI = GameObject.Find("UI");
-        }
-
-        if (holdToRespawnSlider == null)
-        {
-            holdToRespawnSlider = GameObject.Find("SliderRestart").GetComponent<Slider>();
-        }
+            return;
 
         if (respawnCooldownTimer > 0f)
             respawnCooldownTimer -= Time.deltaTime;
@@ -81,18 +90,18 @@ public class PlayerRespawnManager : MonoBehaviour
 
         if (deathScreen.activeInHierarchy && playerDead)
         {
-            if (Input.GetButtonDown("Restart"))
+            if (GameInput.RestartPressedThisFrame)
             {
                 playerHeldR = true;
                 Respawn();
-                EndScreen.endLevel = false;
-                PlayerMovementAdvanced.Paused = false;
+                GameState.ResetForGameplay();
                 deathScreen.SetActive(false);
-                playerDead = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-                mainUI.SetActive(true);
-                holdToRespawnSlider.gameObject.SetActive(false);
+                if (mainUI != null)
+                    mainUI.SetActive(true);
+                if (holdToRespawnSlider != null)
+                    holdToRespawnSlider.gameObject.SetActive(false);
                 isHoldingR = false;
                 holdTime = 0f;
                 CountStars.stars = 0;
@@ -110,18 +119,18 @@ public class PlayerRespawnManager : MonoBehaviour
                     respawnTrigger.GetComponent<Collider>().enabled = true;
                 }
             }
-            if (Input.GetButtonDown("LoadSave") && SceneManager.GetActiveScene().name == "Level_0_T")
+            if (GameInput.LoadSavePressedThisFrame && SceneManager.GetActiveScene().name == "Level_0_T")
             {
                 playerHeldR = false;
                 Respawn();
-                EndScreen.endLevel = false;
-                PlayerMovementAdvanced.Paused = false;
+                GameState.ResetForGameplay();
                 deathScreen.SetActive(false);
-                playerDead = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-                mainUI.SetActive(true);
-                holdToRespawnSlider.gameObject.SetActive(false);
+                if (mainUI != null)
+                    mainUI.SetActive(true);
+                if (holdToRespawnSlider != null)
+                    holdToRespawnSlider.gameObject.SetActive(false);
                 isHoldingR = false;
                 holdTime = 0f;
             }
@@ -130,7 +139,7 @@ public class PlayerRespawnManager : MonoBehaviour
 
     void HandleRespawnInput()
     {
-        if (Input.GetButton("Restart"))
+        if (GameInput.RestartHeld)
         {
             isHoldingR = true;
             holdTime += Time.deltaTime;
@@ -205,16 +214,17 @@ public class PlayerRespawnManager : MonoBehaviour
 
     void Die()
     {
-        EndScreen.endLevel = true;
-        PlayerMovementAdvanced.Paused = true;
-        deathScreen.SetActive(true);
-        playerDead = true;
+        GameState.IsLevelEnded = true;
+        GameState.IsPaused = true;
+        GameState.IsPlayerDead = true;
+        if (deathScreen != null)
+            deathScreen.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        //Time.timeScale = 0;
 
         OptionsManager.TriggerVibration();
-        mainUI.SetActive(false);
+        if (mainUI != null)
+            mainUI.SetActive(false);
         // Handle death logic here if needed (animation, etc.)
 
         if (currentRespawnPoint != null && respawnPoints.Length == 1)

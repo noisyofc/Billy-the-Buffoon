@@ -20,7 +20,7 @@ public class RandomImage : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Lista imagePool jest pusta!");
+            GameLog.Warn("Lista imagePool jest pusta!");
         }
     }
 }

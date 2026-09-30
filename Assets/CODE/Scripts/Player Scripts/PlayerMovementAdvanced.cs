@@ -71,7 +71,13 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     public GameObject optionsCanvas;
     public GameObject mainUI;
-    public static bool Paused;
+
+    /// <summary>Forwards to <see cref="GameState.IsPaused"/>.</summary>
+    public static bool Paused
+    {
+        get => GameState.IsPaused;
+        set => GameState.IsPaused = value;
+    }
 
     private PostProcessVolume postProcessVolume;
     private DepthOfField depthOfField;
@@ -95,12 +101,16 @@ public class PlayerMovementAdvanced : MonoBehaviour
     private bool devFlyMode = false; // DEV: fly mode toggle
     private GameObject mainUIObj;
 
-
     public GameObject shadow;
+
+    private MovingPlatform _ridingPlatform;
+    private float _trampBounceCooldown;
 
 
     private void Start()
     {
+        GameState.ResetForGameplay();
+
         mainUIObj = GameObject.FindGameObjectWithTag("mainUI");
         // Initialize Rigidbody and prevent rotation
         rb = GetComponent<Rigidbody>();
@@ -132,7 +142,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
         #if !UNITY_WEBGL
                 if (Input.GetButtonDown("Pause") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
         #endif */
-        if (Input.GetButtonDown("Pause") && !Paused && !EndScreen.endLevel && !TutorialManager.TutActive)
+        if (GameInput.PausePressedThisFrame && !Paused && GameState.CanPause)
         {
             Paused = true;
             Time.timeScale = 0;
@@ -151,17 +161,24 @@ public class PlayerMovementAdvanced : MonoBehaviour
         StateHandler();
 
         // Handle physics adjustments depending on whether the player is grounded or airborne
-        if (grounded && !activeGraple)
+        if (devFlyMode)
         {
             Umbrella.gameObject.SetActive(false);
-            rb.drag = groundDrag;
+            rb.drag = 0f;
+            rb.mass = playerMass;
+        }
+        else if (grounded && !activeGraple)
+        {
+            Umbrella.gameObject.SetActive(false);
+            // Drag fights platform velocity matching and causes standing jitter.
+            rb.drag = _ridingPlatform != null ? 0f : groundDrag;
             rb.mass = playerMass;
         }
         else
         {
             Umbrella.gameObject.SetActive(false);
             rb.drag = 0;
-            if ((Input.GetButton("Parasol") || Input.GetAxis("Parasol") != 0) && wallrunning == false)
+            if (GameInput.ParasolHeld && wallrunning == false)
             {
                 rb.drag = dragAir;
                 rb.mass = playerMassAir;
@@ -170,13 +187,11 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         // DEV: Toggle fly mode with Page Up
-        if (Input.GetKeyDown(KeyCode.PageUp))
+        if (GameInput.DevFlyTogglePressedThisFrame)
         {
             devFlyMode = !devFlyMode;
             rb.useGravity = !devFlyMode;
 
-            // Find the mainUI object by tag and set active state
-            
             if (mainUIObj != null)
             {
                 mainUIObj.SetActive(!devFlyMode);
@@ -202,9 +217,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
     private void MyInput()
     {
-        // Get player input for movement
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        Vector2 move = GameInput.Move;
+        horizontalInput = move.x;
+        verticalInput = move.y;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -217,10 +232,9 @@ public class PlayerMovementAdvanced : MonoBehaviour
         }
 
         // Jump when hitting a trampoline
-        if (collision.transform.tag == "tramp")
+        if (collision.transform.CompareTag("tramp"))
         {
-            SpringOnTramp.PlaySound();
-            Jump();
+            BounceFromTrampoline();
         }
 
         // Handle banana collision for crouching and sliding behavior
@@ -360,13 +374,28 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        // Ride moving platforms by matching their velocity (no parenting / MovePosition on player).
+        if (_ridingPlatform != null && grounded && !wallrunning)
+        {
+            Vector3 platformVel = _ridingPlatform.CurrentVelocity;
+            Vector3 walk = moveDirection.sqrMagnitude > 0.01f
+                ? moveDirection.normalized * moveSpeed
+                : Vector3.zero;
+
+            rb.velocity = new Vector3(platformVel.x + walk.x, platformVel.y, platformVel.z + walk.z);
+
+            shadow.SetActive(false);
+            gameObject.GetComponent<Shadow>().enabled = false;
+            return;
+        }
+
         if (horizontalInput == 0 && verticalInput == 0 && grounded && !wallrunning)
         {
-//////////// Sposób 1: Natychmiastowe zatrzymanie://////////////////////////////
+//////////// Spos?b 1: Natychmiastowe zatrzymanie://////////////////////////////
 
              rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
 
-//////////// Sposób 2: p³ynne hamowanie:////////////
+//////////// Spos?b 2: p?ynne hamowanie:////////////
 
             //rb.velocity = new Vector3(
             //    Mathf.Lerp(rb.velocity.x, 0f, Time.deltaTime * 10f),
@@ -421,25 +450,50 @@ public class PlayerMovementAdvanced : MonoBehaviour
                 Vector3 limitedVel = flatVel.normalized * stuckSpeed;
                 rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
             }
+            return;
         }
-        else if (state == MovementState.stuck)
+
+        Vector3 platformFlat = Vector3.zero;
+        if (_ridingPlatform != null)
         {
-            rb.velocity = Vector3.zero;  // Stop movement when stuck
+            Vector3 pv = _ridingPlatform.CurrentVelocity;
+            platformFlat = new Vector3(pv.x, 0f, pv.z);
         }
-        else
+
+        Vector3 flatWorld = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 relative = flatWorld - platformFlat;
+        if (relative.magnitude > moveSpeed)
         {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            if (flatVel.magnitude > moveSpeed)
-            {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
+            relative = relative.normalized * moveSpeed;
+            Vector3 limited = platformFlat + relative;
+            rb.velocity = new Vector3(limited.x, rb.velocity.y, limited.z);
         }
+    }
+
+    public void SetRidingPlatform(MovingPlatform platform)
+    {
+        _ridingPlatform = platform;
+    }
+
+    public void ClearRidingPlatform(MovingPlatform platform)
+    {
+        if (_ridingPlatform == platform)
+            _ridingPlatform = null;
     }
 
     public Vector3 GetSlopeMoveDirection(Vector3 direction)
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+    public void BounceFromTrampoline()
+    {
+        if (Time.time < _trampBounceCooldown)
+            return;
+
+        _trampBounceCooldown = Time.time + 0.2f;
+        SpringOnTramp.PlaySound();
+        Jump();
     }
 
     private void Jump()
@@ -496,18 +550,18 @@ public class PlayerMovementAdvanced : MonoBehaviour
         return false;
     }
 
-    // DEV: Fly movement logic
+    // DEV: Fly movement logic (Page Up). Space = up, does not open parasol.
     private void DevFlyMove()
     {
-        // Get input for all axes
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        float up = 0f;
-        if (Input.GetKey(KeyCode.Space)) up += 1f;
-        if (Input.GetKey(KeyCode.LeftControl)) up -= 1f;
+        const float flySpeedMultiplier = 3.5f;
 
-        // Move in orientation's local axes
-        Vector3 move = orientation.forward * v + orientation.right * h + Vector3.up * up;
-        rb.velocity = move.normalized * sprintSpeed; // Use sprintSpeed for flying
+        Vector2 moveInput = GameInput.Move;
+        float up = 0f;
+        if (GameInput.ParasolHeld) up += 1f;
+        if (GameInput.ClimbDownHeld) up -= 1f;
+
+        Vector3 move = orientation.forward * moveInput.y + orientation.right * moveInput.x + Vector3.up * up;
+        float speed = sprintSpeed * flySpeedMultiplier;
+        rb.velocity = move.sqrMagnitude > 0.0001f ? move.normalized * speed : Vector3.zero;
     }
 }
